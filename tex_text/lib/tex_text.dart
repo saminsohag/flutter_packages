@@ -2,6 +2,7 @@ library tex_text;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
+export 'package:flutter_math_fork/flutter_math.dart';
 
 /// A Calculator.
 class TexText extends StatelessWidget {
