@@ -1,39 +1,25 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
-
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
-
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+This package is used to create text with LaTex math formulas
+Example: The equation is <m>x^2+y^2=z^2<m>
+This example will show the text along with the equation
 
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+It cat show text along with LaTex formula
 
 ## Getting started
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+Import the package and you are good to go.
+no additional configuration needed.
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+Wrap the LaTex formula with <m> tag to display the equation.
 
 ```dart
-const like = 'sample';
+TexText(r'The equation is <m>x^2+y^2=z^2<m>');
 ```
 
 ## Additional information
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+You can find the source code at the github page:
+https://github.com/saminsohag/flutter_packages/tree/main/tex_text
