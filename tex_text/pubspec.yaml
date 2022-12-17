@@ -1,6 +1,6 @@
 name: tex_text
 description: This package for Flutter allows you to show text on a Flutter app with LaTex math formula and normal text from string. It is vary easy to use and works for all of the platforms.
-version: 0.0.2
+version: 0.0.3
 homepage: https://github.com/saminsohag/flutter_packages/tree/main/tex_text
 
 environment:

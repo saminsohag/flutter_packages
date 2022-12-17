@@ -1,3 +1,7 @@
+## 0.0.3
+
+* Equation alignment fixed.
+
 ## 0.0.2
 
 * Improved documentation.

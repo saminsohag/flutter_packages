@@ -7,15 +7,20 @@ export 'package:flutter_math_fork/flutter_math.dart';
 /// A Calculator.
 class TexText extends StatelessWidget {
   const TexText(this.text,
-      {super.key, this.style, this.mathStyle = MathStyle.display});
+      {super.key,
+      this.style,
+      this.mathStyle = MathStyle.display,
+      this.alignment = WrapAlignment.start});
   final String text;
   final TextStyle? style;
   final MathStyle mathStyle;
+  final WrapAlignment alignment;
 
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      alignment: WrapAlignment.start,
+      alignment: alignment,
+      crossAxisAlignment: WrapCrossAlignment.center,
       spacing: 4,
       children: text
           .split("<m>")
