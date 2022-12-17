@@ -1,3 +1,7 @@
+## 0.0.4
+
+* New line support added.
+
 ## 0.0.3
 
 * Equation alignment fixed.

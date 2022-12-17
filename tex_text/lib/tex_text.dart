@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
 export 'package:flutter_math_fork/flutter_math.dart';
 
-/// A Calculator.
+/// A LaTex text view.
 class TexText extends StatelessWidget {
   const TexText(this.text,
       {super.key,
@@ -18,43 +18,50 @@ class TexText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      alignment: alignment,
-      crossAxisAlignment: WrapCrossAlignment.center,
-      spacing: 4,
-      children: text
-          .split("<m>")
-          .asMap()
-          .map<int, List<Widget>>(
-            (index, e) {
-              if (index.isOdd) {
-                return MapEntry(
-                  index,
-                  [
-                    Math.tex(
-                      e,
-                      textStyle: style,
-                      mathStyle: mathStyle,
-                    ),
-                  ],
-                );
-              }
-              return MapEntry(
-                index,
-                e
-                    .split(" ")
-                    .map<Widget>((e) => Text(
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.values[alignment.index % 3],
+      children: text.split('\n').map<Widget>(
+        (e) {
+          return Wrap(
+            alignment: alignment,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            spacing: 4,
+            children: e
+                .split("<m>")
+                .asMap()
+                .map<int, List<Widget>>(
+                  (index, e) {
+                    if (index.isOdd) {
+                      return MapEntry(
+                        index,
+                        [
+                          Math.tex(
+                            e,
+                            textStyle: style,
+                            mathStyle: mathStyle,
+                          ),
+                        ],
+                      );
+                    }
+                    return MapEntry(
+                      index,
+                      e.split(" ").map<Widget>((e) {
+                        return Text(
                           e,
                           style: style,
-                        ))
-                    .toList(),
-              );
-            },
-          )
-          .values
-          .toList()
-          .expand<Widget>((element) => element)
-          .toList(),
+                        );
+                      }).toList(),
+                    );
+                  },
+                )
+                .values
+                .toList()
+                .expand<Widget>((element) => element)
+                .toList(),
+          );
+        },
+      ).toList(),
     );
   }
 }
