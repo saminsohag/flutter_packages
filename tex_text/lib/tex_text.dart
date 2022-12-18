@@ -2,7 +2,7 @@ library tex_text;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
-export 'package:flutter_math_fork/flutter_math.dart' show MathStyle;
+export 'package:flutter_math_fork/flutter_math.dart';
 
 enum TexAlignment {
   /// [TexAlignment.start] aligns the words at the start of the text
@@ -47,7 +47,7 @@ class TexText extends StatelessWidget {
             crossAxisAlignment: WrapCrossAlignment.center,
             spacing: 4,
             children: e
-                .split("<m>")
+                .split(r'$')
                 .asMap()
                 .map<int, Iterable<Widget>>(
                   (index, e) {
@@ -57,7 +57,7 @@ class TexText extends StatelessWidget {
                         [
                           if (e.isEmpty)
                             Text(
-                              "<m>",
+                              r'$',
                               textAlign: TextAlign.values[alignment.index],
                               style: style,
                             )
