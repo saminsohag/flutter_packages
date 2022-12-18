@@ -1,3 +1,7 @@
+## 0.0.6
+
+* Code improved.
+
 ## 0.0.5
 
 * Code optimized and documentation improved.
