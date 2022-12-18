@@ -30,6 +30,7 @@ class _MyAppState extends State<MyApp> {
                   builder: (context, child) {
                     return TexText(
                       _text.text,
+                      alignment: TexAlignment.start,
                       style: Theme.of(context)
                           .textTheme
                           .titleLarge

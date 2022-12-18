@@ -1,3 +1,7 @@
+## 0.0.5
+
+* Code optimized and documentation improved.
+
 ## 0.0.4
 
 * New line support added.
