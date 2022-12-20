@@ -23,10 +23,13 @@ class TexMarkdown extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: data
-          .split("\n\n")
+          .trim()
+          .split(
+            RegExp(r"\n\n+"),
+          )
           .map<Widget>(
             (e) => Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(4),
               child: MdWidget(
                 e,
                 style: style,

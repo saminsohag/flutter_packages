@@ -5,16 +5,23 @@ This is a flutter package to create markdown widget. with Latex math formula sup
 You can create simple markdown view by this package.
 
 At this moment this package supports:
-* Unordered list 
+- List 
 
-        `* <Text here>`
-* Links 
+        - Unordered list item
+        1. Ordered list item
 
-        `[<text here>](<href>)`
-* Images with size 
+- Horizontal line
 
-        `![<width>x<hight> someText](url)`
-* Table
+        ---
+
+- Links 
+
+        [<text here>](<href>)
+
+- Images with size 
+
+        ![<with>x<hight> someText](url)
+- Table
 
     ```
     | Name | Roll |
@@ -25,17 +32,34 @@ At this moment this package supports:
     |-------------|-------------|
     | sohag      | 1       |
 
-* Bolt texts
+- Bolt text
 
-        `**<Text here>**`
-* heading texts 
+        **Bolt text**
 
-        `## <Text here>`
-* Latex formula 
+- Italic text
 
-        `$\frac a b$`
+        *Italic text*
 
-    $\frac a b$
+- heading texts 
+
+        # Heading 1
+        ## Heading 2
+        ### Heading 3
+        #### Heading 4
+        ##### Heading 5
+        ###### Heading 6
+
+- Latex formula $\frac a b$
+
+        $\frac a b$
+
+- Radio button and checkbox
+
+        () Unchecked radio
+        (x) Checked radio
+        [] Unchecked checkbox
+        [x] Checked checkbox
+
 
 ## Getting started
 

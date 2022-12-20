@@ -3,9 +3,8 @@ import 'package:tex_text/tex_text.dart';
 
 /// It creates a markdown widget closed to each other.
 class MdWidget extends StatelessWidget {
-  MdWidget(String expression,
-      {super.key, this.style, this.onLinkTab, this.followLinkColor = false})
-      : exp = expression.trim();
+  const MdWidget(this.exp,
+      {super.key, this.style, this.onLinkTab, this.followLinkColor = false});
   final String exp;
   final TextStyle? style;
   final Function(String url, String title)? onLinkTab;
@@ -14,17 +13,22 @@ class MdWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final RegExp h = RegExp(r"^(#{1,6})\s(.*)$");
     final RegExp b = RegExp(r"^\*\*([^\s].*[^\s])\*\*$");
+    final RegExp i = RegExp(r"^\*([^\s].*[^\s])\*$");
     final RegExp a = RegExp(r"^\[([^\s].*[^\s]?)?\]\(([^\s]+)?\)$");
     final RegExp img = RegExp(r"^\!\[([^\s].*[^\s]?)?\]\(([^\s]+)\)$");
-    final RegExp ol = RegExp(r"^\*{1}\s(.*)$");
-    final RegExp table =
-        RegExp(r"^(((\|(.*)?\|)(\s?)+\n(\s?)+)+)?((\|(.*)?\|))$");
+    final RegExp ul = RegExp(r"^(\-)\s(.*)$");
+    final RegExp ol = RegExp(r"^([0-9]+.)\s(.*)$");
+    final RegExp rb = RegExp(r"^\((x)?\)\s(.*)$");
+    final RegExp cb = RegExp(r"^\[(x)?\]\s(.*)$");
+    final RegExp hr = RegExp(r"^(--)[-]+$");
+    final RegExp table = RegExp(
+      r"^(((\|[^\n\|]+\|)((([^\n\|]+\|)+)?))(\n(((\|[^\n\|]+\|)(([^\n\|]+\|)+)?)))+)?$",
+    );
     if (table.hasMatch(exp)) {
       final List<Map<int, String>> value = exp
           .split('\n')
           .map<Map<int, String>>(
             (e) => e
-                .trim()
                 .split('|')
                 .where((element) => element.isNotEmpty)
                 .toList()
@@ -38,7 +42,8 @@ class MdWidget extends StatelessWidget {
         }
       }
       if (maxCol == 0) {
-        return const SizedBox();
+        // return const SizedBox();
+        return Text("", style: style);
       }
       return Table(
         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
@@ -64,23 +69,96 @@ class MdWidget extends StatelessWidget {
     }
     if (h.hasMatch(exp)) {
       var match = h.firstMatch(exp.trim());
-      return TexText(
-        "${match?[2]}",
-        style: [
-          Theme.of(context).textTheme.headline4?.copyWith(color: style?.color),
-          Theme.of(context).textTheme.headline5?.copyWith(color: style?.color),
-          Theme.of(context).textTheme.headline6?.copyWith(color: style?.color),
-          Theme.of(context)
-              .textTheme
-              .titleMedium
-              ?.copyWith(color: style?.color),
-          Theme.of(context).textTheme.titleSmall?.copyWith(color: style?.color),
-          Theme.of(context).textTheme.bodySmall?.copyWith(color: style?.color),
-        ][match![1]!.length - 1],
+      return Column(
+        children: [
+          Row(
+            children: [
+              TexText(
+                "${match?[2]}",
+                style: [
+                  Theme.of(context)
+                      .textTheme
+                      .headlineLarge
+                      ?.copyWith(color: style?.color),
+                  Theme.of(context)
+                      .textTheme
+                      .headlineMedium
+                      ?.copyWith(color: style?.color),
+                  Theme.of(context)
+                      .textTheme
+                      .headlineSmall
+                      ?.copyWith(color: style?.color),
+                  Theme.of(context)
+                      .textTheme
+                      .titleLarge
+                      ?.copyWith(color: style?.color),
+                  Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(color: style?.color),
+                  Theme.of(context)
+                      .textTheme
+                      .titleSmall
+                      ?.copyWith(color: style?.color),
+                ][match![1]!.length - 1],
+              ),
+            ],
+          ),
+          if (match[1]!.length == 1) const Divider(height: 6),
+        ],
       );
     }
-    if (ol.hasMatch(exp)) {
-      var match = ol.firstMatch(exp.trim());
+    if (hr.hasMatch(exp)) {
+      return const Divider(
+        height: 5,
+      );
+    }
+    if (cb.hasMatch(exp)) {
+      var match = cb.firstMatch(exp.trim());
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Checkbox(
+              // value: true,
+              value: ("${match?[1]}" == "x"),
+              onChanged: (value) {},
+              fillColor: ButtonStyleButton.allOrNull(style?.color),
+            ),
+          ),
+          MdWidget(
+            "${match?[2]}",
+            style: style,
+          ),
+        ],
+      );
+    }
+    if (rb.hasMatch(exp)) {
+      var match = rb.firstMatch(exp.trim());
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Radio(
+              value: true,
+              groupValue: ("${match?[1]}" == "x"),
+              onChanged: (value) {},
+              fillColor: ButtonStyleButton.allOrNull(style?.color),
+            ),
+          ),
+          MdWidget(
+            "${match?[2]}",
+            style: style,
+          ),
+        ],
+      );
+    }
+    if (ul.hasMatch(exp)) {
+      var match = ul.firstMatch(exp.trim());
       return Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.max,
@@ -90,11 +168,34 @@ class MdWidget extends StatelessWidget {
             child: Icon(
               Icons.circle,
               color: style?.color,
-              size: 12,
+              size: 8,
             ),
           ),
           MdWidget(
-            "${match?[1]}",
+            "${match?[2]}",
+            style: style,
+          ),
+        ],
+      );
+    }
+    if (ol.hasMatch(exp)) {
+      var match = ol.firstMatch(exp.trim());
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 11),
+            child: Text(
+              "${match?[1]}",
+              style: (style ?? const TextStyle())
+                  .copyWith(fontWeight: FontWeight.bold),
+              // color: style?.color,
+              // size: 12,
+            ),
+          ),
+          MdWidget(
+            "${match?[2]}",
             style: style,
           ),
         ],
@@ -106,6 +207,14 @@ class MdWidget extends StatelessWidget {
         "${match?[1]}",
         style: style?.copyWith(fontWeight: FontWeight.bold) ??
             const TextStyle(fontWeight: FontWeight.bold),
+      );
+    }
+    if (i.hasMatch(exp)) {
+      var match = i.firstMatch(exp.trim());
+      return TexText(
+        "${match?[1]}",
+        style:
+            (style ?? const TextStyle()).copyWith(fontStyle: FontStyle.italic),
       );
     }
     if (a.hasMatch(exp)) {
@@ -156,20 +265,24 @@ class MdWidget extends StatelessWidget {
         ),
       );
     }
-    List<String> expL = exp
-        .split('\n')
-        .map(
-          (e) => e.trim(),
-        )
-        .toList();
+    List<String> expL = exp.split('\n');
+    // .map(
+    //   (e) => e.trim(),
+    // )
+    // .toList();
     bool hasMatch = false;
 
     for (final each in expL) {
       if (a.hasMatch(each) ||
-          h.hasMatch(each) ||
           b.hasMatch(each) ||
+          i.hasMatch(each) ||
+          h.hasMatch(each) ||
+          hr.hasMatch(each) ||
+          ol.hasMatch(each) ||
+          rb.hasMatch(each) ||
+          cb.hasMatch(each) ||
           img.hasMatch(each) ||
-          ol.hasMatch(each)) {
+          ul.hasMatch(each)) {
         hasMatch = true;
       }
     }
@@ -177,7 +290,6 @@ class MdWidget extends StatelessWidget {
       return Wrap(
         crossAxisAlignment: WrapCrossAlignment.center,
         spacing: 10,
-        runSpacing: 2,
         children: exp
             .split("\n")
             .map<Widget>((e) => MdWidget(
