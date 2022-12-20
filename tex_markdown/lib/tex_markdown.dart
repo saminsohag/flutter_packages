@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'md_widget.dart';
 
-/// A Calculator.
+/// This widget create a full markdown widget as a column view.
 class TexMarkdown extends StatelessWidget {
   const TexMarkdown(
     this.data, {

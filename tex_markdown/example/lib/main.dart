@@ -31,7 +31,18 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller =
+      TextEditingController(text: '''# hi how are you?
+
+## hi how are you?
+
+### hi how are you?
+
+#### hi how are you?
+
+##### hi how are you?
+
+###### hi how are you?''');
   @override
   Widget build(BuildContext context) {
     return Scaffold(

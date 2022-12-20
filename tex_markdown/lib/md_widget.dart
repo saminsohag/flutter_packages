@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tex_text/tex_text.dart';
 
+/// It creates a markdown widget closed to each other.
 class MdWidget extends StatelessWidget {
   MdWidget(String expression,
       {super.key, this.style, this.onLinkTab, this.followLinkColor = false})
@@ -52,7 +53,6 @@ class MdWidget extends StatelessWidget {
                       child: MdWidget(
                         e[index] ?? "",
                         style: style,
-                        // alignment: TexAlignment.center,
                       ),
                     ),
                   ),
@@ -67,12 +67,15 @@ class MdWidget extends StatelessWidget {
       return TexText(
         "${match?[2]}",
         style: [
-          Theme.of(context).textTheme.headline1?.copyWith(color: style?.color),
-          Theme.of(context).textTheme.headline2?.copyWith(color: style?.color),
-          Theme.of(context).textTheme.headline3?.copyWith(color: style?.color),
           Theme.of(context).textTheme.headline4?.copyWith(color: style?.color),
           Theme.of(context).textTheme.headline5?.copyWith(color: style?.color),
           Theme.of(context).textTheme.headline6?.copyWith(color: style?.color),
+          Theme.of(context)
+              .textTheme
+              .titleMedium
+              ?.copyWith(color: style?.color),
+          Theme.of(context).textTheme.titleSmall?.copyWith(color: style?.color),
+          Theme.of(context).textTheme.bodySmall?.copyWith(color: style?.color),
         ][match![1]!.length - 1],
       );
     }
@@ -94,10 +97,6 @@ class MdWidget extends StatelessWidget {
             "${match?[1]}",
             style: style,
           ),
-          // TexText(
-          //   "${match?[1]}",
-          //   style: style,
-          // ),
         ],
       );
     }
