@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:tex_markdown/tex_markdown.dart';
 
@@ -70,6 +72,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     builder: (context, _) {
                       return TexMarkdown(
                         _controller.text,
+                        onLinkTab: (url, title) {
+                          log(title, name: "title");
+                          log(url, name: "url");
+                        },
                         style: const TextStyle(
                           color: Colors.red,
                         ),

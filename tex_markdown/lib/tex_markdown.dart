@@ -15,7 +15,7 @@ class TexMarkdown extends StatelessWidget {
   });
   final String data;
   final TextStyle? style;
-  final Function(String url, String title)? onLinkTab;
+  final void Function(String url, String title)? onLinkTab;
   final bool followLinkColor;
 
   @override

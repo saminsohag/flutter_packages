@@ -7,19 +7,19 @@ class MdWidget extends StatelessWidget {
       {super.key, this.style, this.onLinkTab, this.followLinkColor = false});
   final String exp;
   final TextStyle? style;
-  final Function(String url, String title)? onLinkTab;
+  final void Function(String url, String title)? onLinkTab;
   final bool followLinkColor;
   @override
   Widget build(BuildContext context) {
-    final RegExp h = RegExp(r"^(#{1,6})\s(.*)$");
-    final RegExp b = RegExp(r"^\*\*([^\s].*[^\s])\*\*$");
-    final RegExp i = RegExp(r"^\*([^\s].*[^\s])\*$");
-    final RegExp a = RegExp(r"^\[([^\s].*[^\s]?)?\]\(([^\s]+)?\)$");
+    final RegExp h = RegExp(r"^(#{1,6})\s([^\n]+)$");
+    final RegExp b = RegExp(r"^\*{2}(([\S^\*].*)?[\S^\*])\*{2}$");
+    final RegExp i = RegExp(r"^\*{1}(([\S^\*].*)?[\S^\*])\*{1}$");
+    final RegExp a = RegExp(r"^\[([^\s\*].*[^\s]?)?\]\(([^\s\*]+)?\)$");
     final RegExp img = RegExp(r"^\!\[([^\s].*[^\s]?)?\]\(([^\s]+)\)$");
-    final RegExp ul = RegExp(r"^(\-)\s(.*)$");
-    final RegExp ol = RegExp(r"^([0-9]+.)\s(.*)$");
-    final RegExp rb = RegExp(r"^\((x)?\)\s(.*)$");
-    final RegExp cb = RegExp(r"^\[(x)?\]\s(.*)$");
+    final RegExp ul = RegExp(r"^(\-)\s([^\n]+)$");
+    final RegExp ol = RegExp(r"^([0-9]+.)\s([^\n]+)$");
+    final RegExp rb = RegExp(r"^\((\x?)\)\s(\S.*)$");
+    final RegExp cb = RegExp(r"^\[(\x?)\]\s(\S.*)$");
     final RegExp hr = RegExp(r"^(--)[-]+$");
     final RegExp table = RegExp(
       r"^(((\|[^\n\|]+\|)((([^\n\|]+\|)+)?))(\n(((\|[^\n\|]+\|)(([^\n\|]+\|)+)?)))+)?$",
@@ -51,17 +51,16 @@ class MdWidget extends StatelessWidget {
         children: value
             .map<TableRow>(
               (e) => TableRow(
-                children: [
-                  ...List.generate(
-                    maxCol,
-                    (index) => Center(
-                      child: MdWidget(
-                        e[index] ?? "",
-                        style: style,
-                      ),
+                children: List.generate(
+                  maxCol,
+                  (index) => Center(
+                    child: MdWidget(
+                      (e[index] ?? "").trim(),
+                      onLinkTab: onLinkTab,
+                      style: style,
                     ),
                   ),
-                ],
+                ),
               ),
             )
             .toList(),
@@ -130,6 +129,7 @@ class MdWidget extends StatelessWidget {
           ),
           MdWidget(
             "${match?[2]}",
+            onLinkTab: onLinkTab,
             style: style,
           ),
         ],
@@ -152,6 +152,7 @@ class MdWidget extends StatelessWidget {
           ),
           MdWidget(
             "${match?[2]}",
+            onLinkTab: onLinkTab,
             style: style,
           ),
         ],
@@ -173,6 +174,7 @@ class MdWidget extends StatelessWidget {
           ),
           MdWidget(
             "${match?[2]}",
+            onLinkTab: onLinkTab,
             style: style,
           ),
         ],
@@ -190,12 +192,11 @@ class MdWidget extends StatelessWidget {
               "${match?[1]}",
               style: (style ?? const TextStyle())
                   .copyWith(fontWeight: FontWeight.bold),
-              // color: style?.color,
-              // size: 12,
             ),
           ),
           MdWidget(
             "${match?[2]}",
+            onLinkTab: onLinkTab,
             style: style,
           ),
         ],
@@ -224,12 +225,14 @@ class MdWidget extends StatelessWidget {
       }
       return GestureDetector(
         onTap: () {
-          if (onLinkTab != null) {
-            onLinkTab!("${match?[2]}", "${match?[2]}");
+          if (onLinkTab == null) {
+            return;
           }
+          onLinkTab!("${match?[1]}", "${match?[2]}");
         },
         child: MdWidget(
           "${match?[1]}",
+          onLinkTab: onLinkTab,
           style: ((followLinkColor && style != null)
                   ? style
                   : const TextStyle(color: Colors.blueAccent))
@@ -294,6 +297,7 @@ class MdWidget extends StatelessWidget {
             .split("\n")
             .map<Widget>((e) => MdWidget(
                   e,
+                  onLinkTab: onLinkTab,
                   style: style,
                 ))
             .toList(),
