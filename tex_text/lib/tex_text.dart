@@ -43,51 +43,62 @@ class TexText extends StatelessWidget {
       children: text.split('\n').map<Widget>(
         (e) {
           return Wrap(
-            alignment: WrapAlignment.values[alignment.index],
-            crossAxisAlignment: WrapCrossAlignment.center,
-            spacing: 4,
-            children: e
-                .split(r'$')
-                .asMap()
-                .map<int, Iterable<Widget>>(
-                  (index, e) {
-                    if (index.isOdd) {
+              alignment: WrapAlignment.values[alignment.index],
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: e
+                  .split(r'$')
+                  .asMap()
+                  .map<int, Iterable<Widget>>(
+                    (index, e) {
+                      if (index.isOdd) {
+                        return MapEntry(
+                          index,
+                          [
+                            if (e.isEmpty)
+                              Text(
+                                r'$',
+                                textAlign: TextAlign.values[alignment.index],
+                                style: style,
+                              )
+                            else
+                              Math.tex(
+                                e,
+                                textStyle: style,
+                                mathStyle: mathStyle,
+                              ),
+                          ],
+                        );
+                      }
                       return MapEntry(
                         index,
-                        [
-                          if (e.isEmpty)
-                            Text(
-                              r'$',
-                              textAlign: TextAlign.values[alignment.index],
-                              style: style,
+                        e
+                            .split(" ")
+                            .asMap()
+                            .map<int, Iterable<Widget>>(
+                              (index, e) {
+                                return MapEntry(index, [
+                                  if (index != 0)
+                                    Text(
+                                      " ",
+                                      style: style,
+                                    ),
+                                  Text(
+                                    e,
+                                    textAlign:
+                                        TextAlign.values[alignment.index],
+                                    style: style,
+                                  ),
+                                ]);
+                              },
                             )
-                          else
-                            Math.tex(
-                              e,
-                              textStyle: style,
-                              mathStyle: mathStyle,
-                            ),
-                        ],
+                            .values
+                            .expand((element) => element),
                       );
-                    }
-                    return MapEntry(
-                      index,
-                      e.split(" ").map<Widget>(
-                        (e) {
-                          return Text(
-                            e,
-                            textAlign: TextAlign.values[alignment.index],
-                            style: style,
-                          );
-                        },
-                      ),
-                    );
-                  },
-                )
-                .values
-                .expand<Widget>((element) => element)
-                .toList(),
-          );
+                    },
+                  )
+                  .values
+                  .expand<Widget>((element) => element)
+                  .toList());
         },
       ).toList(),
     );
