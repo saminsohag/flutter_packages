@@ -46,14 +46,22 @@ flutter pub add tex_markdown
 
 ## Usage
 
-[documentation]()
+Check the documentation [here.](https://github.com/saminsohag/flutter_packages/tree/main/tex_markdown/example)
 
 ```dart
-const like = 'sample';
+import 'package:flutter/material.dart';
+import 'package:tex_markdown/tex_markdown.dart';
+
+return TexMarkdown(
+    '''
+    * This is a unordered list.
+    ''',
+    style: const TextStyle(
+    color: Colors.red,
+),
+
 ```
 
 ## Additional information
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+You can find the source code [here.](https://github.com/saminsohag/flutter_packages/tree/main/tex_markdown)
