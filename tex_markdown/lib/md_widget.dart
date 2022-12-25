@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:tex_text/tex_text.dart';
 
@@ -47,7 +49,10 @@ class MdWidget extends StatelessWidget {
       }
       return Table(
         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-        border: TableBorder.all(width: 1),
+        border: TableBorder.all(
+          width: 1,
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
         children: value
             .map<TableRow>(
               (e) => TableRow(
@@ -72,34 +77,36 @@ class MdWidget extends StatelessWidget {
         children: [
           Row(
             children: [
-              TexText(
-                "${match?[2]}",
-                style: [
-                  Theme.of(context)
-                      .textTheme
-                      .headlineLarge
-                      ?.copyWith(color: style?.color),
-                  Theme.of(context)
-                      .textTheme
-                      .headlineMedium
-                      ?.copyWith(color: style?.color),
-                  Theme.of(context)
-                      .textTheme
-                      .headlineSmall
-                      ?.copyWith(color: style?.color),
-                  Theme.of(context)
-                      .textTheme
-                      .titleLarge
-                      ?.copyWith(color: style?.color),
-                  Theme.of(context)
-                      .textTheme
-                      .titleMedium
-                      ?.copyWith(color: style?.color),
-                  Theme.of(context)
-                      .textTheme
-                      .titleSmall
-                      ?.copyWith(color: style?.color),
-                ][match![1]!.length - 1],
+              Expanded(
+                child: TexText(
+                  "${match?[2]}",
+                  style: [
+                    Theme.of(context)
+                        .textTheme
+                        .headlineLarge
+                        ?.copyWith(color: style?.color),
+                    Theme.of(context)
+                        .textTheme
+                        .headlineMedium
+                        ?.copyWith(color: style?.color),
+                    Theme.of(context)
+                        .textTheme
+                        .headlineSmall
+                        ?.copyWith(color: style?.color),
+                    Theme.of(context)
+                        .textTheme
+                        .titleLarge
+                        ?.copyWith(color: style?.color),
+                    Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(color: style?.color),
+                    Theme.of(context)
+                        .textTheme
+                        .titleSmall
+                        ?.copyWith(color: style?.color),
+                  ][match![1]!.length - 1],
+                ),
               ),
             ],
           ),
@@ -127,10 +134,12 @@ class MdWidget extends StatelessWidget {
               fillColor: ButtonStyleButton.allOrNull(style?.color),
             ),
           ),
-          MdWidget(
-            "${match?[2]}",
-            onLinkTab: onLinkTab,
-            style: style,
+          Expanded(
+            child: MdWidget(
+              "${match?[2]}",
+              onLinkTab: onLinkTab,
+              style: style,
+            ),
           ),
         ],
       );
@@ -150,10 +159,12 @@ class MdWidget extends StatelessWidget {
               fillColor: ButtonStyleButton.allOrNull(style?.color),
             ),
           ),
-          MdWidget(
-            "${match?[2]}",
-            onLinkTab: onLinkTab,
-            style: style,
+          Expanded(
+            child: MdWidget(
+              "${match?[2]}",
+              onLinkTab: onLinkTab,
+              style: style,
+            ),
           ),
         ],
       );
@@ -172,10 +183,12 @@ class MdWidget extends StatelessWidget {
               size: 8,
             ),
           ),
-          MdWidget(
-            "${match?[2]}",
-            onLinkTab: onLinkTab,
-            style: style,
+          Expanded(
+            child: MdWidget(
+              "${match?[2]}",
+              onLinkTab: onLinkTab,
+              style: style,
+            ),
           ),
         ],
       );
@@ -194,10 +207,12 @@ class MdWidget extends StatelessWidget {
                   .copyWith(fontWeight: FontWeight.bold),
             ),
           ),
-          MdWidget(
-            "${match?[2]}",
-            onLinkTab: onLinkTab,
-            style: style,
+          Expanded(
+            child: MdWidget(
+              "${match?[2]}",
+              onLinkTab: onLinkTab,
+              style: style,
+            ),
           ),
         ],
       );
@@ -228,7 +243,7 @@ class MdWidget extends StatelessWidget {
           if (onLinkTab == null) {
             return;
           }
-          onLinkTab!("${match?[1]}", "${match?[2]}");
+          onLinkTab!("${match?[2]}", "${match?[1]}");
         },
         child: MdWidget(
           "${match?[1]}",

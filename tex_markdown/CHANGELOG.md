@@ -1,3 +1,7 @@
+## 0.0.4
+
+* Heading, Lists, Checkboxes and RadioButton wrap fixed and Table borer color fixed.
+
 ## 0.0.3
 
 * More support added and heading text style changed.

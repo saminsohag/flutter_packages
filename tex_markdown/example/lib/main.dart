@@ -7,24 +7,46 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  ThemeMode _themeMode = ThemeMode.light;
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
+      themeMode: _themeMode,
       theme: ThemeData(
         useMaterial3: true,
+        brightness: Brightness.light,
         colorSchemeSeed: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        brightness: Brightness.dark,
+        colorSchemeSeed: Colors.blue,
+      ),
+      home: MyHomePage(
+        title: 'Flutter Demo Home Page',
+        onPressed: () {
+          setState(() {
+            _themeMode = ThemeMode.values[(_themeMode.index + 1) % 2];
+          });
+        },
+      ),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({super.key, required this.title, required this.onPressed});
+  final VoidCallback? onPressed;
 
   final String title;
 
@@ -61,6 +83,12 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        actions: [
+          IconButton(
+            onPressed: widget.onPressed,
+            icon: const Icon(Icons.sunny),
+          ),
+        ],
       ),
       body: Column(
         children: [
