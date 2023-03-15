@@ -1,3 +1,7 @@
+## 0.0.5
+
+* Bug fixed.
+
 ## 0.0.4
 
 * Heading, Lists, Checkboxes and RadioButton wrap fixed and Table borer color fixed.

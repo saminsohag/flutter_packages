@@ -16,8 +16,8 @@ class MdWidget extends StatelessWidget {
     final RegExp i = RegExp(r"^\*{1}(([\S^\*].*)?[\S^\*])\*{1}$");
     final RegExp a = RegExp(r"^\[([^\s\*].*[^\s]?)?\]\(([^\s\*]+)?\)$");
     final RegExp img = RegExp(r"^\!\[([^\s].*[^\s]?)?\]\(([^\s]+)\)$");
-    final RegExp ul = RegExp(r"^(\-)\s([^\n]+)$");
-    final RegExp ol = RegExp(r"^([0-9]+.)\s([^\n]+)$");
+    final RegExp ul = RegExp(r"^(\-|\*)\s([^\n]+)$");
+    final RegExp ol = RegExp(r"^([0-9]+\.)\s([^\n]+)$");
     final RegExp rb = RegExp(r"^\((\x?)\)\s(\S.*)$");
     final RegExp cb = RegExp(r"^\[(\x?)\]\s(\S.*)$");
     final RegExp hr = RegExp(r"^(--)[-]+$");
