@@ -1,5 +1,5 @@
 This package is used to create text with LaTex math formulas
-Example: The equation is <m>x^2+y^2=z^2<m>
+Example: The equation is $x^2+y^2=z^2$
 This example will show the text along with the equation
 
 ## Features
@@ -13,10 +13,12 @@ no additional configuration needed.
 
 ## Usage
 
-Wrap the LaTex formula with <m> tag to display the equation.
+Wrap the LaTex formula with dollar $ sign to display the equation
+
+use backslash dollar \$ to display $.
 
 ```dart
-TexText(r'The equation is <m>x^2+y^2=z^2<m>');
+TexText(r'The equation is $x^2+y^2=z^2$');
 ```
 
 ## Additional information

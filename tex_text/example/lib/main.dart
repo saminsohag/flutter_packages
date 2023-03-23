@@ -31,10 +31,7 @@ class _MyAppState extends State<MyApp> {
                     return TexText(
                       _text.text,
                       alignment: TexAlignment.start,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge
-                          ?.copyWith(color: Colors.red),
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(),
                       mathStyle: MathStyle.text,
                     );
                   }),

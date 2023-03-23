@@ -35,6 +35,57 @@ class TexText extends StatelessWidget {
   final MathStyle mathStyle;
   final TexAlignment alignment;
 
+  List<Widget> generateWidget(String e) {
+    const dollar = r"\[-~`::36]";
+    List<Widget> widgets = [];
+
+    e.replaceAll("\\\$", dollar).splitMapJoin(
+      RegExp(
+        r"(?!\\)\$(.*?)(?!\\)\$",
+      ),
+      onMatch: (p0) {
+        widgets.add(
+          Math.tex(
+            p0[1].toString().replaceAll(dollar, "\\\$"),
+            textStyle: style,
+            mathStyle: mathStyle,
+            textScaleFactor: 1,
+            onErrorFallback: (err) {
+              return Text(
+                "\$${p0[1]}\$",
+                style: style?.copyWith(color: Colors.red),
+              );
+            },
+          ),
+        );
+        return p0[1].toString();
+      },
+      onNonMatch: (p0) {
+        p0
+            .toString()
+            .replaceAll(dollar, "\$")
+            .split(" ")
+            .asMap()
+            .forEach((key, element) {
+          if (key != 0) {
+            widgets.add(Text(
+              " ",
+              textAlign: TextAlign.values[alignment.index],
+              style: style,
+            ));
+          }
+          widgets.add(Text(
+            element,
+            textAlign: TextAlign.values[alignment.index],
+            style: style,
+          ));
+        });
+        return p0;
+      },
+    );
+    return widgets;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -45,60 +96,7 @@ class TexText extends StatelessWidget {
           return Wrap(
               alignment: WrapAlignment.values[alignment.index],
               crossAxisAlignment: WrapCrossAlignment.center,
-              children: e
-                  .split(r'$')
-                  .asMap()
-                  .map<int, Iterable<Widget>>(
-                    (index, e) {
-                      if (index.isOdd) {
-                        return MapEntry(
-                          index,
-                          [
-                            if (e.isEmpty)
-                              Text(
-                                r'$',
-                                textAlign: TextAlign.values[alignment.index],
-                                style: style,
-                              )
-                            else
-                              Math.tex(
-                                e,
-                                textStyle: style,
-                                mathStyle: mathStyle,
-                              ),
-                          ],
-                        );
-                      }
-                      return MapEntry(
-                        index,
-                        e
-                            .split(" ")
-                            .asMap()
-                            .map<int, Iterable<Widget>>(
-                              (index, e) {
-                                return MapEntry(index, [
-                                  if (index != 0)
-                                    Text(
-                                      " ",
-                                      style: style,
-                                    ),
-                                  Text(
-                                    e,
-                                    textAlign:
-                                        TextAlign.values[alignment.index],
-                                    style: style,
-                                  ),
-                                ]);
-                              },
-                            )
-                            .values
-                            .expand((element) => element),
-                      );
-                    },
-                  )
-                  .values
-                  .expand<Widget>((element) => element)
-                  .toList());
+              children: generateWidget(e));
         },
       ).toList(),
     );

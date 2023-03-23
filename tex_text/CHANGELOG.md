@@ -1,3 +1,8 @@
+## 0.0.8
+
+* Error display fixed.
+* Dollar parsing fixed.
+
 ## 0.0.7
 
 * Font spacing fixed.
