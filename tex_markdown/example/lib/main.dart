@@ -15,7 +15,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  ThemeMode _themeMode = ThemeMode.light;
+  ThemeMode _themeMode = ThemeMode.system;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -36,7 +36,7 @@ class _MyAppState extends State<MyApp> {
         title: 'Flutter Demo Home Page',
         onPressed: () {
           setState(() {
-            _themeMode = ThemeMode.values[(_themeMode.index + 1) % 2];
+            _themeMode = ThemeMode.values[(_themeMode.index + 1) % 3];
           });
         },
       ),
@@ -105,8 +105,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           log(url, name: "url");
                         },
                         style: const TextStyle(
-                          color: Colors.red,
-                        ),
+                            // color: Colors.red,
+                            ),
                       );
                     }),
               ],
