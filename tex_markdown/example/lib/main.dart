@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tex_markdown/tex_markdown.dart';
 
 void main() {
@@ -105,8 +106,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           log(url, name: "url");
                         },
                         style: const TextStyle(
-                            // color: Colors.red,
-                            ),
+                          color: Colors.green,
+                        ),
                       );
                     }),
               ],
@@ -114,14 +115,37 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           ConstrainedBox(
             constraints: const BoxConstraints(maxHeight: 200),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                decoration: const InputDecoration(
-                    border: OutlineInputBorder(), label: Text("Type here:")),
-                maxLines: null,
-                controller: _controller,
-              ),
+            child: Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        label: Text("Type here:")),
+                    maxLines: null,
+                    controller: _controller,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    String html = '''<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><title>markdown</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+</head>
+<body>
+${TexMarkdown.toHtml(_controller.text)}
+</body>
+</html>
+''';
+                    Clipboard.setData(ClipboardData(text: html));
+                  },
+                  icon: const Icon(Icons.html),
+                ),
+              ],
             ),
           ),
         ],

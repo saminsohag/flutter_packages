@@ -1,3 +1,15 @@
+## 0.0.9
+
+* To html added.
+
+## 0.0.8
+
+* Bug fixes.
+
+## 0.0.7
+
+* Bug fixes.
+
 ## 0.0.6
 
 * Bug fixes.

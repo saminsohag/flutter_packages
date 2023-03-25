@@ -17,6 +17,13 @@ class TexMarkdown extends StatelessWidget {
   final TextStyle? style;
   final void Function(String url, String title)? onLinkTab;
   final bool followLinkColor;
+  static String toHtml(String text) {
+    String html = "";
+    text.trim().split(RegExp(r"\n\n+")).forEach((element) {
+      html += MdWidget.toHtml(element);
+    });
+    return html;
+  }
 
   @override
   Widget build(BuildContext context) {
