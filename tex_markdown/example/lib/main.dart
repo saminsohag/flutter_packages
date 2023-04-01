@@ -56,17 +56,24 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final TextEditingController _controller =
-      TextEditingController(text: '''# hi how are you?
-## hi how are you?
+  final TextEditingController _controller = TextEditingController(text: r'''
+# hi how are you?$my  is^2$
+## hi how are you$(\frac ab)^2$?
 ### hi how are you?
 #### hi how are you?
-##### hi how are you?
-###### hi how are you?
-![100x100](https://image.jpg)
+##### hi how are you?$my name is x^2$
+###### hi how are you?$x^2$
+hello
 ---
-**bold text**
-*Italic text*
+my name is
+![100x100](https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/800px-Image_created_with_a_mobile_phone.png)
+**bold$x^2\cfrac a{\cfrac ab}$ text**
+*Italic text$x^2\cfrac a{b}$*
+**hello**
+$hello$
+
+$sdf\frac a{\frac ab}$
+$hello$
 [Link]()
 - unordered list
 1. ordered list 1

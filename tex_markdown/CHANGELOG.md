@@ -1,3 +1,8 @@
+## 0.1.2
+
+* Bug fixes.
+* Shortcut syntax to math added.
+
 ## 0.1.1
 
 * Html parser math fixed.

@@ -238,15 +238,15 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.1.1"
+    version: "0.1.2"
   tex_text:
     dependency: transitive
     description:
       name: tex_text
-      sha256: "33bd11ec8eb58ca9d32919a71629ab80d704405da1a6e03d48ec3f6a266f1267"
+      sha256: "46942a9587170f5130d2f7110083abd4335b66d763b0cf6a241c80e74826d71d"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.4"
+    version: "0.1.5"
   tuple:
     dependency: transitive
     description:

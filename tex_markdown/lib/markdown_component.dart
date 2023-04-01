@@ -50,7 +50,10 @@ abstract class MarkdownComponent {
             if (each is InlineMd) {
               if (spans.isNotEmpty) {
                 spans.add(
-                  TextSpan(text: " ", style: style),
+                  TextSpan(
+                    text: " ",
+                    style: style,
+                  ),
                 );
               }
               spans.add(each.inlineSpan(
@@ -83,7 +86,9 @@ abstract class MarkdownComponent {
     if (spans.isNotEmpty) {
       children.add(
         Text.rich(
-          TextSpan(children: List.from(spans)),
+          TextSpan(
+            children: List.from(spans),
+          ),
           textAlign: TextAlign.left,
         ),
       );
@@ -168,7 +173,13 @@ class HTag extends BlockMd {
             ),
           ],
         ),
-        if (match[1]!.length == 1) const Divider(height: 6),
+        if (match[1]!.length == 1)
+          Divider(
+            height: 6,
+            thickness: 2,
+            color:
+                style?.color ?? Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
       ],
     );
   }
@@ -190,8 +201,10 @@ class HrLine extends BlockMd {
     TextStyle? style,
     final void Function(String url, String title)? onLinkTab,
   ) {
-    return const Divider(
-      height: 5,
+    return Divider(
+      height: 6,
+      thickness: 2,
+      color: style?.color ?? Theme.of(context).colorScheme.onSurfaceVariant,
     );
   }
 
@@ -393,6 +406,8 @@ class BoldMd extends InlineMd {
     var match = exp.firstMatch(text.trim());
     return WidgetSpan(
       // text: "${match?[1]}",
+      alignment: PlaceholderAlignment.baseline,
+      baseline: TextBaseline.alphabetic,
       child: TexText(
         "${match?[1]}",
         style: style?.copyWith(fontWeight: FontWeight.bold) ??
@@ -423,6 +438,8 @@ class ItalicMd extends InlineMd {
   ) {
     var match = exp.firstMatch(text.trim());
     return WidgetSpan(
+      alignment: PlaceholderAlignment.baseline,
+      baseline: TextBaseline.alphabetic,
       child: TexText(
         "${match?[1]}",
         style:
@@ -455,6 +472,8 @@ class ATagMd extends InlineMd {
       return const TextSpan();
     }
     return WidgetSpan(
+      alignment: PlaceholderAlignment.baseline,
+      baseline: TextBaseline.alphabetic,
       child: GestureDetector(
         onTap: () {
           if (onLinkTab == null) {
@@ -502,7 +521,7 @@ class ImageMd extends InlineMd {
       height = double.tryParse(size?[2]?.toString().trim() ?? 'a');
     }
     return WidgetSpan(
-      // alignment: PlaceholderAlignment.middle,
+      alignment: PlaceholderAlignment.bottom,
       child: SizedBox(
         width: width,
         height: height,
@@ -526,7 +545,15 @@ class ImageMd extends InlineMd {
   @override
   String toHtml(String text) {
     var match = exp.firstMatch(text.trim());
-    return '<img src="${match?[2].toString().trim()}">';
+    double? height;
+    double? width;
+    if (match?[1] != null) {
+      var size = RegExp(r"^([0-9]+)?x?([0-9]+)?")
+          .firstMatch(match![1].toString().trim());
+      width = double.tryParse(size?[1]?.toString().trim() ?? 'a');
+      height = double.tryParse(size?[2]?.toString().trim() ?? 'a');
+    }
+    return '<img src="${match?[2].toString().trim()}" height="$height" width="$width">';
   }
 }
 
