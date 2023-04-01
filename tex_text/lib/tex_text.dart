@@ -27,78 +27,137 @@ enum TexAlignment {
 class TexText extends StatelessWidget {
   const TexText(this.text,
       {super.key,
-      this.style,
-      this.mathStyle = MathStyle.display,
-      this.alignment = TexAlignment.start});
+      TextStyle? style,
+      this.mathStyle = MathStyle.text,
+      this.alignment = TexAlignment.start})
+      : _style = style;
   final String text;
-  final TextStyle? style;
+  final TextStyle? _style;
   final MathStyle mathStyle;
   final TexAlignment alignment;
 
-  List<Widget> generateWidget(String e) {
-    const dollar = r"\[-~`::36]";
-    List<Widget> widgets = [];
+  /// LaTex to HTML parser
+  String toHtml() {
+    return toHtmlData(text);
+  }
 
-    e.replaceAll("\\\$", dollar).splitMapJoin(
+  static String _newEasySyntax(String data) {
+    return data
+        .replaceAll(r"\frac", r"\cfrac")
+        .replaceAll(r"\left[", r"[")
+        .replaceAll(r"\right]", r"]")
+        .replaceAll(r"[", r"{\left[")
+        .replaceAll(r"]", r"\right]}")
+        .replaceAll(r"\left\{", r"\{")
+        .replaceAll(r"\right\}", r"\}")
+        .replaceAll(r"\{", r"{\left\{")
+        .replaceAll(r"\}", r"\right\}}")
+        .replaceAll(r"\left(", r"(")
+        .replaceAll(r"\right)", r")")
+        .replaceAll(r"(", r"{\left(")
+        .replaceAll(r")", r"\right)}")
+        .replaceAll(RegExp(r"\\tf"), r"\therefore")
+        .replaceAll(RegExp(r"\\bc"), r"\because")
+        .replaceAllMapped(
+            RegExp(r"([^A-Za-z]|^)(sin|cos|tan|cosec|sec|cot)([^A-Za-z]|$)"),
+            (match) => "{\\${match[2].toString()}}${match[3].toString()}")
+        .replaceAll(r"=>", r"{\Rightarrow}")
+        .replaceAll(RegExp(r"\\AA(\s|$)"), r"{Å}")
+        .replaceAll(r"*", r"{\times}")
+        .replaceAllMapped(
+            RegExp(r"\\([a-z]?)mat(\s+?\S.*?)\\([a-z]?)mat"),
+            (match) =>
+                "\\begin{${match[1].toString()}matrix}${match[2].toString().replaceAll("\\&", r"{\&}").replaceAll(",", "&").replaceAll("&&", "\\\\")}\\end{${match[3].toString()}matrix}");
+  }
+
+  /// LaTex to HTML parser
+  static String toHtmlData(String data) {
+    const dollar = r"\[-~`::36]";
+    return data.replaceAll("\\\$", dollar).splitMapJoin(
       RegExp(
         r"(?!\\)\$(.*?)(?!\\)\$",
       ),
       onMatch: (p0) {
+        return "\\(${_newEasySyntax(p0[1].toString().replaceAll(dollar, "\\\$"))}\\)";
+      },
+      onNonMatch: (p0) {
+        return p0
+            .replaceAll(dollar, "\$")
+            .replaceAll("\n", "</br>")
+            .replaceAll(" ", r"&nbsp;");
+      },
+    ).trim();
+  }
+
+  Widget _generateWidget(BuildContext context, String e) {
+    TextStyle? style = _style ?? Theme.of(context).textTheme.bodyMedium;
+    const dollar = r"\[-~`::36]";
+    List<InlineSpan> widgets = [];
+
+    e.replaceAll("\\\$", dollar).splitMapJoin(
+      RegExp(
+        r"\$(.*?)\$",
+      ),
+      onMatch: (p0) {
         widgets.add(
-          Math.tex(
-            p0[1].toString().replaceAll(dollar, "\\\$"),
-            textStyle: style,
-            mathStyle: mathStyle,
-            textScaleFactor: 1,
-            onErrorFallback: (err) {
-              return Text(
-                "\$${p0[1]}\$",
-                style: style?.copyWith(color: Colors.red),
-              );
-            },
+          WidgetSpan(
+            alignment: PlaceholderAlignment.baseline,
+            baseline: TextBaseline.alphabetic,
+            child: Math.tex(
+              _newEasySyntax(p0[1].toString().replaceAll(dollar, "\\\$")),
+              textStyle: style?.copyWith(
+                fontFamily: "SansSerif",
+              ),
+              mathStyle: mathStyle,
+              textScaleFactor: 1.3,
+              options: MathOptions(
+                sizeUnderTextStyle: MathSize.large,
+                color: style?.color ?? Theme.of(context).colorScheme.onSurface,
+                fontSize: style?.fontSize ??
+                    Theme.of(context).textTheme.bodyMedium?.fontSize,
+                mathFontOptions: FontOptions(
+                  fontFamily: "Main",
+                  fontWeight: style?.fontWeight ?? FontWeight.normal,
+                ),
+                textFontOptions: FontOptions(
+                  fontFamily: "Main",
+                  fontWeight: style?.fontWeight ?? FontWeight.normal,
+                ),
+                style: mathStyle,
+              ),
+              onErrorFallback: (err) {
+                return Text(
+                  "\$${p0[1]}\$",
+                  style: style?.copyWith(
+                          color: Theme.of(context).colorScheme.error) ??
+                      TextStyle(color: Theme.of(context).colorScheme.error),
+                );
+              },
+            ),
           ),
         );
         return p0[1].toString();
       },
       onNonMatch: (p0) {
-        p0
-            .toString()
-            .replaceAll(dollar, "\$")
-            .split(" ")
-            .asMap()
-            .forEach((key, element) {
-          if (key != 0) {
-            widgets.add(Text(
-              " ",
-              textAlign: TextAlign.values[alignment.index],
-              style: style,
-            ));
-          }
-          widgets.add(Text(
-            element,
-            textAlign: TextAlign.values[alignment.index],
+        widgets.add(
+          TextSpan(
+            text: p0.toString().replaceAll(dollar, "\$"),
             style: style,
-          ));
-        });
+          ),
+        );
         return p0;
       },
     );
-    return widgets;
+    return Text.rich(
+      TextSpan(
+        children: widgets,
+      ),
+      textAlign: TextAlign.values[alignment.index],
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.values[alignment.index],
-      children: text.split('\n').map<Widget>(
-        (e) {
-          return Wrap(
-              alignment: WrapAlignment.values[alignment.index],
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: generateWidget(e));
-        },
-      ).toList(),
-    );
+    return _generateWidget(context, text);
   }
 }

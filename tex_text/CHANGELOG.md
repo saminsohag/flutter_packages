@@ -1,3 +1,32 @@
+## 0.1.5
+
+* New shortcut added.
+* Font fixed.
+
+## 0.1.4
+
+* Html parser math fixed.
+
+## 0.1.3
+
+* Html parser fixed.
+
+## 0.1.2
+
+* Baseline fixed.
+
+## 0.1.1
+
+* Bug fixed.
+
+## 0.1.0
+
+* Color scheme fixed.
+
+## 0.0.9
+
+* Color scheme fixed.
+
 ## 0.0.8
 
 * Error display fixed.
