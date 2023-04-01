@@ -138,35 +138,33 @@ class HTag extends BlockMd {
         Row(
           children: [
             Expanded(
-              child: TexText(
-                "${match?[2]}",
-                style: [
-                  Theme.of(context)
-                      .textTheme
-                      .headlineLarge
-                      ?.copyWith(color: style?.color),
-                  Theme.of(context)
-                      .textTheme
-                      .headlineMedium
-                      ?.copyWith(color: style?.color),
-                  Theme.of(context)
-                      .textTheme
-                      .headlineSmall
-                      ?.copyWith(color: style?.color),
-                  Theme.of(context)
-                      .textTheme
-                      .titleLarge
-                      ?.copyWith(color: style?.color),
-                  Theme.of(context)
-                      .textTheme
-                      .titleMedium
-                      ?.copyWith(color: style?.color),
-                  Theme.of(context)
-                      .textTheme
-                      .titleSmall
-                      ?.copyWith(color: style?.color),
-                ][match![1]!.length - 1],
-              ),
+              child: TexText("${match?[2]}",
+                  style: [
+                    Theme.of(context)
+                        .textTheme
+                        .headlineLarge
+                        ?.copyWith(color: style?.color),
+                    Theme.of(context)
+                        .textTheme
+                        .headlineMedium
+                        ?.copyWith(color: style?.color),
+                    Theme.of(context)
+                        .textTheme
+                        .headlineSmall
+                        ?.copyWith(color: style?.color),
+                    Theme.of(context)
+                        .textTheme
+                        .titleLarge
+                        ?.copyWith(color: style?.color),
+                    Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(color: style?.color),
+                    Theme.of(context)
+                        .textTheme
+                        .titleSmall
+                        ?.copyWith(color: style?.color),
+                  ][match![1]!.length - 1]),
             ),
           ],
         ),
@@ -333,7 +331,7 @@ class UnOrderedList extends BlockMd {
   @override
   String toHtml(String text) {
     var match = exp.firstMatch(text.trim());
-    return "<ul><li>${MdWidget.toHtml((match?[2]).toString())}</li></ul>";
+    return "<ul><li>${MdWidget.toHtml((match?[2]).toString()).trim()}</li></ul>";
   }
 }
 
@@ -377,7 +375,7 @@ class OrderedList extends BlockMd {
   @override
   String toHtml(String text) {
     var match = exp.firstMatch(text.trim());
-    return '<ol start="${match?[1]}"><li>${MdWidget.toHtml((match?[2]).toString())}</li></ol>';
+    return '<ol start="${match?[1]}"><li>${MdWidget.toHtml((match?[2]).toString()).trim()}</li></ol>';
   }
 }
 
@@ -408,7 +406,7 @@ class BoldMd extends InlineMd {
   @override
   String toHtml(String text) {
     var match = exp.firstMatch(text.trim());
-    return '<b>${TexText.toHtmlData((match?[1]).toString())}</b>';
+    return '<b>${TexText.toHtmlData((match?[1]).toString()).trim()}</b>';
   }
 }
 
@@ -437,7 +435,7 @@ class ItalicMd extends InlineMd {
   @override
   String toHtml(String text) {
     var match = exp.firstMatch(text.trim());
-    return '<i>${TexText.toHtmlData((match?[1]).toString())}</i>';
+    return '<i>${TexText.toHtmlData((match?[1]).toString()).trim()}</i>';
   }
 }
 
@@ -500,8 +498,8 @@ class ImageMd extends InlineMd {
     if (match?[1] != null) {
       var size = RegExp(r"^([0-9]+)?x?([0-9]+)?")
           .firstMatch(match![1].toString().trim());
-      width = double.tryParse(size?[1]?.toString() ?? 'a');
-      height = double.tryParse(size?[2]?.toString() ?? 'a');
+      width = double.tryParse(size?[1]?.toString().trim() ?? 'a');
+      height = double.tryParse(size?[2]?.toString().trim() ?? 'a');
     }
     return WidgetSpan(
       // alignment: PlaceholderAlignment.middle,
@@ -528,7 +526,7 @@ class ImageMd extends InlineMd {
   @override
   String toHtml(String text) {
     var match = exp.firstMatch(text.trim());
-    return '<img src="${match?[2]}">';
+    return '<img src="${match?[2].toString().trim()}">';
   }
 }
 
@@ -540,14 +538,16 @@ class TextMd extends InlineMd {
   InlineSpan inlineSpan(BuildContext context, String text, TextStyle? style,
       void Function(String url, String title)? onLinkTab) {
     return WidgetSpan(
+        alignment: PlaceholderAlignment.baseline,
+        baseline: TextBaseline.alphabetic,
         child: TexText(
-      text,
-      style: style,
-    ));
+          text,
+          style: style,
+        ));
   }
 
   @override
   String toHtml(String text) {
-    return TexText.toHtmlData(text);
+    return TexText.toHtmlData(text).trim();
   }
 }

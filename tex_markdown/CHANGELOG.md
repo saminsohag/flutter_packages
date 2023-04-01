@@ -1,3 +1,15 @@
+## 0.1.1
+
+* Html parser math fixed.
+
+## 0.1.0
+
+* Html parser fixed.
+
+## 0.0.10
+
+* Alignment fixed.
+
 ## 0.0.9
 
 * To html added.

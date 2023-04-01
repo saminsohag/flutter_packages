@@ -20,7 +20,7 @@ class TexMarkdown extends StatelessWidget {
   static String toHtml(String text) {
     String html = "";
     text.trim().split(RegExp(r"\n\n+")).forEach((element) {
-      html += MdWidget.toHtml(element);
+      html += '<p>${MdWidget.toHtml(element)}</p>';
     });
     return html;
   }

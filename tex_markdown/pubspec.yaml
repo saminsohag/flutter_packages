@@ -1,6 +1,6 @@
 name: tex_markdown
 description: This package is used to create flutter widget that can render markdown and latex formulas. It is very simple to use and uses native flutter components.
-version: 0.0.9
+version: 0.1.1
 homepage: https://github.com/saminsohag/flutter_packages/tree/main/tex_markdown
 
 environment:
@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  tex_text: ^0.1.2
+  tex_text: ^0.1.4
 
 dev_dependencies:
   flutter_test:
