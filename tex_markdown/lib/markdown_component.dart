@@ -17,6 +17,8 @@ abstract class MarkdownComponent {
     HrLine(),
     TextMd(),
   ];
+
+  /// Convert markdown to html
   static String toHtml(String text) {
     String html = "";
     text.split(RegExp(r"\n+")).forEach((element) {
@@ -35,6 +37,7 @@ abstract class MarkdownComponent {
     return html;
   }
 
+  /// Generate widget for markdown widget
   static Widget generate(
     BuildContext context,
     String text,
@@ -103,6 +106,7 @@ abstract class MarkdownComponent {
   bool get inline;
 }
 
+/// Inline component
 abstract class InlineMd extends MarkdownComponent {
   @override
   bool get inline => true;
@@ -115,6 +119,7 @@ abstract class InlineMd extends MarkdownComponent {
   String toHtml(String text);
 }
 
+/// Block component
 abstract class BlockMd extends MarkdownComponent {
   @override
   bool get inline => false;
@@ -127,6 +132,7 @@ abstract class BlockMd extends MarkdownComponent {
   String toHtml(String text);
 }
 
+/// Heading component
 class HTag extends BlockMd {
   @override
   final RegExp exp = RegExp(r"^(#{1,6})\s([^\n]+)$");
@@ -191,6 +197,7 @@ class HTag extends BlockMd {
   }
 }
 
+/// Horizontal line component
 class HrLine extends BlockMd {
   @override
   final RegExp exp = RegExp(r"^(--)[-]+$");
@@ -214,6 +221,7 @@ class HrLine extends BlockMd {
   }
 }
 
+/// Checkbox component
 class CheckBoxMd extends BlockMd {
   get onLinkTab => null;
 
@@ -259,6 +267,7 @@ class CheckBoxMd extends BlockMd {
   }
 }
 
+/// Radio Button component
 class RadioButtonMd extends BlockMd {
   get onLinkTab => null;
 
@@ -304,6 +313,7 @@ class RadioButtonMd extends BlockMd {
   }
 }
 
+/// Unordered list component
 class UnOrderedList extends BlockMd {
   get onLinkTab => null;
 
@@ -348,6 +358,7 @@ class UnOrderedList extends BlockMd {
   }
 }
 
+/// Ordered list component
 class OrderedList extends BlockMd {
   @override
   final RegExp exp = RegExp(r"^([0-9]+\.)\s([^\n]+)$");
@@ -392,6 +403,7 @@ class OrderedList extends BlockMd {
   }
 }
 
+/// Bold text component
 class BoldMd extends InlineMd {
   @override
   final RegExp exp = RegExp(r"^\*{2}(([\S^\*].*)?[\S^\*])\*{2}$");
@@ -425,6 +437,7 @@ class BoldMd extends InlineMd {
   }
 }
 
+/// Italic text component
 class ItalicMd extends InlineMd {
   @override
   final RegExp exp = RegExp(r"^\*{1}(([\S^\*].*)?[\S^\*])\*{1}$");
@@ -456,6 +469,7 @@ class ItalicMd extends InlineMd {
   }
 }
 
+/// Link text component
 class ATagMd extends InlineMd {
   @override
   final RegExp exp = RegExp(r"^\[([^\s\*].*[^\s]?)?\]\(([^\s\*]+)?\)$");
@@ -500,6 +514,7 @@ class ATagMd extends InlineMd {
   }
 }
 
+/// Image component
 class ImageMd extends InlineMd {
   @override
   final RegExp exp = RegExp(r"^\!\[([^\s].*[^\s]?)?\]\(([^\s]+)\)$");
@@ -557,6 +572,7 @@ class ImageMd extends InlineMd {
   }
 }
 
+/// Text component
 class TextMd extends InlineMd {
   @override
   final RegExp exp = RegExp(".*");
