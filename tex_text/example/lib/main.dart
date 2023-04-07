@@ -39,13 +39,12 @@ class _MyAppState extends State<MyApp> {
                           child: TexText(
                             // TexText.newEasySyntax(_text.text),
                             _text.text,
-                            alignment: TexAlignment.start,
                             style: Theme.of(context)
                                 .textTheme
-                                .headlineLarge
+                                .titleLarge
                                 ?.copyWith(
-                                    // color: Colors.red,
-                                    ),
+                                  color: Colors.blue,
+                                ),
                             mathStyle: MathStyle.displayCramped,
                           ),
                         );

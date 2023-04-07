@@ -4,65 +4,61 @@ import 'package:flutter/material.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
 export 'package:flutter_math_fork/flutter_math.dart';
 
-enum TexAlignment {
-  /// [TexAlignment.start] aligns the words at the start of the text
-  start,
-
-  /// It aligns the words at the end of the text
-  end,
-
-  /// It aligns the words at the center of the text
-  center,
-}
-
 /// A LaTex text view.
 ///
 /// Example:
 /// ```dart
-/// TexText(r"The equation is <m>x^2+y^2=z^2<m>") //Output: The equation is <LaTex formatted equation>
+/// TexText(r"The equation is $x^2+y^2=z^2$") //Output: The equation is <LaTex formatted equation>
 ///
-/// // <m><m> shows <m> result
-/// TexText(r"The equation is <m><m>") //Output: The equation is <m>
+/// // \$ shows $ result
+/// TexText(r"The equation is \$") //Output: The equation is $
 /// ```
 class TexText extends StatelessWidget {
-  const TexText(this.text,
-      {super.key,
-      TextStyle? style,
-      this.mathStyle = MathStyle.text,
-      this.alignment = TexAlignment.start})
-      : _style = style;
+  const TexText(
+    this.text, {
+    super.key,
+    TextStyle? style,
+    this.mathStyle = MathStyle.text,
+  }) : _style = style;
   final String text;
   final TextStyle? _style;
   final MathStyle mathStyle;
-  final TexAlignment alignment;
+  // final TexAlignment alignment;
 
   /// LaTex to HTML parser
   String toHtml() {
     return toHtmlData(text);
   }
 
+  /// LaTex custom syntax
   static String _newEasySyntax(String data) {
     return data
         .replaceAll(r"\frac", r"\cfrac")
         .replaceAll(r"\left[", r"[")
         .replaceAll(r"\right]", r"]")
-        .replaceAll(r"[", r"{\left[")
-        .replaceAll(r"]", r"\right]}")
+        .replaceAll(r"[", r"{\left[{")
+        .replaceAll(r"]", r"}\right]}")
+        .replaceAllMapped(
+          RegExp(r'\\sqrt\{\\left\[\{(.*?)\}\\right\]\}'),
+          (match) =>
+              "\\sqrt[${match[1].toString().replaceAll(r"\cfrac", r"\frac")}]",
+        )
         .replaceAll(r"\left\{", r"\{")
         .replaceAll(r"\right\}", r"\}")
-        .replaceAll(r"\{", r"{\left\{")
-        .replaceAll(r"\}", r"\right\}}")
+        .replaceAll(r"\{", r"{\left\{{")
+        .replaceAll(r"\}", r"}\right\}}")
         .replaceAll(r"\left(", r"(")
         .replaceAll(r"\right)", r")")
-        .replaceAll(r"(", r"{\left(")
-        .replaceAll(r")", r"\right)}")
+        .replaceAll(r"(", r"{\left({")
+        .replaceAll(r")", r"}\right)}")
         .replaceAll(RegExp(r"\\tf"), r"\therefore")
         .replaceAll(RegExp(r"\\bc"), r"\because")
         .replaceAllMapped(
-            RegExp(r"([^A-Za-z]|^)(sin|cos|tan|cosec|sec|cot)([^A-Za-z]|$)"),
-            (match) => "{\\${match[2].toString()}}${match[3].toString()}")
+            RegExp(r"([^A-Za-z\\]|^)(sin|cos|tan|cosec|sec|cot)([^A-Za-z]|$)"),
+            (match) =>
+                "${match[1].toString()}{\\,\\${match[2].toString()}}${match[3].toString()}")
         .replaceAll(r"=>", r"{\Rightarrow}")
-        .replaceAll(RegExp(r"\\AA(\s|$)"), r"{Å}")
+        .replaceAll(RegExp(r"\\AA(\s|$)"), r"{\text{Å}}")
         .replaceAll(r"*", r"{\times}")
         .replaceAllMapped(
             RegExp(r"\\([a-z]?)mat(\s+?\S.*?)\\([a-z]?)mat"),
@@ -89,17 +85,18 @@ class TexText extends StatelessWidget {
     ).trim();
   }
 
+  /// Generate spans for widget
   Widget _generateWidget(BuildContext context, String e) {
     TextStyle? style = _style ?? Theme.of(context).textTheme.bodyMedium;
     const dollar = r"\[-~`::36]";
-    List<InlineSpan> widgets = [];
+    List<InlineSpan> spans = [];
 
     e.replaceAll("\\\$", dollar).splitMapJoin(
       RegExp(
         r"\$(.*?)\$",
       ),
       onMatch: (p0) {
-        widgets.add(
+        spans.add(
           WidgetSpan(
             alignment: PlaceholderAlignment.baseline,
             baseline: TextBaseline.alphabetic,
@@ -109,7 +106,10 @@ class TexText extends StatelessWidget {
                 fontFamily: "SansSerif",
               ),
               mathStyle: mathStyle,
-              textScaleFactor: 1.3,
+              textScaleFactor: 1,
+              settings: const TexParserSettings(
+                strict: Strict.ignore,
+              ),
               options: MathOptions(
                 sizeUnderTextStyle: MathSize.large,
                 color: style?.color ?? Theme.of(context).colorScheme.onSurface,
@@ -118,10 +118,12 @@ class TexText extends StatelessWidget {
                 mathFontOptions: FontOptions(
                   fontFamily: "Main",
                   fontWeight: style?.fontWeight ?? FontWeight.normal,
+                  fontShape: FontStyle.normal,
                 ),
                 textFontOptions: FontOptions(
                   fontFamily: "Main",
                   fontWeight: style?.fontWeight ?? FontWeight.normal,
+                  fontShape: FontStyle.normal,
                 ),
                 style: mathStyle,
               ),
@@ -139,7 +141,7 @@ class TexText extends StatelessWidget {
         return p0[1].toString();
       },
       onNonMatch: (p0) {
-        widgets.add(
+        spans.add(
           TextSpan(
             text: p0.toString().replaceAll(dollar, "\$"),
             style: style,
@@ -150,9 +152,8 @@ class TexText extends StatelessWidget {
     );
     return Text.rich(
       TextSpan(
-        children: widgets,
+        children: spans,
       ),
-      textAlign: TextAlign.values[alignment.index],
     );
   }
 

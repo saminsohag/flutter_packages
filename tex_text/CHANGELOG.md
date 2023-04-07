@@ -1,3 +1,11 @@
+## 0.1.7
+
+* Bug fixed.
+
+## 0.1.6
+
+* Bug fixed.
+
 ## 0.1.5
 
 * New shortcut added.
