@@ -106,14 +106,19 @@ $hello$
                 AnimatedBuilder(
                     animation: _controller,
                     builder: (context, _) {
-                      return TexMarkdown(
-                        _controller.text,
-                        onLinkTab: (url, title) {
-                          log(title, name: "title");
-                          log(url, name: "url");
-                        },
-                        style: const TextStyle(
-                          color: Colors.green,
+                      return Material(
+                        shape: const RoundedRectangleBorder(
+                          side: BorderSide(width: 1),
+                        ),
+                        child: TexMarkdown(
+                          _controller.text,
+                          onLinkTab: (url, title) {
+                            log(title, name: "title");
+                            log(url, name: "url");
+                          },
+                          style: const TextStyle(
+                            color: Colors.green,
+                          ),
                         ),
                       );
                     }),

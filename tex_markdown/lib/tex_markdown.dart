@@ -36,7 +36,7 @@ class TexMarkdown extends StatelessWidget {
           )
           .map<Widget>(
             (e) => Padding(
-              padding: const EdgeInsets.all(4),
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
               child: MdWidget(
                 e,
                 style: style,

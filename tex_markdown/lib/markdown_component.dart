@@ -44,40 +44,28 @@ abstract class MarkdownComponent {
     TextStyle? style,
     final void Function(String url, String title)? onLinkTab,
   ) {
-    List<Widget> children = [];
     List<InlineSpan> spans = [];
     text.split(RegExp(r"\n+")).forEach(
       (element) {
         for (var each in components) {
           if (each.exp.hasMatch(element.trim())) {
             if (each is InlineMd) {
-              if (spans.isNotEmpty) {
-                spans.add(
-                  TextSpan(
-                    text: " ",
-                    style: style,
-                  ),
-                );
-              }
-              spans.add(each.inlineSpan(
+              spans.add(each.span(
                 context,
                 element,
                 style,
                 onLinkTab,
               ));
+              spans.add(
+                TextSpan(
+                  text: " ",
+                  style: style,
+                ),
+              );
             } else {
-              if (spans.isNotEmpty) {
-                children.add(
-                  Text.rich(
-                    TextSpan(children: List.from(spans)),
-                    textAlign: TextAlign.left,
-                  ),
-                );
-                spans.clear();
-              }
               if (each is BlockMd) {
-                children.add(
-                  each.build(context, element, style, onLinkTab),
+                spans.add(
+                  each.span(context, element, style, onLinkTab),
                 );
               }
             }
@@ -86,21 +74,20 @@ abstract class MarkdownComponent {
         }
       },
     );
-    if (spans.isNotEmpty) {
-      children.add(
-        Text.rich(
-          TextSpan(
-            children: List.from(spans),
-          ),
-          textAlign: TextAlign.left,
-        ),
-      );
-    }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: children,
+    return Text.rich(
+      TextSpan(
+        children: List.from(spans),
+      ),
+      textAlign: TextAlign.left,
     );
   }
+
+  InlineSpan span(
+    BuildContext context,
+    String text,
+    TextStyle? style,
+    final void Function(String url, String title)? onLinkTab,
+  );
 
   RegExp get exp;
   bool get inline;
@@ -110,7 +97,9 @@ abstract class MarkdownComponent {
 abstract class InlineMd extends MarkdownComponent {
   @override
   bool get inline => true;
-  InlineSpan inlineSpan(
+
+  @override
+  InlineSpan span(
     BuildContext context,
     String text,
     TextStyle? style,
@@ -123,6 +112,21 @@ abstract class InlineMd extends MarkdownComponent {
 abstract class BlockMd extends MarkdownComponent {
   @override
   bool get inline => false;
+  @override
+  InlineSpan span(
+    BuildContext context,
+    String text,
+    TextStyle? style,
+    final void Function(String url, String title)? onLinkTab,
+  ) {
+    return WidgetSpan(
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: build(context, text, style, onLinkTab),
+      ),
+    );
+  }
+
   Widget build(
     BuildContext context,
     String text,
@@ -409,7 +413,7 @@ class BoldMd extends InlineMd {
   final RegExp exp = RegExp(r"^\*{2}(([\S^\*].*)?[\S^\*])\*{2}$");
 
   @override
-  InlineSpan inlineSpan(
+  InlineSpan span(
     BuildContext context,
     String text,
     TextStyle? style,
@@ -443,7 +447,7 @@ class ItalicMd extends InlineMd {
   final RegExp exp = RegExp(r"^\*{1}(([\S^\*].*)?[\S^\*])\*{1}$");
 
   @override
-  InlineSpan inlineSpan(
+  InlineSpan span(
     BuildContext context,
     String text,
     TextStyle? style,
@@ -475,7 +479,7 @@ class ATagMd extends InlineMd {
   final RegExp exp = RegExp(r"^\[([^\s\*].*[^\s]?)?\]\(([^\s\*]+)?\)$");
 
   @override
-  InlineSpan inlineSpan(
+  InlineSpan span(
     BuildContext context,
     String text,
     TextStyle? style,
@@ -520,7 +524,7 @@ class ImageMd extends InlineMd {
   final RegExp exp = RegExp(r"^\!\[([^\s].*[^\s]?)?\]\(([^\s]+)\)$");
 
   @override
-  InlineSpan inlineSpan(
+  InlineSpan span(
     BuildContext context,
     String text,
     TextStyle? style,
@@ -578,7 +582,7 @@ class TextMd extends InlineMd {
   final RegExp exp = RegExp(".*");
 
   @override
-  InlineSpan inlineSpan(BuildContext context, String text, TextStyle? style,
+  InlineSpan span(BuildContext context, String text, TextStyle? style,
       void Function(String url, String title)? onLinkTab) {
     return WidgetSpan(
         alignment: PlaceholderAlignment.baseline,
