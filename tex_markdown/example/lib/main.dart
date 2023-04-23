@@ -110,16 +110,21 @@ $hello$
                         shape: const RoundedRectangleBorder(
                           side: BorderSide(width: 1),
                         ),
-                        child: TexMarkdown(
-                          _controller.text,
-                          onLinkTab: (url, title) {
-                            log(title, name: "title");
-                            log(url, name: "url");
-                          },
-                          style: const TextStyle(
-                            color: Colors.green,
-                          ),
-                        ),
+                        child: LayoutBuilder(builder: (context, constraints) {
+                          return SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: TexMarkdown(
+                              _controller.text,
+                              onLinkTab: (url, title) {
+                                log(title, name: "title");
+                                log(url, name: "url");
+                              },
+                              style: const TextStyle(
+                                  // color: Colors.green,
+                                  ),
+                            ),
+                          );
+                        }),
                       );
                     }),
               ],

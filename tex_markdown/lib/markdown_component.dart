@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:tex_markdown/custom_widgets/custom_divider.dart';
+import 'package:tex_markdown/custom_widgets/custom_rb_cb.dart';
+import 'package:tex_markdown/custom_widgets/unordered_ordered_list.dart';
 import 'package:tex_text/tex_text.dart';
 import 'md_widget.dart';
 
 /// Markdown components
 abstract class MarkdownComponent {
   static final List<MarkdownComponent> components = [
+    // TableMd(),
     HTag(),
     BoldMd(),
     ItalicMd(),
-    ATagMd(),
     ImageMd(),
+    ATagMd(),
     UnOrderedList(),
     OrderedList(),
     RadioButtonMd(),
@@ -38,7 +42,7 @@ abstract class MarkdownComponent {
   }
 
   /// Generate widget for markdown widget
-  static Widget generate(
+  static List<InlineSpan> generate(
     BuildContext context,
     String text,
     TextStyle? style,
@@ -52,7 +56,7 @@ abstract class MarkdownComponent {
             if (each is InlineMd) {
               spans.add(each.span(
                 context,
-                element,
+                element.trim(),
                 style,
                 onLinkTab,
               ));
@@ -65,7 +69,7 @@ abstract class MarkdownComponent {
             } else {
               if (each is BlockMd) {
                 spans.add(
-                  each.span(context, element, style, onLinkTab),
+                  each.span(context, element.trim(), style, onLinkTab),
                 );
               }
             }
@@ -74,12 +78,13 @@ abstract class MarkdownComponent {
         }
       },
     );
-    return Text.rich(
-      TextSpan(
-        children: List.from(spans),
-      ),
-      textAlign: TextAlign.left,
-    );
+    // return Text.rich(
+    //   TextSpan(
+    //     children: List.from(spans),
+    //   ),
+    //   // textAlign: TextAlign.left,
+    // );
+    return spans;
   }
 
   InlineSpan span(
@@ -119,11 +124,27 @@ abstract class BlockMd extends MarkdownComponent {
     TextStyle? style,
     final void Function(String url, String title)? onLinkTab,
   ) {
-    return WidgetSpan(
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: build(context, text, style, onLinkTab),
-      ),
+    return TextSpan(
+      children: [
+        const TextSpan(
+          text: "\n",
+          style: TextStyle(
+            fontSize: 0,
+          ),
+        ),
+        WidgetSpan(
+          child: build(context, text, style, onLinkTab),
+          alignment: PlaceholderAlignment.middle,
+        ),
+        const TextSpan(
+          text: "\n",
+          style: TextStyle(fontSize: 0),
+        ),
+      ],
+      // child: Align(
+      //   alignment: Alignment.centerLeft,
+      //   child: build(context, text, style, onLinkTab),
+      // ),
     );
   }
 
@@ -148,50 +169,53 @@ class HTag extends BlockMd {
     final void Function(String url, String title)? onLinkTab,
   ) {
     var match = exp.firstMatch(text.trim());
-    return Column(
+    return Text.rich(TextSpan(
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: TexText("${match?[2]}",
-                  style: [
-                    Theme.of(context)
-                        .textTheme
-                        .headlineLarge
-                        ?.copyWith(color: style?.color),
-                    Theme.of(context)
-                        .textTheme
-                        .headlineMedium
-                        ?.copyWith(color: style?.color),
-                    Theme.of(context)
-                        .textTheme
-                        .headlineSmall
-                        ?.copyWith(color: style?.color),
-                    Theme.of(context)
-                        .textTheme
-                        .titleLarge
-                        ?.copyWith(color: style?.color),
-                    Theme.of(context)
-                        .textTheme
-                        .titleMedium
-                        ?.copyWith(color: style?.color),
-                    Theme.of(context)
-                        .textTheme
-                        .titleSmall
-                        ?.copyWith(color: style?.color),
-                  ][match![1]!.length - 1]),
-            ),
-          ],
+        WidgetSpan(
+          child: TexText("${match?[2]}",
+              style: [
+                Theme.of(context)
+                    .textTheme
+                    .headlineLarge
+                    ?.copyWith(color: style?.color),
+                Theme.of(context)
+                    .textTheme
+                    .headlineMedium
+                    ?.copyWith(color: style?.color),
+                Theme.of(context)
+                    .textTheme
+                    .headlineSmall
+                    ?.copyWith(color: style?.color),
+                Theme.of(context)
+                    .textTheme
+                    .titleLarge
+                    ?.copyWith(color: style?.color),
+                Theme.of(context)
+                    .textTheme
+                    .titleMedium
+                    ?.copyWith(color: style?.color),
+                Theme.of(context)
+                    .textTheme
+                    .titleSmall
+                    ?.copyWith(color: style?.color),
+              ][match![1]!.length - 1]),
         ),
-        if (match[1]!.length == 1)
-          Divider(
-            height: 6,
-            thickness: 2,
-            color:
-                style?.color ?? Theme.of(context).colorScheme.onSurfaceVariant,
+        if (match[1]!.length == 1) ...[
+          const TextSpan(
+            text: "\n",
+            style: TextStyle(fontSize: 0, height: 0),
           ),
+          WidgetSpan(
+            alignment: PlaceholderAlignment.top,
+            child: CustomDivider(
+              height: 2,
+              color: style?.color ??
+                  Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ],
       ],
-    );
+    ));
   }
 
   @override
@@ -212,9 +236,8 @@ class HrLine extends BlockMd {
     TextStyle? style,
     final void Function(String url, String title)? onLinkTab,
   ) {
-    return Divider(
-      height: 6,
-      thickness: 2,
+    return CustomDivider(
+      height: 2,
       color: style?.color ?? Theme.of(context).colorScheme.onSurfaceVariant,
     );
   }
@@ -237,27 +260,13 @@ class CheckBoxMd extends BlockMd {
     final void Function(String url, String title)? onLinkTab,
   ) {
     var match = exp.firstMatch(text.trim());
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Checkbox(
-            // value: true,
-            value: ("${match?[1]}" == "x"),
-            onChanged: (value) {},
-            fillColor: ButtonStyleButton.allOrNull(style?.color),
-          ),
-        ),
-        Expanded(
-          child: MdWidget(
-            "${match?[2]}",
-            onLinkTab: onLinkTab,
-            style: style,
-          ),
-        ),
-      ],
+    return CustomCb(
+      value: ("${match?[1]}" == "x"),
+      child: MdWidget(
+        "${match?[2]}",
+        onLinkTab: onLinkTab,
+        style: style,
+      ),
     );
   }
 
@@ -283,27 +292,13 @@ class RadioButtonMd extends BlockMd {
     final void Function(String url, String title)? onLinkTab,
   ) {
     var match = exp.firstMatch(text.trim());
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Radio(
-            value: true,
-            groupValue: ("${match?[1]}" == "x"),
-            onChanged: (value) {},
-            fillColor: ButtonStyleButton.allOrNull(style?.color),
-          ),
-        ),
-        Expanded(
-          child: MdWidget(
-            "${match?[2]}",
-            onLinkTab: onLinkTab,
-            style: style,
-          ),
-        ),
-      ],
+    return CustomRb(
+      value: ("${match?[1]}" == "x"),
+      child: MdWidget(
+        "${match?[2]}",
+        onLinkTab: onLinkTab,
+        style: style,
+      ),
     );
   }
 
@@ -329,26 +324,13 @@ class UnOrderedList extends BlockMd {
     final void Function(String url, String title)? onLinkTab,
   ) {
     var match = exp.firstMatch(text.trim());
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Icon(
-            Icons.circle,
-            color: style?.color,
-            size: 8,
-          ),
-        ),
-        Expanded(
-          child: MdWidget(
-            "${match?[2]}",
-            onLinkTab: onLinkTab,
-            style: style,
-          ),
-        ),
-      ],
+    return UnorderedListView(
+      bulletColor: style?.color,
+      child: MdWidget(
+        "${match?[2]}",
+        onLinkTab: onLinkTab,
+        style: style,
+      ),
     );
   }
 
@@ -377,26 +359,14 @@ class OrderedList extends BlockMd {
     final void Function(String url, String title)? onLinkTab,
   ) {
     var match = exp.firstMatch(text.trim());
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 11),
-          child: Text(
-            "${match?[1]}",
-            style: (style ?? const TextStyle())
-                .copyWith(fontWeight: FontWeight.bold),
-          ),
-        ),
-        Expanded(
-          child: MdWidget(
-            "${match?[2]}",
-            onLinkTab: onLinkTab,
-            style: style,
-          ),
-        ),
-      ],
+    return OrderedListView(
+      no: "${match?[1]}",
+      style: (style ?? const TextStyle()).copyWith(fontWeight: FontWeight.bold),
+      child: MdWidget(
+        "${match?[2]}",
+        onLinkTab: onLinkTab,
+        style: style,
+      ),
     );
   }
 
@@ -573,6 +543,89 @@ class ImageMd extends InlineMd {
       height = double.tryParse(size?[2]?.toString().trim() ?? 'a');
     }
     return '<img src="${match?[2].toString().trim()}" height="$height" width="$width">';
+  }
+}
+
+/// Table component
+class TableMd extends BlockMd {
+  @override
+  Widget build(BuildContext context, String text, TextStyle? style,
+      void Function(String url, String title)? onLinkTab) {
+    final List<Map<int, String>> value = text
+        .split('\n')
+        .map<Map<int, String>>(
+          (e) => e
+              .split('|')
+              .where((element) => element.isNotEmpty)
+              .toList()
+              .asMap(),
+        )
+        .toList();
+    int maxCol = 0;
+    for (final each in value) {
+      if (maxCol < each.keys.length) {
+        maxCol = each.keys.length;
+      }
+    }
+    if (maxCol == 0) {
+      return Text("", style: style);
+    }
+    return Table(
+      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+      border: TableBorder.all(
+        width: 1,
+        color: Theme.of(context).colorScheme.onSurface,
+      ),
+      children: value
+          .map<TableRow>(
+            (e) => TableRow(
+              children: List.generate(
+                maxCol,
+                (index) => Center(
+                  child: MdWidget(
+                    (e[index] ?? "").trim(),
+                    onLinkTab: onLinkTab,
+                    style: style,
+                  ),
+                ),
+              ),
+            ),
+          )
+          .toList(),
+    );
+  }
+
+  @override
+  RegExp get exp => RegExp(
+        r"(((\|[^\n\|]+\|)((([^\n\|]+\|)+)?))(\n(((\|[^\n\|]+\|)(([^\n\|]+\|)+)?)))+)?",
+      );
+
+  @override
+  String toHtml(String text) {
+    final String value = text.trim().splitMapJoin(
+          RegExp(r'^\||\|\n\||\|$'),
+          onMatch: (p0) => "\n",
+          onNonMatch: (p0) {
+            if (p0.trim().isEmpty) {
+              return "";
+            }
+            // return p0;
+            return '<tr>${p0.trim().splitMapJoin(
+              '|',
+              onMatch: (p0) {
+                return "";
+              },
+              onNonMatch: (p0) {
+                return '<td>$p0</td>';
+              },
+            )}</tr>';
+          },
+        );
+    return '''
+<table border="1"  cellspacing="0">
+$value
+</table>
+''';
   }
 }
 

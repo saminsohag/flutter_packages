@@ -27,25 +27,6 @@ class TexMarkdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: data
-          .trim()
-          .split(
-            RegExp(r"\n\n+"),
-          )
-          .map<Widget>(
-            (e) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
-              child: MdWidget(
-                e,
-                style: style,
-                followLinkColor: followLinkColor,
-                onLinkTab: onLinkTab,
-              ),
-            ),
-          )
-          .toList(),
-    );
+    return ClipRRect(child: MdWidget(data.trim()));
   }
 }
