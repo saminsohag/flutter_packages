@@ -71,9 +71,23 @@ abstract class MarkdownComponent {
               );
             } else {
               if (each is BlockMd) {
-                spans.add(
+                spans.addAll([
+                  const TextSpan(
+                    text: "\n ",
+                    style: TextStyle(
+                      fontSize: 0,
+                      height: 0,
+                    ),
+                  ),
                   each.span(context, element.trim(), style, onLinkTab),
-                );
+                  const TextSpan(
+                    text: "\n ",
+                    style: TextStyle(
+                      fontSize: 0,
+                      height: 0,
+                    ),
+                  ),
+                ]);
               }
             }
             return;
@@ -81,12 +95,6 @@ abstract class MarkdownComponent {
         }
       },
     );
-    // return Text.rich(
-    //   TextSpan(
-    //     children: List.from(spans),
-    //   ),
-    //   // textAlign: TextAlign.left,
-    // );
     return spans;
   }
 
@@ -127,24 +135,9 @@ abstract class BlockMd extends MarkdownComponent {
     TextStyle? style,
     final void Function(String url, String title)? onLinkTab,
   ) {
-    return TextSpan(
-      children: [
-        const TextSpan(
-          text: "\n ",
-          style: TextStyle(
-            fontSize: 0,
-            height: 0,
-          ),
-        ),
-        WidgetSpan(
-          child: build(context, text, style, onLinkTab),
-          alignment: PlaceholderAlignment.middle,
-        ),
-        const TextSpan(
-          text: "\n ",
-          style: TextStyle(fontSize: 0, height: 0),
-        ),
-      ],
+    return WidgetSpan(
+      child: build(context, text, style, onLinkTab),
+      alignment: PlaceholderAlignment.middle,
     );
   }
 

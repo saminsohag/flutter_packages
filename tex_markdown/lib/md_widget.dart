@@ -92,7 +92,6 @@ $value
                 child: Table(
                   defaultColumnWidth: CustomTableColumnWidth(),
                   defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                  // defaultColumnWidth: const FixedColumnWidth(double.infinity),
                   border: TableBorder.all(
                     width: 1,
                     color: Theme.of(context).colorScheme.onSurface,

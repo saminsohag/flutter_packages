@@ -1,8 +1,11 @@
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+// import 'package:flutter/services.dart';
 import 'package:tex_markdown/tex_markdown.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 void main() {
   runApp(const MyApp());
@@ -100,44 +103,47 @@ $hello$
           ),
         ],
       ),
-      body: Column(
+      body: Stack(
         children: [
-          Expanded(
-            child: ListView(
-              children: [
-                AnimatedBuilder(
-                    animation: _controller,
-                    builder: (context, _) {
-                      return Material(
-                        color: Theme.of(context).colorScheme.surfaceVariant,
-                        shape: const RoundedRectangleBorder(
-                          side: BorderSide(width: 1),
-                        ),
-                        child: LayoutBuilder(builder: (context, constraints) {
-                          return SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: TexMarkdown(
-                              _controller.text,
-                              onLinkTab: (url, title) {
-                                log(title, name: "title");
-                                log(url, name: "url");
-                              },
-                              style: const TextStyle(
-                                  // color: Colors.green,
-                                  ),
+          Column(
+            children: [
+              Expanded(
+                child: ListView(
+                  children: [
+                    AnimatedBuilder(
+                        animation: _controller,
+                        builder: (context, _) {
+                          return Material(
+                            // color: Theme.of(context).colorScheme.surfaceVariant,
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                  width: 1,
+                                  color: Theme.of(context).colorScheme.outline),
                             ),
+                            child:
+                                LayoutBuilder(builder: (context, constraints) {
+                              return SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: TexMarkdown(
+                                  _controller.text,
+                                  onLinkTab: (url, title) {
+                                    log(title, name: "title");
+                                    log(url, name: "url");
+                                  },
+                                  style: const TextStyle(
+                                      // color: Colors.green,
+                                      ),
+                                ),
+                              );
+                            }),
                           );
                         }),
-                      );
-                    }),
-              ],
-            ),
-          ),
-          ConstrainedBox(
-            constraints: const BoxConstraints(maxHeight: 200),
-            child: Stack(
-              children: [
-                Padding(
+                  ],
+                ),
+              ),
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxHeight: 200),
+                child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextField(
                     decoration: const InputDecoration(
@@ -147,25 +153,36 @@ $hello$
                     controller: _controller,
                   ),
                 ),
-                IconButton(
-                  onPressed: () {
-                    String html = '''<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"><title>markdown</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
-</head>
-<body>
-${TexMarkdown.toHtml(_controller.text)}
-</body>
-</html>
-''';
-                    Clipboard.setData(ClipboardData(text: html));
-                  },
-                  icon: const Icon(Icons.html),
-                ),
-              ],
+              ),
+            ],
+          ),
+          Align(
+            alignment: Alignment.topRight,
+            child: IconButton(
+              onPressed: () async {
+                String html = '''<!DOCTYPE html>
+                    <html lang="en">
+                    <head>
+                    <meta charset="UTF-8"><title>markdown</title>
+                    </head>
+                    <body>
+                    ${TexMarkdown.toHtml(_controller.text)}
+                    </body>
+                    </html>
+                    ''';
+                String? path = await FilePicker.platform.saveFile();
+                if (path == null) {
+                  return;
+                }
+                File(path).writeAsStringSync(html);
+                launchUrlString(
+                  "file:${Uri(
+                    path: path,
+                  ).path}",
+                  mode: LaunchMode.externalApplication,
+                );
+              },
+              icon: const Icon(Icons.html),
             ),
           ),
         ],

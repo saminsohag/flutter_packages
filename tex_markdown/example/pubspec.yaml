@@ -38,6 +38,13 @@ dependencies:
   cupertino_icons: ^1.0.2
   tex_markdown:
     path: ../../tex_markdown
+  printing: ^5.10.3
+  pdf: ^3.10.1
+  flutter_html_to_pdf: ^0.7.0
+  url_launcher: ^6.1.10
+  path_provider: ^2.0.14
+  permission_handler: ^10.2.0
+  file_picker: ^5.2.10
 
 dev_dependencies:
   flutter_test:
