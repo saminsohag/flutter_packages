@@ -7,17 +7,14 @@ class CustomDivider extends LeafRenderObjectWidget {
 
   @override
   RenderObject createRenderObject(BuildContext context) {
-    return RenderDivider(
-        color ?? Theme.of(context).colorScheme.onSurfaceVariant,
-        MediaQuery.of(context).size.width,
-        height ?? 2);
+    return RenderDivider(color ?? Theme.of(context).colorScheme.outline,
+        MediaQuery.of(context).size.width, height ?? 2);
   }
 
   @override
   void updateRenderObject(
       BuildContext context, covariant RenderDivider renderObject) {
-    renderObject.color =
-        color ?? Theme.of(context).colorScheme.onSurfaceVariant;
+    renderObject.color = color ?? Theme.of(context).colorScheme.outline;
     renderObject.height = height ?? 2;
     renderObject.width = MediaQuery.of(context).size.width;
   }

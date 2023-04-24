@@ -53,16 +53,17 @@ $value
       RegExp(r"\n\n+"),
       onMatch: (p0) {
         list.add(
-          const TextSpan(text: "\n"),
+          const TextSpan(text: "\n\n", style: TextStyle(fontSize: 16)),
         );
         return "";
       },
       onNonMatch: (eachLn) {
         final RegExp table = RegExp(
-          r"^(((\|[^\n\|]+\|)((([^\n\|]+\|)+)?))(\n(((\|[^\n\|]+\|)(([^\n\|]+\|)+)?)))+)?$",
+          r"^(((\|[^\n\|]+\|)((([^\n\|]+\|)+)?))(\n(((\|[^\n\|]+\|)(([^\n\|]+\|)+)?)))+)$",
         );
-        if (table.hasMatch(eachLn)) {
+        if (table.hasMatch(eachLn.trim())) {
           final List<Map<int, String>> value = eachLn
+              .trim()
               .split('\n')
               .map<Map<int, String>>(
                 (e) => e
@@ -84,8 +85,8 @@ $value
           list.addAll(
             [
               const TextSpan(
-                text: "\n",
-                style: TextStyle(height: 0),
+                text: "\n ",
+                style: TextStyle(height: 0, fontSize: 0),
               ),
               WidgetSpan(
                 child: Table(
@@ -115,14 +116,15 @@ $value
                 ),
               ),
               const TextSpan(
-                text: "\n",
-                style: TextStyle(height: 0),
+                text: "\n ",
+                style: TextStyle(height: 0, fontSize: 0),
               ),
             ],
           );
         } else {
           list.addAll(
-            MarkdownComponent.generate(context, eachLn, style, onLinkTab),
+            MarkdownComponent.generate(
+                context, eachLn.trim(), style, onLinkTab),
           );
         }
         return "";
@@ -143,9 +145,6 @@ class CustomTableColumnWidth extends TableColumnWidth {
     for (var each in cells) {
       each.layout(const BoxConstraints(), parentUsesSize: true);
       width = max(width, each.size.width);
-    }
-    if (containerWidth == double.infinity) {
-      return width;
     }
     return min(containerWidth, width);
   }

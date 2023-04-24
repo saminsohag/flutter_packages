@@ -16,7 +16,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  ThemeMode _themeMode = ThemeMode.system;
+  ThemeMode _themeMode = ThemeMode.dark;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -37,7 +37,9 @@ class _MyAppState extends State<MyApp> {
         title: 'Flutter Demo Home Page',
         onPressed: () {
           setState(() {
-            _themeMode = ThemeMode.values[(_themeMode.index + 1) % 3];
+            _themeMode = (_themeMode == ThemeMode.dark)
+                ? ThemeMode.light
+                : ThemeMode.dark;
           });
         },
       ),
@@ -107,6 +109,7 @@ $hello$
                     animation: _controller,
                     builder: (context, _) {
                       return Material(
+                        color: Theme.of(context).colorScheme.surfaceVariant,
                         shape: const RoundedRectangleBorder(
                           side: BorderSide(width: 1),
                         ),

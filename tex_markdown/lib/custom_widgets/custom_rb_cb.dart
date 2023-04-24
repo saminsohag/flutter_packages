@@ -20,7 +20,12 @@ class CustomRb extends RenderObjectWidget
   Widget? childForSlot(CustomRbSlot slot) {
     switch (slot) {
       case CustomRbSlot.rb:
-        return Radio(value: value, groupValue: true, onChanged: (value) {});
+        return Radio(
+          value: value,
+          groupValue: true,
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          onChanged: (value) {},
+        );
       case CustomRbSlot.child:
         return child;
     }
@@ -69,7 +74,8 @@ class RenderCustomRb extends RenderBox
       return;
     }
     rb;
-    Size rbSize = _layoutBox(rb!, const BoxConstraints(maxWidth: 50));
+    Size rbSize =
+        _layoutBox(rb!, const BoxConstraints(maxWidth: 50, maxHeight: 20));
     Size bodySize = _layoutBox(
         body!,
         BoxConstraints(
@@ -78,9 +84,10 @@ class RenderCustomRb extends RenderBox
       ..offset = Offset(rbSize.width + _spacing, 0);
     rb!.parentData = BoxParentData()
       ..offset = Offset(
-          0,
-          body!.computeDistanceToActualBaseline(TextBaseline.alphabetic)! -
-              rb!.size.height / 1.5);
+        0,
+        body!.computeDistanceToActualBaseline(TextBaseline.alphabetic)! -
+            rb!.size.height / 1.5,
+      );
     size = constraints.constrain(Size(bodySize.width + rbSize.width + _spacing,
         max(rbSize.height, bodySize.height)));
   }
@@ -183,7 +190,8 @@ class RenderCustomCb extends RenderBox
       return;
     }
     rb;
-    Size rbSize = _layoutBox(rb!, const BoxConstraints(maxWidth: 50));
+    Size rbSize =
+        _layoutBox(rb!, const BoxConstraints(maxWidth: 50, maxHeight: 20));
     Size bodySize = _layoutBox(
         body!,
         BoxConstraints(

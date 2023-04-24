@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:tex_markdown/custom_widgets/custom_divider.dart';
+import 'package:tex_markdown/custom_widgets/custom_error_image.dart';
 import 'package:tex_markdown/custom_widgets/custom_rb_cb.dart';
 import 'package:tex_markdown/custom_widgets/unordered_ordered_list.dart';
 import 'package:tex_text/tex_text.dart';
@@ -127,9 +130,10 @@ abstract class BlockMd extends MarkdownComponent {
     return TextSpan(
       children: [
         const TextSpan(
-          text: "\n",
+          text: "\n ",
           style: TextStyle(
             fontSize: 0,
+            height: 0,
           ),
         ),
         WidgetSpan(
@@ -137,14 +141,10 @@ abstract class BlockMd extends MarkdownComponent {
           alignment: PlaceholderAlignment.middle,
         ),
         const TextSpan(
-          text: "\n",
-          style: TextStyle(fontSize: 0),
+          text: "\n ",
+          style: TextStyle(fontSize: 0, height: 0),
         ),
       ],
-      // child: Align(
-      //   alignment: Alignment.centerLeft,
-      //   child: build(context, text, style, onLinkTab),
-      // ),
     );
   }
 
@@ -202,15 +202,13 @@ class HTag extends BlockMd {
         ),
         if (match[1]!.length == 1) ...[
           const TextSpan(
-            text: "\n",
+            text: "\n ",
             style: TextStyle(fontSize: 0, height: 0),
           ),
           WidgetSpan(
-            alignment: PlaceholderAlignment.top,
             child: CustomDivider(
               height: 2,
-              color: style?.color ??
-                  Theme.of(context).colorScheme.onSurfaceVariant,
+              color: style?.color ?? Theme.of(context).colorScheme.outline,
             ),
           ),
         ],
@@ -238,7 +236,7 @@ class HrLine extends BlockMd {
   ) {
     return CustomDivider(
       height: 2,
-      color: style?.color ?? Theme.of(context).colorScheme.onSurfaceVariant,
+      color: style?.color ?? Theme.of(context).colorScheme.outline,
     );
   }
 
@@ -518,13 +516,12 @@ class ImageMd extends InlineMd {
           "${match?[2]}",
           fit: BoxFit.fill,
           errorBuilder: (context, error, stackTrace) {
-            return Placeholder(
-              color: Theme.of(context).colorScheme.error,
-              child: Text(
-                "${match?[2]}\n$error",
-                style: style,
-              ),
-            );
+            double size = 35;
+            // if (height != null && width != null) {
+            size = min(size, height ?? size);
+            size = min(size, width ?? size);
+            // }
+            return const CustomImageError();
           },
         ),
       ),
