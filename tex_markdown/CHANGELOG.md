@@ -1,3 +1,7 @@
+## 0.1.7
+
+* Color bug fixed.
+
 ## 0.1.6
 
 * Engine improved.

@@ -53,7 +53,13 @@ $value
       RegExp(r"\n\n+"),
       onMatch: (p0) {
         list.add(
-          const TextSpan(text: "\n\n", style: TextStyle(fontSize: 16)),
+          TextSpan(
+            text: "\n\n",
+            style: TextStyle(
+              fontSize: 16,
+              color: style?.color,
+            ),
+          ),
         );
         return "";
       },
@@ -79,14 +85,11 @@ $value
               maxCol = each.keys.length;
             }
           }
-          // if (maxCol == 0) {
-          //   return Text("", style: style);
-          // }
           list.addAll(
             [
-              const TextSpan(
+              TextSpan(
                 text: "\n ",
-                style: TextStyle(height: 0, fontSize: 0),
+                style: TextStyle(height: 0, fontSize: 0, color: style?.color),
               ),
               WidgetSpan(
                 child: Table(
@@ -114,9 +117,9 @@ $value
                       .toList(),
                 ),
               ),
-              const TextSpan(
+              TextSpan(
                 text: "\n ",
-                style: TextStyle(height: 0, fontSize: 0),
+                style: TextStyle(height: 0, fontSize: 0, color: style?.color),
               ),
             ],
           );
@@ -132,6 +135,7 @@ $value
     return Text.rich(
       TextSpan(
         children: list,
+        style: style,
       ),
     );
   }

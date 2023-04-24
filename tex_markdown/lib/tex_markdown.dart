@@ -27,6 +27,12 @@ class TexMarkdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(child: MdWidget(data.trim()));
+    return ClipRRect(
+        child: MdWidget(
+      data.trim(),
+      style: style,
+      onLinkTab: onLinkTab,
+      followLinkColor: followLinkColor,
+    ));
   }
 }

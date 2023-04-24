@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:tex_markdown/custom_widgets/custom_divider.dart';
 import 'package:tex_markdown/custom_widgets/custom_error_image.dart';
@@ -72,19 +70,21 @@ abstract class MarkdownComponent {
             } else {
               if (each is BlockMd) {
                 spans.addAll([
-                  const TextSpan(
+                  TextSpan(
                     text: "\n ",
                     style: TextStyle(
                       fontSize: 0,
                       height: 0,
+                      color: style?.color,
                     ),
                   ),
                   each.span(context, element.trim(), style, onLinkTab),
-                  const TextSpan(
+                  TextSpan(
                     text: "\n ",
                     style: TextStyle(
                       fontSize: 0,
                       height: 0,
+                      color: style?.color,
                     ),
                   ),
                 ]);
@@ -505,15 +505,24 @@ class ImageMd extends InlineMd {
       child: SizedBox(
         width: width,
         height: height,
-        child: Image.network(
-          "${match?[2]}",
+        child: Image(
+          image: NetworkImage(
+            "${match?[2]}",
+          ),
+          loadingBuilder: (BuildContext context, Widget child,
+              ImageChunkEvent? loadingProgress) {
+            if (loadingProgress == null) {
+              return child;
+            }
+            return CustomImageLoading(
+              progress: loadingProgress.expectedTotalBytes != null
+                  ? loadingProgress.cumulativeBytesLoaded /
+                      loadingProgress.expectedTotalBytes!
+                  : 1,
+            );
+          },
           fit: BoxFit.fill,
           errorBuilder: (context, error, stackTrace) {
-            double size = 35;
-            // if (height != null && width != null) {
-            size = min(size, height ?? size);
-            size = min(size, width ?? size);
-            // }
             return const CustomImageError();
           },
         ),

@@ -491,7 +491,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.1.6"
+    version: "0.1.7"
   tex_text:
     dependency: transitive
     description:

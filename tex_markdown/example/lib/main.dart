@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
 import 'package:tex_markdown/tex_markdown.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -71,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
 hello
 ---
 my name is
-![100x100](https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/800px-Image_created_with_a_mobile_phone.png)
+![300](https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/800px-Image_created_with_a_mobile_phone.png)
 **bold$x^2\cfrac a{\cfrac ab}$ text**
 *Italic text$x^2\cfrac a{b}$*
 **hello**
