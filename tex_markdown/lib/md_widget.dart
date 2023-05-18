@@ -56,7 +56,7 @@ $value
           TextSpan(
             text: "\n\n",
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 6,
               color: style?.color,
             ),
           ),
