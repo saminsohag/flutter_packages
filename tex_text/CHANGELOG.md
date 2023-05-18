@@ -1,3 +1,7 @@
+## 0.1.8
+
+* Updated for flutter 3.10.0 and Dart 3.
+
 ## 0.1.7
 
 * Bug fixed.
