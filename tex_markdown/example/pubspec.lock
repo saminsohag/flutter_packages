@@ -499,7 +499,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.1.8"
+    version: "0.1.9"
   tex_text:
     dependency: transitive
     description:
