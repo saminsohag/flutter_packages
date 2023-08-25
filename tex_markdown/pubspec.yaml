@@ -4,7 +4,7 @@ version: 0.1.8
 homepage: https://github.com/saminsohag/flutter_packages/tree/main/tex_markdown
 
 environment:
-  sdk: '>=2.18.6 <4.0.0'
+  sdk: '>=3.1.0 <4.0.0'
   flutter: ">=1.17.0"
 
 dependencies:

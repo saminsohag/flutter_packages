@@ -8,8 +8,8 @@ enum CustomRbSlot {
   child,
 }
 
-class CustomRb extends RenderObjectWidget
-    with SlottedMultiChildRenderObjectWidgetMixin<CustomRbSlot> {
+class CustomRb
+    extends SlottedMultiChildRenderObjectWidget<CustomRbSlot, RenderBox> {
   const CustomRb(
       {super.key, this.spacing = 5, required this.child, required this.value});
   final Widget child;
@@ -32,7 +32,7 @@ class CustomRb extends RenderObjectWidget
   }
 
   @override
-  SlottedContainerRenderObjectMixin<CustomRbSlot> createRenderObject(
+  SlottedContainerRenderObjectMixin<CustomRbSlot, RenderBox> createRenderObject(
       BuildContext context) {
     return RenderCustomRb(spacing);
   }
@@ -48,7 +48,7 @@ class CustomRb extends RenderObjectWidget
 }
 
 class RenderCustomRb extends RenderBox
-    with SlottedContainerRenderObjectMixin<CustomRbSlot> {
+    with SlottedContainerRenderObjectMixin<CustomRbSlot, RenderBox> {
   RenderCustomRb(this._spacing);
   double _spacing;
   set spacing(double value) {
@@ -129,8 +129,8 @@ enum CustomCbSlot {
   child,
 }
 
-class CustomCb extends RenderObjectWidget
-    with SlottedMultiChildRenderObjectWidgetMixin<CustomCbSlot> {
+class CustomCb
+    extends SlottedMultiChildRenderObjectWidget<CustomCbSlot, RenderBox> {
   const CustomCb(
       {super.key, this.spacing = 5, required this.child, required this.value});
   final Widget child;
@@ -148,7 +148,7 @@ class CustomCb extends RenderObjectWidget
   }
 
   @override
-  SlottedContainerRenderObjectMixin<CustomCbSlot> createRenderObject(
+  SlottedContainerRenderObjectMixin<CustomCbSlot, RenderBox> createRenderObject(
       BuildContext context) {
     return RenderCustomCb(spacing);
   }
@@ -164,7 +164,7 @@ class CustomCb extends RenderObjectWidget
 }
 
 class RenderCustomCb extends RenderBox
-    with SlottedContainerRenderObjectMixin<CustomCbSlot> {
+    with SlottedContainerRenderObjectMixin<CustomCbSlot, RenderBox> {
   RenderCustomCb(this._spacing);
   double _spacing;
   set spacing(double value) {
