@@ -1,3 +1,7 @@
+## 0.1.9
+
+* TextDirection parameter added.
+
 ## 0.1.8
 
 * Updated for flutter 3.10.0 and Dart 3.
