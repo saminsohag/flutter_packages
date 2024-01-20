@@ -47,6 +47,7 @@ abstract class MarkdownComponent {
     BuildContext context,
     String text,
     TextStyle? style,
+    TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
   ) {
     List<InlineSpan> spans = [];
@@ -59,6 +60,7 @@ abstract class MarkdownComponent {
                 context,
                 element.trim(),
                 style,
+                textDirection,
                 onLinkTab,
               ));
               spans.add(
@@ -78,7 +80,13 @@ abstract class MarkdownComponent {
                       color: style?.color,
                     ),
                   ),
-                  each.span(context, element.trim(), style, onLinkTab),
+                  each.span(
+                    context,
+                    element.trim(),
+                    style,
+                    textDirection,
+                    onLinkTab,
+                  ),
                   TextSpan(
                     text: "\n ",
                     style: TextStyle(
@@ -102,6 +110,7 @@ abstract class MarkdownComponent {
     BuildContext context,
     String text,
     TextStyle? style,
+    TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
   );
 
@@ -119,6 +128,7 @@ abstract class InlineMd extends MarkdownComponent {
     BuildContext context,
     String text,
     TextStyle? style,
+    TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
   );
   String toHtml(String text);
@@ -133,10 +143,11 @@ abstract class BlockMd extends MarkdownComponent {
     BuildContext context,
     String text,
     TextStyle? style,
+    TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
   ) {
     return WidgetSpan(
-      child: build(context, text, style, onLinkTab),
+      child: build(context, text, style, textDirection, onLinkTab),
       alignment: PlaceholderAlignment.middle,
     );
   }
@@ -145,6 +156,7 @@ abstract class BlockMd extends MarkdownComponent {
     BuildContext context,
     String text,
     TextStyle? style,
+    TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
   );
   String toHtml(String text);
@@ -159,13 +171,17 @@ class HTag extends BlockMd {
     BuildContext context,
     String text,
     TextStyle? style,
+    TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
   ) {
     var match = exp.firstMatch(text.trim());
-    return Text.rich(TextSpan(
-      children: [
-        WidgetSpan(
-          child: TexText("${match?[2]}",
+    return Text.rich(
+      TextSpan(
+        children: [
+          WidgetSpan(
+            child: TexText(
+              "${match?[2]}",
+              textDirection: textDirection,
               style: [
                 Theme.of(context)
                     .textTheme
@@ -191,22 +207,26 @@ class HTag extends BlockMd {
                     .textTheme
                     .titleSmall
                     ?.copyWith(color: style?.color),
-              ][match![1]!.length - 1]),
-        ),
-        if (match[1]!.length == 1) ...[
-          const TextSpan(
-            text: "\n ",
-            style: TextStyle(fontSize: 0, height: 0),
-          ),
-          WidgetSpan(
-            child: CustomDivider(
-              height: 2,
-              color: style?.color ?? Theme.of(context).colorScheme.outline,
+              ][match![1]!.length - 1],
+              // textDirection: textDirection,
             ),
           ),
+          if (match[1]!.length == 1) ...[
+            const TextSpan(
+              text: "\n ",
+              style: TextStyle(fontSize: 0, height: 0),
+            ),
+            WidgetSpan(
+              child: CustomDivider(
+                height: 2,
+                color: style?.color ?? Theme.of(context).colorScheme.outline,
+              ),
+            ),
+          ],
         ],
-      ],
-    ));
+      ),
+      textDirection: textDirection,
+    );
   }
 
   @override
@@ -225,6 +245,7 @@ class HrLine extends BlockMd {
     BuildContext context,
     String text,
     TextStyle? style,
+    TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
   ) {
     return CustomDivider(
@@ -248,6 +269,7 @@ class CheckBoxMd extends BlockMd {
     BuildContext context,
     String text,
     TextStyle? style,
+    TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
   ) {
     var match = exp.firstMatch(text.trim());
@@ -256,6 +278,7 @@ class CheckBoxMd extends BlockMd {
       child: MdWidget(
         "${match?[2]}",
         onLinkTab: onLinkTab,
+        textDirection: textDirection,
         style: style,
       ),
     );
@@ -280,6 +303,7 @@ class RadioButtonMd extends BlockMd {
     BuildContext context,
     String text,
     TextStyle? style,
+    TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
   ) {
     var match = exp.firstMatch(text.trim());
@@ -288,6 +312,7 @@ class RadioButtonMd extends BlockMd {
       child: MdWidget(
         "${match?[2]}",
         onLinkTab: onLinkTab,
+        textDirection: textDirection,
         style: style,
       ),
     );
@@ -312,6 +337,7 @@ class UnOrderedList extends BlockMd {
     BuildContext context,
     String text,
     TextStyle? style,
+    TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
   ) {
     var match = exp.firstMatch(text.trim());
@@ -320,6 +346,7 @@ class UnOrderedList extends BlockMd {
       child: MdWidget(
         "${match?[2]}",
         onLinkTab: onLinkTab,
+        textDirection: textDirection,
         style: style,
       ),
     );
@@ -347,6 +374,7 @@ class OrderedList extends BlockMd {
     BuildContext context,
     String text,
     TextStyle? style,
+    TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
   ) {
     var match = exp.firstMatch(text.trim());
@@ -356,6 +384,7 @@ class OrderedList extends BlockMd {
       child: MdWidget(
         "${match?[2]}",
         onLinkTab: onLinkTab,
+        textDirection: textDirection,
         style: style,
       ),
     );
@@ -378,6 +407,7 @@ class BoldMd extends InlineMd {
     BuildContext context,
     String text,
     TextStyle? style,
+    TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
   ) {
     var match = exp.firstMatch(text.trim());
@@ -387,6 +417,7 @@ class BoldMd extends InlineMd {
       baseline: TextBaseline.alphabetic,
       child: TexText(
         "${match?[1]}",
+        textDirection: textDirection,
         style: style?.copyWith(fontWeight: FontWeight.bold) ??
             const TextStyle(fontWeight: FontWeight.bold),
       ),
@@ -412,6 +443,7 @@ class ItalicMd extends InlineMd {
     BuildContext context,
     String text,
     TextStyle? style,
+    TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
   ) {
     var match = exp.firstMatch(text.trim());
@@ -420,6 +452,7 @@ class ItalicMd extends InlineMd {
       baseline: TextBaseline.alphabetic,
       child: TexText(
         "${match?[1]}",
+        textDirection: textDirection,
         style:
             (style ?? const TextStyle()).copyWith(fontStyle: FontStyle.italic),
       ),
@@ -444,6 +477,7 @@ class ATagMd extends InlineMd {
     BuildContext context,
     String text,
     TextStyle? style,
+    TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
   ) {
     var match = exp.firstMatch(text.trim());
@@ -462,6 +496,7 @@ class ATagMd extends InlineMd {
         },
         child: TexText(
           "${match?[1]}",
+          textDirection: textDirection,
           style: (style ?? const TextStyle()).copyWith(
             color: Colors.blueAccent,
             decorationColor: Colors.blue,
@@ -489,6 +524,7 @@ class ImageMd extends InlineMd {
     BuildContext context,
     String text,
     TextStyle? style,
+    TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
   ) {
     var match = exp.firstMatch(text.trim());
@@ -548,8 +584,13 @@ class ImageMd extends InlineMd {
 /// Table component
 class TableMd extends BlockMd {
   @override
-  Widget build(BuildContext context, String text, TextStyle? style,
-      void Function(String url, String title)? onLinkTab) {
+  Widget build(
+    BuildContext context,
+    String text,
+    TextStyle? style,
+    TextDirection textDirection,
+    void Function(String url, String title)? onLinkTab,
+  ) {
     final List<Map<int, String>> value = text
         .split('\n')
         .map<Map<int, String>>(
@@ -571,6 +612,7 @@ class TableMd extends BlockMd {
     }
     return Table(
       defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+      textDirection: textDirection,
       border: TableBorder.all(
         width: 1,
         color: Theme.of(context).colorScheme.onSurface,
@@ -583,6 +625,7 @@ class TableMd extends BlockMd {
                 (index) => Center(
                   child: MdWidget(
                     (e[index] ?? "").trim(),
+                    textDirection: textDirection,
                     onLinkTab: onLinkTab,
                     style: style,
                   ),
@@ -634,13 +677,19 @@ class TextMd extends InlineMd {
   final RegExp exp = RegExp(".*");
 
   @override
-  InlineSpan span(BuildContext context, String text, TextStyle? style,
-      void Function(String url, String title)? onLinkTab) {
+  InlineSpan span(
+    BuildContext context,
+    String text,
+    TextStyle? style,
+    TextDirection textDirection,
+    void Function(String url, String title)? onLinkTab,
+  ) {
     return WidgetSpan(
         alignment: PlaceholderAlignment.baseline,
         baseline: TextBaseline.alphabetic,
         child: TexText(
           text,
+          textDirection: textDirection,
           style: style,
         ));
   }

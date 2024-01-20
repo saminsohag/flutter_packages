@@ -6,8 +6,13 @@ import 'package:tex_markdown/markdown_component.dart';
 /// It creates a markdown widget closed to each other.
 class MdWidget extends StatelessWidget {
   const MdWidget(this.exp,
-      {super.key, this.style, this.onLinkTab, this.followLinkColor = false});
+      {super.key,
+      this.style,
+      this.textDirection = TextDirection.ltr,
+      this.onLinkTab,
+      this.followLinkColor = false});
   final String exp;
+  final TextDirection textDirection;
   final TextStyle? style;
   final void Function(String url, String title)? onLinkTab;
   final bool followLinkColor;
@@ -93,6 +98,7 @@ $value
               ),
               WidgetSpan(
                 child: Table(
+                  textDirection: textDirection,
                   defaultColumnWidth: CustomTableColumnWidth(),
                   defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                   border: TableBorder.all(
@@ -107,6 +113,7 @@ $value
                             (index) => Center(
                               child: MdWidget(
                                 (e[index] ?? "").trim(),
+                                textDirection: textDirection,
                                 onLinkTab: onLinkTab,
                                 style: style,
                               ),
@@ -126,7 +133,12 @@ $value
         } else {
           list.addAll(
             MarkdownComponent.generate(
-                context, eachLn.trim(), style, onLinkTab),
+              context,
+              eachLn.trim(),
+              style,
+              textDirection,
+              onLinkTab,
+            ),
           );
         }
         return "";
@@ -137,6 +149,7 @@ $value
         children: list,
         style: style,
       ),
+      textDirection: textDirection,
     );
   }
 }

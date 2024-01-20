@@ -18,10 +18,12 @@ class TexText extends StatelessWidget {
     this.text, {
     super.key,
     TextStyle? style,
+    this.textDirection = TextDirection.ltr,
     this.mathStyle = MathStyle.text,
   }) : _style = style;
   final String text;
   final TextStyle? _style;
+  final TextDirection textDirection;
   final MathStyle mathStyle;
   // final TexAlignment alignment;
 
@@ -130,6 +132,7 @@ class TexText extends StatelessWidget {
               onErrorFallback: (err) {
                 return Text(
                   "\$${p0[1]}\$",
+                  textDirection: textDirection,
                   style: style?.copyWith(
                           color: Theme.of(context).colorScheme.error) ??
                       TextStyle(color: Theme.of(context).colorScheme.error),
@@ -154,6 +157,7 @@ class TexText extends StatelessWidget {
       TextSpan(
         children: spans,
       ),
+      textDirection: textDirection,
     );
   }
 

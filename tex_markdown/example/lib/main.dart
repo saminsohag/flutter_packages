@@ -125,6 +125,7 @@ $hello$
                                 scrollDirection: Axis.horizontal,
                                 child: TexMarkdown(
                                   _controller.text,
+                                  textDirection: TextDirection.rtl,
                                   onLinkTab: (url, title) {
                                     log(title, name: "title");
                                     log(url, name: "url");

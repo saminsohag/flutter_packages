@@ -11,8 +11,10 @@ class TexMarkdown extends StatelessWidget {
     super.key,
     this.style,
     this.followLinkColor = false,
+    this.textDirection = TextDirection.ltr,
     this.onLinkTab,
   });
+  final TextDirection textDirection;
   final String data;
   final TextStyle? style;
   final void Function(String url, String title)? onLinkTab;
@@ -30,6 +32,7 @@ class TexMarkdown extends StatelessWidget {
     return ClipRRect(
         child: MdWidget(
       data.trim(),
+      textDirection: textDirection,
       style: style,
       onLinkTab: onLinkTab,
       followLinkColor: followLinkColor,

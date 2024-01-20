@@ -479,10 +479,9 @@ packages:
   tex_text:
     dependency: transitive
     description:
-      name: tex_text
-      sha256: d970cdcf16fb38b28f16b6118853434703191c9757117bc264c43c212d554949
-      url: "https://pub.dev"
-    source: hosted
+      path: "../../tex_text"
+      relative: true
+    source: path
     version: "0.1.8"
   tuple:
     dependency: transitive

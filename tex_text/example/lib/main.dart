@@ -14,12 +14,17 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final TextEditingController _text = TextEditingController();
+  final TextEditingController _text = TextEditingController(
+      text: r"Some random text and $x^2+y^2=$ some thing");
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(title: const Text("Tex Text.")),
+        appBar: AppBar(
+            title: const Text(
+          "Tex Text .",
+          textDirection: TextDirection.rtl,
+        )),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,6 +44,7 @@ class _MyAppState extends State<MyApp> {
                           child: TexText(
                             // TexText.newEasySyntax(_text.text),
                             _text.text,
+                            textDirection: TextDirection.rtl,
                             style: Theme.of(context)
                                 .textTheme
                                 .titleLarge
