@@ -8,10 +8,12 @@ class UnorderedListView extends SingleChildRenderObjectWidget {
       this.padding = 10,
       this.bulletColor,
       this.bulletSize = 4,
+      this.textDirection = TextDirection.ltr,
       required super.child});
   final double bulletSize;
   final double spacing;
   final double padding;
+  final TextDirection textDirection;
   final Color? bulletColor;
 
   @override
@@ -20,6 +22,7 @@ class UnorderedListView extends SingleChildRenderObjectWidget {
       spacing,
       padding,
       bulletColor ?? Theme.of(context).colorScheme.onSurface,
+      textDirection,
       bulletSize,
     );
   }
@@ -32,6 +35,7 @@ class UnorderedListView extends SingleChildRenderObjectWidget {
     renderObject.bulletSize = bulletSize;
     renderObject.spacing = spacing;
     renderObject.padding = padding;
+    renderObject.textDirection = textDirection;
   }
 }
 
@@ -40,15 +44,18 @@ class UnorderedListRenderObject extends RenderProxyBox {
     double spacing,
     double padding,
     Color bulletColor,
+    TextDirection textDirection,
     this._bulletSize, {
     RenderBox? child,
   })  : _bulletColor = bulletColor,
         _spacing = spacing,
         _padding = padding,
+        _textDirection = textDirection,
         super(child);
   double _spacing;
   double _padding;
   Offset _bulletOffset = Offset.zero;
+  TextDirection _textDirection;
   set spacing(double value) {
     if (_spacing == value) {
       return;
@@ -63,6 +70,15 @@ class UnorderedListRenderObject extends RenderProxyBox {
     }
     _padding = value;
     markNeedsLayout();
+  }
+
+  set textDirection(TextDirection value) {
+    if (_textDirection == value) {
+      return;
+    }
+    _textDirection = value;
+    markNeedsLayout();
+    markNeedsPaint();
   }
 
   Color _bulletColor;
@@ -139,10 +155,20 @@ class UnorderedListRenderObject extends RenderProxyBox {
               constraints.maxWidth - _spacing - 6 - _bulletSize - _padding,
         ),
         parentUsesSize: true);
-    child!.parentData = BoxParentData()
-      ..offset = Offset(_spacing + _padding + 6 + _bulletSize, 0);
-    var value = child!.computeDistanceToActualBaseline(TextBaseline.alphabetic);
-    _bulletOffset = Offset(4 + _padding, value! - _bulletSize);
+    if (_textDirection == TextDirection.ltr) {
+      child!.parentData = BoxParentData()
+        ..offset = Offset(_spacing + _padding + 6 + _bulletSize, 0);
+      var value =
+          child!.computeDistanceToActualBaseline(TextBaseline.alphabetic);
+      _bulletOffset = Offset(4 + _padding, value! - _bulletSize);
+    } else {
+      child!.parentData = BoxParentData()
+        ..offset = Offset(-_spacing - _padding + 6 + _bulletSize, 0);
+      var value =
+          child!.computeDistanceToActualBaseline(TextBaseline.alphabetic);
+      _bulletOffset =
+          Offset(child!.size.width - 4 + _padding, value! - _bulletSize);
+    }
     size = constraints.constrain(Size(
         child!.size.width + _spacing + _padding + 6 + _bulletSize,
         child!.size.height));
@@ -153,10 +179,17 @@ class UnorderedListRenderObject extends RenderProxyBox {
     if (child == null) {
       return;
     }
-    context.paintChild(
-        child!, offset + (child!.parentData as BoxParentData).offset);
-    context.canvas.drawCircle(
-        offset + _bulletOffset, _bulletSize, Paint()..color = _bulletColor);
+    if (_textDirection == TextDirection.ltr) {
+      context.paintChild(
+          child!, offset + (child!.parentData as BoxParentData).offset);
+      context.canvas.drawCircle(
+          offset + _bulletOffset, _bulletSize, Paint()..color = _bulletColor);
+    } else {
+      context.paintChild(
+          child!, offset + (child!.parentData as BoxParentData).offset);
+      context.canvas.drawCircle(
+          offset + _bulletOffset, _bulletSize, Paint()..color = _bulletColor);
+    }
   }
 }
 
@@ -170,9 +203,11 @@ class OrderedListView extends SingleChildRenderObjectWidget {
       this.padding = 10,
       TextStyle? style,
       required super.child,
+      this.textDirection = TextDirection.ltr,
       required this.no})
       : _style = style;
   final TextStyle? _style;
+  final TextDirection textDirection;
 
   TextStyle getStyle(BuildContext context) {
     if (_style == null || _style!.inherit) {
@@ -187,6 +222,7 @@ class OrderedListView extends SingleChildRenderObjectWidget {
       no,
       spacing,
       padding,
+      textDirection,
       getStyle(context),
     );
   }
@@ -198,6 +234,7 @@ class OrderedListView extends SingleChildRenderObjectWidget {
     renderObject.spacing = spacing;
     renderObject.padding = padding;
     renderObject.style = getStyle(context);
+    renderObject.textDirection = textDirection;
   }
 }
 
@@ -206,15 +243,18 @@ class OrderedListRenderObject extends RenderProxyBox {
     String no,
     double spacing,
     double padding,
+    TextDirection textDirection,
     TextStyle style, {
     RenderBox? child,
   })  : _no = no,
         _style = style,
         _spacing = spacing,
         _padding = padding,
+        _textDirection = textDirection,
         super(child);
   double _spacing;
   double _padding;
+  TextDirection _textDirection;
   Offset _ptOffset = Offset.zero;
   set spacing(double value) {
     if (_spacing == value) {
@@ -230,6 +270,15 @@ class OrderedListRenderObject extends RenderProxyBox {
     }
     _padding = value;
     markNeedsLayout();
+  }
+
+  set textDirection(TextDirection value) {
+    if (_textDirection == value) {
+      return;
+    }
+    _textDirection = value;
+    markNeedsLayout();
+    markNeedsPaint();
   }
 
   TextStyle _style;
@@ -292,11 +341,21 @@ class OrderedListRenderObject extends RenderProxyBox {
           maxWidth: constraints.maxWidth - pt.width - _spacing - _padding,
         ),
         parentUsesSize: true);
-    child!.parentData = BoxParentData()
-      ..offset = Offset(_spacing + _padding + pt.width, 0);
-    var value = child!.computeDistanceToActualBaseline(TextBaseline.alphabetic);
-    _ptOffset = Offset(_padding,
-        value! - pt.computeDistanceToActualBaseline(TextBaseline.alphabetic));
+    if (_textDirection == TextDirection.ltr) {
+      child!.parentData = BoxParentData()
+        ..offset = Offset(_spacing + _padding + pt.width, 0);
+      var value =
+          child!.computeDistanceToActualBaseline(TextBaseline.alphabetic);
+      _ptOffset = Offset(_padding,
+          value! - pt.computeDistanceToActualBaseline(TextBaseline.alphabetic));
+    } else {
+      child!.parentData = BoxParentData()
+        ..offset = Offset(-_spacing - _padding + pt.width, 0);
+      var value =
+          child!.computeDistanceToActualBaseline(TextBaseline.alphabetic);
+      _ptOffset = Offset(child!.size.width + _padding - 4,
+          value! - pt.computeDistanceToActualBaseline(TextBaseline.alphabetic));
+    }
     size = constraints.constrain(Size(
         child!.size.width + _spacing + _padding + pt.width,
         child!.size.height));

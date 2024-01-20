@@ -275,6 +275,7 @@ class CheckBoxMd extends BlockMd {
     var match = exp.firstMatch(text.trim());
     return CustomCb(
       value: ("${match?[1]}" == "x"),
+      textDirection: textDirection,
       child: MdWidget(
         "${match?[2]}",
         onLinkTab: onLinkTab,
@@ -309,6 +310,7 @@ class RadioButtonMd extends BlockMd {
     var match = exp.firstMatch(text.trim());
     return CustomRb(
       value: ("${match?[1]}" == "x"),
+      textDirection: textDirection,
       child: MdWidget(
         "${match?[2]}",
         onLinkTab: onLinkTab,
@@ -343,6 +345,7 @@ class UnOrderedList extends BlockMd {
     var match = exp.firstMatch(text.trim());
     return UnorderedListView(
       bulletColor: style?.color,
+      textDirection: textDirection,
       child: MdWidget(
         "${match?[2]}",
         onLinkTab: onLinkTab,
@@ -380,6 +383,7 @@ class OrderedList extends BlockMd {
     var match = exp.firstMatch(text.trim());
     return OrderedListView(
       no: "${match?[1]}",
+      textDirection: textDirection,
       style: (style ?? const TextStyle()).copyWith(fontWeight: FontWeight.bold),
       child: MdWidget(
         "${match?[2]}",

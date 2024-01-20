@@ -60,6 +60,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  TextDirection _direction = TextDirection.ltr;
   final TextEditingController _controller = TextEditingController(text: r'''
 # hi how are you?$my  is^2$
 ## hi how are you$(\frac ab)^2$?
@@ -97,6 +98,14 @@ $hello$
         title: Text(widget.title),
         actions: [
           IconButton(
+            onPressed: () {
+              setState(() {
+                _direction = TextDirection.values[(_direction.index + 1) % 2];
+              });
+            },
+            icon: const [Text("LTR"), Text("RTL")][_direction.index],
+          ),
+          IconButton(
             onPressed: widget.onPressed,
             icon: const Icon(Icons.sunny),
           ),
@@ -123,16 +132,20 @@ $hello$
                                 LayoutBuilder(builder: (context, constraints) {
                               return SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
-                                child: TexMarkdown(
-                                  _controller.text,
-                                  textDirection: TextDirection.rtl,
-                                  onLinkTab: (url, title) {
-                                    log(title, name: "title");
-                                    log(url, name: "url");
-                                  },
-                                  style: const TextStyle(
-                                      // color: Colors.green,
-                                      ),
+                                reverse: _direction == TextDirection.rtl,
+                                child: SizedBox(
+                                  width: 400,
+                                  child: TexMarkdown(
+                                    _controller.text,
+                                    textDirection: _direction,
+                                    onLinkTab: (url, title) {
+                                      log(title, name: "title");
+                                      log(url, name: "url");
+                                    },
+                                    style: const TextStyle(
+                                        // color: Colors.green,
+                                        ),
+                                  ),
                                 ),
                               );
                             }),

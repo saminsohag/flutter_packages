@@ -10,11 +10,17 @@ enum CustomRbSlot {
 
 class CustomRb
     extends SlottedMultiChildRenderObjectWidget<CustomRbSlot, RenderBox> {
-  const CustomRb(
-      {super.key, this.spacing = 5, required this.child, required this.value});
+  const CustomRb({
+    super.key,
+    this.spacing = 5,
+    required this.child,
+    this.textDirection = TextDirection.ltr,
+    required this.value,
+  });
   final Widget child;
   final bool value;
   final double spacing;
+  final TextDirection textDirection;
 
   @override
   Widget? childForSlot(CustomRbSlot slot) {
@@ -34,13 +40,14 @@ class CustomRb
   @override
   SlottedContainerRenderObjectMixin<CustomRbSlot, RenderBox> createRenderObject(
       BuildContext context) {
-    return RenderCustomRb(spacing);
+    return RenderCustomRb(spacing, textDirection);
   }
 
   @override
   void updateRenderObject(
       BuildContext context, covariant RenderCustomRb renderObject) {
     renderObject.spacing = spacing;
+    renderObject.textDirection = textDirection;
   }
 
   @override
@@ -49,8 +56,17 @@ class CustomRb
 
 class RenderCustomRb extends RenderBox
     with SlottedContainerRenderObjectMixin<CustomRbSlot, RenderBox> {
-  RenderCustomRb(this._spacing);
+  RenderCustomRb(this._spacing, this._textDirection);
   double _spacing;
+  TextDirection _textDirection;
+  set textDirection(TextDirection value) {
+    if (_textDirection == value) {
+      return;
+    }
+    _textDirection = value;
+    markNeedsLayout();
+  }
+
   set spacing(double value) {
     if (_spacing == value) {
       return;
@@ -80,14 +96,24 @@ class RenderCustomRb extends RenderBox
         body!,
         BoxConstraints(
             maxWidth: constraints.maxWidth - rbSize.width - _spacing));
-    body!.parentData = BoxParentData()
-      ..offset = Offset(rbSize.width + _spacing, 0);
-    rb!.parentData = BoxParentData()
-      ..offset = Offset(
-        0,
-        body!.computeDistanceToActualBaseline(TextBaseline.alphabetic)! -
-            rb!.size.height / 1.5,
-      );
+    if (_textDirection == TextDirection.ltr) {
+      body!.parentData = BoxParentData()
+        ..offset = Offset(rbSize.width + _spacing, 0);
+      rb!.parentData = BoxParentData()
+        ..offset = Offset(
+          0,
+          body!.computeDistanceToActualBaseline(TextBaseline.alphabetic)! -
+              rb!.size.height / 1.5,
+        );
+    } else {
+      body!.parentData = BoxParentData()..offset = Offset(-_spacing, 0);
+      rb!.parentData = BoxParentData()
+        ..offset = Offset(
+          bodySize.width,
+          body!.computeDistanceToActualBaseline(TextBaseline.alphabetic)! -
+              rb!.size.height / 1.5,
+        );
+    }
     size = constraints.constrain(Size(bodySize.width + rbSize.width + _spacing,
         max(rbSize.height, bodySize.height)));
   }
@@ -132,8 +158,13 @@ enum CustomCbSlot {
 class CustomCb
     extends SlottedMultiChildRenderObjectWidget<CustomCbSlot, RenderBox> {
   const CustomCb(
-      {super.key, this.spacing = 5, required this.child, required this.value});
+      {super.key,
+      this.spacing = 5,
+      this.textDirection = TextDirection.ltr,
+      required this.child,
+      required this.value});
   final Widget child;
+  final TextDirection textDirection;
   final bool value;
   final double spacing;
 
@@ -150,13 +181,14 @@ class CustomCb
   @override
   SlottedContainerRenderObjectMixin<CustomCbSlot, RenderBox> createRenderObject(
       BuildContext context) {
-    return RenderCustomCb(spacing);
+    return RenderCustomCb(spacing, textDirection);
   }
 
   @override
   void updateRenderObject(
       BuildContext context, covariant RenderCustomCb renderObject) {
     renderObject.spacing = spacing;
+    renderObject.textDirection = textDirection;
   }
 
   @override
@@ -165,8 +197,17 @@ class CustomCb
 
 class RenderCustomCb extends RenderBox
     with SlottedContainerRenderObjectMixin<CustomCbSlot, RenderBox> {
-  RenderCustomCb(this._spacing);
+  RenderCustomCb(this._spacing, this._textDirection);
   double _spacing;
+  TextDirection _textDirection;
+  set textDirection(TextDirection value) {
+    if (_textDirection == value) {
+      return;
+    }
+    _textDirection = value;
+    markNeedsLayout();
+  }
+
   set spacing(double value) {
     if (_spacing == value) {
       return;
@@ -196,13 +237,22 @@ class RenderCustomCb extends RenderBox
         body!,
         BoxConstraints(
             maxWidth: constraints.maxWidth - rbSize.width - _spacing));
-    body!.parentData = BoxParentData()
-      ..offset = Offset(rbSize.width + _spacing, 0);
-    rb!.parentData = BoxParentData()
-      ..offset = Offset(
-          0,
-          body!.computeDistanceToActualBaseline(TextBaseline.alphabetic)! -
-              rb!.size.height / 1.5);
+    if (_textDirection == TextDirection.ltr) {
+      body!.parentData = BoxParentData()
+        ..offset = Offset(rbSize.width + _spacing, 0);
+      rb!.parentData = BoxParentData()
+        ..offset = Offset(
+            0,
+            body!.computeDistanceToActualBaseline(TextBaseline.alphabetic)! -
+                rb!.size.height / 1.5);
+    } else {
+      body!.parentData = BoxParentData()..offset = Offset(-_spacing, 0);
+      rb!.parentData = BoxParentData()
+        ..offset = Offset(
+            bodySize.width,
+            body!.computeDistanceToActualBaseline(TextBaseline.alphabetic)! -
+                rb!.size.height / 1.5);
+    }
     size = constraints.constrain(Size(bodySize.width + rbSize.width + _spacing,
         max(rbSize.height, bodySize.height)));
   }
