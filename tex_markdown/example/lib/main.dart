@@ -62,22 +62,23 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   TextDirection _direction = TextDirection.ltr;
   final TextEditingController _controller = TextEditingController(text: r'''
-# hi how are you?$my  is^2$
-## hi how are you$(\frac ab)^2$?
-### hi how are you?
-#### hi how are you?
-##### hi how are you?$my name is x^2$
-###### hi how are you?$x^2$
-hello
+# This is H1
+## This is H2
+### This is H3
+#### This is H4
+##### This is H5
+###### This is H6
+
+This are just regular text.
 ---
-my name is
+This is a image.
 ![300](https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/800px-Image_created_with_a_mobile_phone.png)
-**bold$x^2\cfrac a{\cfrac ab}$ text**
-*Italic text$x^2\cfrac a{b}$*
+**bold $x^2\cfrac a{\cfrac ab}$ text**
+*Italic text $x^2\cfrac a{b}$*
 **hello**
 $hello$
 
-$sdf\frac a{\frac ab}$
+$sdf \frac a{\frac ab}$
 $hello$
 [Link]()
 - unordered list
@@ -135,16 +136,36 @@ $hello$
                                 reverse: _direction == TextDirection.rtl,
                                 child: SizedBox(
                                   width: 400,
-                                  child: TexMarkdown(
-                                    _controller.text,
-                                    textDirection: _direction,
-                                    onLinkTab: (url, title) {
-                                      log(title, name: "title");
-                                      log(url, name: "url");
-                                    },
-                                    style: const TextStyle(
-                                        // color: Colors.green,
-                                        ),
+                                  child: Theme(
+                                    data: Theme.of(context).copyWith(
+                                      textTheme: const TextTheme(
+                                        // For H1.
+                                        headlineLarge: TextStyle(fontSize: 55),
+                                        // For H2.
+                                        headlineMedium: TextStyle(fontSize: 45),
+                                        // For H3.
+                                        headlineSmall: TextStyle(fontSize: 35),
+                                        // For H4.
+                                        titleLarge: TextStyle(fontSize: 25),
+                                        // For H5.
+                                        titleMedium: TextStyle(fontSize: 15),
+                                        // For H6.
+                                        titleSmall: TextStyle(fontSize: 10),
+                                      ),
+                                    ),
+                                    child: TexMarkdown(
+                                      _controller.text,
+                                      textDirection: _direction,
+                                      onLinkTab: (url, title) {
+                                        log(title, name: "title");
+                                        log(url, name: "url");
+                                      },
+                                      style: const TextStyle(
+                                        // Regular text font size here.
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    // child: const Text("Hello"),
                                   ),
                                 ),
                               );
