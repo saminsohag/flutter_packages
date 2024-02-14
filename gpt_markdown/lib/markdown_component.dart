@@ -599,7 +599,7 @@ class ItalicMd extends InlineMd {
 /// Link text component
 class ATagMd extends InlineMd {
   @override
-  RegExp get exp => RegExp(r"\[([^\s\*][^\n]*[^\s]?)?\]\(([^\s\*]+)?\)");
+  RegExp get exp => RegExp(r"\[([^\s\*][^\n]*?[^\s]?)?\]\(([^\s\*]+)?\)");
 
   @override
   InlineSpan span(
