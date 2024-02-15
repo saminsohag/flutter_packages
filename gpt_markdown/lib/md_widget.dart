@@ -10,10 +10,14 @@ class MdWidget extends StatelessWidget {
       this.style,
       this.textDirection = TextDirection.ltr,
       this.onLinkTab,
+      this.textAlign,
+      this.textScaler,
       this.followLinkColor = false});
   final String exp;
   final TextDirection textDirection;
   final TextStyle? style;
+  final TextAlign? textAlign;
+  final TextScaler? textScaler;
   final void Function(String url, String title)? onLinkTab;
   final bool followLinkColor;
 
@@ -122,9 +126,11 @@ class MdWidget extends StatelessWidget {
     return Text.rich(
       TextSpan(
         children: list,
-        style: style,
+        style: style?.copyWith(),
       ),
       textDirection: textDirection,
+      textScaler: textScaler,
+      textAlign: textAlign,
     );
   }
 }
