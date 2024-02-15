@@ -82,15 +82,21 @@ class MdWidget extends StatelessWidget {
                         (e) => TableRow(
                           children: List.generate(
                             maxCol,
-                            (index) => Center(
-                              child: MdWidget(
-                                (e[index] ?? "").trim(),
-                                textDirection: textDirection,
-                                onLinkTab: onLinkTab,
-                                style: style,
-                                latexWorkaround: latexWorkaround,
-                              ),
-                            ),
+                            (index) {
+                              String data = e[index] ?? "";
+                              if (RegExp(r"^---+$").hasMatch(data.trim())) {
+                                return const SizedBox();
+                              }
+                              return Center(
+                                child: MdWidget(
+                                  (e[index] ?? "").trim(),
+                                  textDirection: textDirection,
+                                  onLinkTab: onLinkTab,
+                                  style: style,
+                                  latexWorkaround: latexWorkaround,
+                                ),
+                              );
+                            },
                           ),
                         ),
                       )
