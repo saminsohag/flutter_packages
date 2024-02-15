@@ -249,12 +249,6 @@ class HTag extends BlockMd {
       textDirection: textDirection,
     );
   }
-
-  // @override
-  // String toHtml(String text) {
-  //   var match = exp.firstMatch(text.trim());
-  //   return "<h${match![1]!.length}>${TexText.toHtmlData(match[2].toString().trim())}<h${match[1]!.length}>";
-  // }
 }
 
 /// Horizontal line component
@@ -480,7 +474,7 @@ class BoldMd extends InlineMd {
   }
 }
 
-class LatexMathMultyLine extends InlineMd {
+class LatexMathMultyLine extends BlockMd {
   @override
   RegExp get exp => RegExp(
         r"\\\[(.*?)\\\]|(\\begin.*?\\end{.*?})",
@@ -488,14 +482,14 @@ class LatexMathMultyLine extends InlineMd {
       );
 
   @override
-  InlineSpan span(
+  Widget build(
     BuildContext context,
     String text,
     TextStyle? style,
     TextDirection textDirection,
-    final void Function(String url, String title)? onLinkTab,
-    final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex)? latexBuilder,
+    void Function(String url, String title)? onLinkTab,
+    String Function(String tex)? latexWorkaround,
+    Widget Function(BuildContext context, String tex)? latexBuilder,
   ) {
     var p0 = exp.firstMatch(text.trim());
     p0?.group(0);
@@ -504,7 +498,7 @@ class LatexMathMultyLine extends InlineMd {
 
     var builder = latexBuilder ??
         (BuildContext context, String tex) => Math.tex(
-              workaround(tex),
+              tex,
               textStyle: style?.copyWith(
                 fontFamily: "SansSerif",
               ),
@@ -540,12 +534,7 @@ class LatexMathMultyLine extends InlineMd {
                 );
               },
             );
-
-    return WidgetSpan(
-      alignment: PlaceholderAlignment.baseline,
-      baseline: TextBaseline.alphabetic,
-      child: builder(context, mathText),
-    );
+    return builder(context, workaround(mathText));
   }
 }
 

@@ -191,6 +191,28 @@ class UnorderedListRenderObject extends RenderProxyBox {
           offset + _bulletOffset, _bulletSize, Paint()..color = _bulletColor);
     }
   }
+
+  @override
+  bool hitTestSelf(Offset position) {
+    return false;
+  }
+
+  @override
+  bool hitTestChildren(BoxHitTestResult result, {required Offset position}) {
+    Offset offset = (child!.parentData as BoxParentData).offset;
+    return result.addWithPaintOffset(
+      offset: offset,
+      position: position,
+      hitTest: (result, newOffset) {
+        return child?.hitTest(result, position: newOffset) ?? false;
+      },
+    );
+  }
+
+  @override
+  bool hitTest(BoxHitTestResult result, {required Offset position}) {
+    return hitTestChildren(result, position: position);
+  }
 }
 
 class OrderedListView extends SingleChildRenderObjectWidget {

@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
 import 'package:gpt_markdown/gpt_markdown.dart';
@@ -123,69 +122,84 @@ Markdown and LaTeX can be powerful tools for formatting text and mathematical ex
           Column(
             children: [
               Expanded(
-                child: ListView(
-                  children: [
-                    AnimatedBuilder(
-                      animation: _controller,
-                      builder: (context, _) {
-                        return Material(
-                          // color: Theme.of(context).colorScheme.surfaceVariant,
-                          shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                                width: 1,
-                                color: Theme.of(context).colorScheme.outline),
-                          ),
-                          child: LayoutBuilder(builder: (context, constraints) {
-                            return Theme(
-                              data: Theme.of(context).copyWith(
-                                textTheme: const TextTheme(
-                                  // For H1.
-                                  headlineLarge: TextStyle(fontSize: 55),
-                                  // For H2.
-                                  headlineMedium: TextStyle(fontSize: 45),
-                                  // For H3.
-                                  headlineSmall: TextStyle(fontSize: 35),
-                                  // For H4.
-                                  titleLarge: TextStyle(fontSize: 25),
-                                  // For H5.
-                                  titleMedium: TextStyle(fontSize: 15),
-                                  // For H6.
-                                  titleSmall: TextStyle(fontSize: 10),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      AnimatedBuilder(
+                        animation: _controller,
+                        builder: (context, _) {
+                          return Material(
+                            // color: Theme.of(context).colorScheme.surfaceVariant,
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                  width: 1,
+                                  color: Theme.of(context).colorScheme.outline),
+                            ),
+                            child:
+                                LayoutBuilder(builder: (context, constraints) {
+                              return Theme(
+                                data: Theme.of(context).copyWith(
+                                  textTheme: const TextTheme(
+                                    // For H1.
+                                    headlineLarge: TextStyle(fontSize: 55),
+                                    // For H2.
+                                    headlineMedium: TextStyle(fontSize: 45),
+                                    // For H3.
+                                    headlineSmall: TextStyle(fontSize: 35),
+                                    // For H4.
+                                    titleLarge: TextStyle(fontSize: 25),
+                                    // For H5.
+                                    titleMedium: TextStyle(fontSize: 15),
+                                    // For H6.
+                                    titleSmall: TextStyle(fontSize: 10),
+                                  ),
                                 ),
-                              ),
-                              child: TexMarkdown(
-                                _controller.text,
-                                textDirection: _direction,
-                                onLinkTab: (url, title) {
-                                  log(title, name: "title");
-                                  log(url, name: "url");
-                                },
-                                textAlign: TextAlign.justify,
-                                // textScaler: const TextScaler.linear(1.3),
-                                textScaler: MediaQuery.textScalerOf(context),
-                                style: const TextStyle(
-                                  // Regular text font size here.
-                                  fontSize: 15,
+                                child: TexMarkdown(
+                                  _controller.text,
+                                  textDirection: _direction,
+                                  onLinkTab: (url, title) {
+                                    log(title, name: "title");
+                                    log(url, name: "url");
+                                  },
+                                  textAlign: TextAlign.justify,
+                                  // textScaler: const TextScaler.linear(1.3),
+                                  textScaler: MediaQuery.textScalerOf(context),
+                                  style: const TextStyle(
+                                    // Regular text font size here.
+                                    fontSize: 15,
+                                  ),
+                                  latexWorkaround: (tex) =>
+                                      tex.replaceAllMapped(RegExp(r"align\*"),
+                                          (match) => "aligned"),
+                                  latexBuilder: (contex, tex) {
+                                    var controller = ScrollController();
+                                    return Column(
+                                      children: [
+                                        Scrollbar(
+                                          controller: controller,
+                                          child: SingleChildScrollView(
+                                            controller: controller,
+                                            scrollDirection: Axis.horizontal,
+                                            child: Math.tex(
+                                              tex,
+                                              textStyle: const TextStyle(
+                                                fontSize: 17,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
                                 ),
-                                latexWorkaround: (tex) => tex.replaceAllMapped(
-                                    RegExp(r"align\*"), (match) => "aligned"),
-                                latexBuilder: (contex, tex) {
-                                  return SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: Math.tex(
-                                      tex,
-                                      textStyle: const TextStyle(fontSize: 17),
-                                    ),
-                                  );
-                                },
-                              ),
-                              // child: const Text("Hello"),
-                            );
-                          }),
-                        );
-                      },
-                    ),
-                  ],
+                                // child: const Text("Hello"),
+                              );
+                            }),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
               ConstrainedBox(

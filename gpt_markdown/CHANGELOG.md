@@ -1,3 +1,7 @@
+## 0.0.4
+
+* Customizable latex and workarround added.
+
 ## 0.0.3
 
 * Some latex related fixes.
