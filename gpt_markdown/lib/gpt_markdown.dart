@@ -12,6 +12,7 @@ class TexMarkdown extends StatelessWidget {
     this.style,
     this.followLinkColor = false,
     this.textDirection = TextDirection.ltr,
+    this.latexWorkaround,
     this.textAlign,
     this.textScaler,
     this.onLinkTab,
@@ -22,6 +23,7 @@ class TexMarkdown extends StatelessWidget {
   final TextAlign? textAlign;
   final TextScaler? textScaler;
   final void Function(String url, String title)? onLinkTab;
+  final String Function(String tex)? latexWorkaround;
   final bool followLinkColor;
 
   @override
@@ -35,6 +37,7 @@ class TexMarkdown extends StatelessWidget {
       textAlign: textAlign,
       textScaler: textScaler,
       followLinkColor: followLinkColor,
+      latexWorkaround: latexWorkaround,
     ));
   }
 }

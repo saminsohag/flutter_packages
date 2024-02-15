@@ -12,6 +12,7 @@ class MdWidget extends StatelessWidget {
       this.onLinkTab,
       this.textAlign,
       this.textScaler,
+      this.latexWorkaround,
       this.followLinkColor = false});
   final String exp;
   final TextDirection textDirection;
@@ -19,6 +20,7 @@ class MdWidget extends StatelessWidget {
   final TextAlign? textAlign;
   final TextScaler? textScaler;
   final void Function(String url, String title)? onLinkTab;
+  final String Function(String tex)? latexWorkaround;
   final bool followLinkColor;
 
   @override
@@ -86,6 +88,7 @@ class MdWidget extends StatelessWidget {
                                 textDirection: textDirection,
                                 onLinkTab: onLinkTab,
                                 style: style,
+                                latexWorkaround: latexWorkaround,
                               ),
                             ),
                           ),
@@ -117,6 +120,7 @@ class MdWidget extends StatelessWidget {
               style,
               textDirection,
               onLinkTab,
+              latexWorkaround,
             ),
           );
         }

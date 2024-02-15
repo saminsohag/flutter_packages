@@ -31,6 +31,7 @@ abstract class MarkdownComponent {
     TextStyle? style,
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
+    final String Function(String tex)? latexWorkaround,
   ) {
     List<InlineSpan> spans = [];
     List<String> regexes =
@@ -55,6 +56,7 @@ abstract class MarkdownComponent {
                 style,
                 textDirection,
                 onLinkTab,
+                latexWorkaround,
               ));
             } else {
               if (each is BlockMd) {
@@ -73,6 +75,7 @@ abstract class MarkdownComponent {
                     style,
                     textDirection,
                     onLinkTab,
+                    latexWorkaround,
                   ),
                   TextSpan(
                     text: "\n ",
@@ -110,6 +113,7 @@ abstract class MarkdownComponent {
     TextStyle? style,
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
+    final String Function(String tex)? latexWorkaround,
   );
 
   RegExp get exp;
@@ -128,6 +132,7 @@ abstract class InlineMd extends MarkdownComponent {
     TextStyle? style,
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
+    final String Function(String tex)? latexWorkaround,
   );
 }
 
@@ -142,6 +147,7 @@ abstract class BlockMd extends MarkdownComponent {
     TextStyle? style,
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
+    final String Function(String tex)? latexWorkaround,
   ) {
     return WidgetSpan(
       child: build(
@@ -150,6 +156,7 @@ abstract class BlockMd extends MarkdownComponent {
         style,
         textDirection,
         onLinkTab,
+        latexWorkaround,
       ),
       alignment: PlaceholderAlignment.middle,
     );
@@ -161,6 +168,7 @@ abstract class BlockMd extends MarkdownComponent {
     TextStyle? style,
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
+    final String Function(String tex)? latexWorkaround,
   );
 }
 
@@ -175,6 +183,7 @@ class HTag extends BlockMd {
     TextStyle? style,
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
+    final String Function(String tex)? latexWorkaround,
   ) {
     var match = exp.firstMatch(text.trim());
     return Text.rich(
@@ -211,6 +220,7 @@ class HTag extends BlockMd {
             ][match![1]!.length - 1],
             textDirection,
             (url, title) {},
+            latexWorkaround,
           )),
           if (match[1]!.length == 1) ...[
             const TextSpan(
@@ -248,6 +258,7 @@ class HrLine extends BlockMd {
     TextStyle? style,
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
+    final String Function(String tex)? latexWorkaround,
   ) {
     return CustomDivider(
       height: 2,
@@ -269,6 +280,7 @@ class CheckBoxMd extends BlockMd {
     TextStyle? style,
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
+    final String Function(String tex)? latexWorkaround,
   ) {
     var match = exp.firstMatch(text.trim());
     return CustomCb(
@@ -279,6 +291,7 @@ class CheckBoxMd extends BlockMd {
         onLinkTab: onLinkTab,
         textDirection: textDirection,
         style: style,
+        latexWorkaround: latexWorkaround,
       ),
     );
   }
@@ -297,6 +310,7 @@ class RadioButtonMd extends BlockMd {
     TextStyle? style,
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
+    final String Function(String tex)? latexWorkaround,
   ) {
     var match = exp.firstMatch(text.trim());
     return CustomRb(
@@ -307,6 +321,7 @@ class RadioButtonMd extends BlockMd {
         onLinkTab: onLinkTab,
         textDirection: textDirection,
         style: style,
+        latexWorkaround: latexWorkaround,
       ),
     );
   }
@@ -325,6 +340,7 @@ class IndentMd extends BlockMd {
     TextStyle? style,
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
+    final String Function(String tex)? latexWorkaround,
   ) {
     [
       r"\\\[(.*?)\\\]",
@@ -346,6 +362,7 @@ class IndentMd extends BlockMd {
           style,
           textDirection,
           onLinkTab,
+          latexWorkaround,
         ),
       )),
     );
@@ -365,6 +382,7 @@ class UnOrderedList extends BlockMd {
     TextStyle? style,
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
+    final String Function(String tex)? latexWorkaround,
   ) {
     var match = exp.firstMatch(text);
     return UnorderedListView(
@@ -377,6 +395,7 @@ class UnOrderedList extends BlockMd {
         onLinkTab: onLinkTab,
         textDirection: textDirection,
         style: style,
+        latexWorkaround: latexWorkaround,
       ),
     );
   }
@@ -396,6 +415,7 @@ class OrderedList extends BlockMd {
     TextStyle? style,
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
+    final String Function(String tex)? latexWorkaround,
   ) {
     var match = exp.firstMatch(text.trim());
     return OrderedListView(
@@ -407,6 +427,7 @@ class OrderedList extends BlockMd {
         onLinkTab: onLinkTab,
         textDirection: textDirection,
         style: style,
+        latexWorkaround: latexWorkaround,
       ),
     );
   }
@@ -424,6 +445,7 @@ class BoldMd extends InlineMd {
     TextStyle? style,
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
+    final String Function(String tex)? latexWorkaround,
   ) {
     var match = exp.firstMatch(text.trim());
     return TextSpan(
@@ -434,6 +456,7 @@ class BoldMd extends InlineMd {
             const TextStyle(fontWeight: FontWeight.w900),
         textDirection,
         onLinkTab,
+        latexWorkaround,
       ),
       style: style?.copyWith(fontWeight: FontWeight.bold) ??
           const TextStyle(fontWeight: FontWeight.bold),
@@ -455,15 +478,17 @@ class LatexMathMultyLine extends InlineMd {
     TextStyle? style,
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
+    final String Function(String tex)? latexWorkaround,
   ) {
     var p0 = exp.firstMatch(text.trim());
     p0?.group(0);
     String mathText = p0?[1]?.toString() ?? "";
+    var workaround = latexWorkaround ?? (String tex) => tex;
     return WidgetSpan(
       alignment: PlaceholderAlignment.baseline,
       baseline: TextBaseline.alphabetic,
       child: Math.tex(
-        mathText,
+        workaround(mathText),
         textStyle: style?.copyWith(
           fontFamily: "SansSerif",
         ),
@@ -491,7 +516,7 @@ class LatexMathMultyLine extends InlineMd {
         ),
         onErrorFallback: (err) {
           return Text(
-            mathText,
+            workaround(mathText),
             textDirection: textDirection,
             style:
                 style?.copyWith(color: Theme.of(context).colorScheme.error) ??
@@ -521,15 +546,17 @@ class LatexMath extends InlineMd {
     TextStyle? style,
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
+    final String Function(String tex)? latexWorkaround,
   ) {
     var p0 = exp.firstMatch(text.trim());
     p0?.group(0);
     String mathText = p0?[1]?.toString() ?? "";
+    var workaround = latexWorkaround ?? (String tex) => tex;
     return WidgetSpan(
       alignment: PlaceholderAlignment.baseline,
       baseline: TextBaseline.alphabetic,
       child: Math.tex(
-        mathText,
+        workaround(mathText),
         textStyle: style?.copyWith(
           fontFamily: "SansSerif",
         ),
@@ -557,7 +584,7 @@ class LatexMath extends InlineMd {
         ),
         onErrorFallback: (err) {
           return Text(
-            mathText,
+            workaround(mathText),
             textDirection: textDirection,
             style:
                 style?.copyWith(color: Theme.of(context).colorScheme.error) ??
@@ -581,6 +608,7 @@ class ItalicMd extends InlineMd {
     TextStyle? style,
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
+    final String Function(String tex)? latexWorkaround,
   ) {
     var match = exp.firstMatch(text.trim());
     return TextSpan(
@@ -590,6 +618,7 @@ class ItalicMd extends InlineMd {
         (style ?? const TextStyle()).copyWith(fontStyle: FontStyle.italic),
         textDirection,
         onLinkTab,
+        latexWorkaround,
       ),
       style: (style ?? const TextStyle()).copyWith(fontStyle: FontStyle.italic),
     );
@@ -608,6 +637,7 @@ class ATagMd extends InlineMd {
     TextStyle? style,
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
+    final String Function(String tex)? latexWorkaround,
   ) {
     var match = exp.firstMatch(text.trim());
     if (match?[1] == null && match?[2] == null) {
@@ -651,6 +681,7 @@ class ImageMd extends InlineMd {
     TextStyle? style,
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
+    final String Function(String tex)? latexWorkaround,
   ) {
     var match = exp.firstMatch(text.trim());
     double? height;
@@ -701,6 +732,7 @@ class TableMd extends BlockMd {
     TextStyle? style,
     TextDirection textDirection,
     void Function(String url, String title)? onLinkTab,
+    final String Function(String tex)? latexWorkaround,
   ) {
     final List<Map<int, String>> value = text
         .split('\n')
@@ -739,6 +771,7 @@ class TableMd extends BlockMd {
                     textDirection: textDirection,
                     onLinkTab: onLinkTab,
                     style: style,
+                    latexWorkaround: latexWorkaround,
                   ),
                 ),
               ),

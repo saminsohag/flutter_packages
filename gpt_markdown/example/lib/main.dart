@@ -161,13 +161,15 @@ Markdown and LaTeX can be powerful tools for formatting text and mathematical ex
                                     log(url, name: "url");
                                   },
                                   textAlign: TextAlign.justify,
-                                  textScaler: const TextScaler.linear(1.3),
-                                  // textScaler:
-                                  //     MediaQuery.textScalerOf(context),
+                                  // textScaler: const TextScaler.linear(1.3),
+                                  textScaler: MediaQuery.textScalerOf(context),
                                   style: const TextStyle(
                                     // Regular text font size here.
                                     fontSize: 15,
                                   ),
+                                  latexWorkaround: (tex) =>
+                                      tex.replaceAllMapped(RegExp(r"align\*"),
+                                          (match) => "aligned"),
                                 ),
                                 // child: const Text("Hello"),
                               );
