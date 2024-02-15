@@ -115,12 +115,13 @@ class MdWidget extends StatelessWidget {
               context,
               eachLn.replaceAllMapped(
                   RegExp(
-                    r"\\\[(.*)\\\]",
+                    r"\\\[(.*?)\\\]|(\\begin.*?\\end{.*?})",
                     multiLine: true,
                     dotAll: true,
                   ), (match) {
                 //
-                String body = match[1]?.replaceAll("\n", " ") ?? "";
+                String body =
+                    (match[1] ?? match[2])?.replaceAll("\n", " ") ?? "";
                 return "\\[$body\\]";
               }),
               style,

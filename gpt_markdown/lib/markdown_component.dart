@@ -467,7 +467,7 @@ class BoldMd extends InlineMd {
 class LatexMathMultyLine extends InlineMd {
   @override
   RegExp get exp => RegExp(
-        r"\\\[(.*?)\\\]",
+        r"\\\[(.*?)\\\]|(\\begin.*?\\end{.*?})",
         dotAll: true,
       );
 
@@ -482,7 +482,7 @@ class LatexMathMultyLine extends InlineMd {
   ) {
     var p0 = exp.firstMatch(text.trim());
     p0?.group(0);
-    String mathText = p0?[1]?.toString() ?? "";
+    String mathText = p0?[1] ?? p0?[2] ?? "";
     var workaround = latexWorkaround ?? (String tex) => tex;
     return WidgetSpan(
       alignment: PlaceholderAlignment.baseline,
