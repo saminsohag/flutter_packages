@@ -18,9 +18,9 @@ abstract class MarkdownComponent {
         HrLine(),
         ImageMd(),
         BoldMd(),
-        ItalicMd(),
         LatexMathMultyLine(),
         LatexMath(),
+        ItalicMd(),
         ATagMd(),
       ];
 

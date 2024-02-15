@@ -1,3 +1,7 @@
+## 0.0.3
+
+* Some latex related fixes.
+
 ## 0.0.2
 
 * TextScaler and TextAlign added.
