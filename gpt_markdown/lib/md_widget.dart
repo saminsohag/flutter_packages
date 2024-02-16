@@ -102,17 +102,23 @@ class MdWidget extends StatelessWidget {
                             (index) {
                               var e = entry.value;
                               String data = e[index] ?? "";
-                              if (RegExp(r"^--+$").hasMatch(data.trim())) {
+                              if (RegExp(r"^--+$").hasMatch(data.trim()) ||
+                                  data.trim().isEmpty) {
                                 return const SizedBox();
                               }
+
                               return Center(
-                                child: MdWidget(
-                                  (e[index] ?? "").trim(),
-                                  textDirection: textDirection,
-                                  onLinkTab: onLinkTab,
-                                  style: style,
-                                  latexWorkaround: latexWorkaround,
-                                  latexBuilder: latexBuilder,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  child: MdWidget(
+                                    (e[index] ?? "").trim(),
+                                    textDirection: textDirection,
+                                    onLinkTab: onLinkTab,
+                                    style: style,
+                                    latexWorkaround: latexWorkaround,
+                                    latexBuilder: latexBuilder,
+                                  ),
                                 ),
                               );
                             },

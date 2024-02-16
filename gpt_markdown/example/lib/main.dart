@@ -134,8 +134,7 @@ Markdown and LaTeX can be powerful tools for formatting text and mathematical ex
                                 width: 1,
                                 color: Theme.of(context).colorScheme.outline),
                           ),
-                          child:
-                              LayoutBuilder(builder: (context, constraints) {
+                          child: LayoutBuilder(builder: (context, constraints) {
                             return Theme(
                               data: Theme.of(context).copyWith(
                                 textTheme: const TextTheme(
@@ -167,9 +166,8 @@ Markdown and LaTeX can be powerful tools for formatting text and mathematical ex
                                   // Regular text font size here.
                                   fontSize: 15,
                                 ),
-                                latexWorkaround: (tex) =>
-                                    tex.replaceAllMapped(RegExp(r"align\*"),
-                                        (match) => "aligned"),
+                                latexWorkaround: (tex) => tex.replaceAllMapped(
+                                    RegExp(r"align\*"), (match) => "aligned"),
                                 latexBuilder: (contex, tex) {
                                   if (tex.contains(r"\begin{tabular}")) {
                                     // return table.
@@ -180,7 +178,12 @@ Markdown and LaTeX can be powerful tools for formatting text and mathematical ex
                                         ).firstMatch(tex)?[1] ?? "").trim()}|";
                                     tableString = tableString
                                         .replaceAll(r"\\", "|\n|")
-                                        .replaceAll("&", "|");
+                                        .replaceAll(r"\hline", "")
+                                        .replaceAll(RegExp(r"(?<!\\)&"), "|");
+                                    var tableStringList = tableString
+                                        .split("\n")
+                                      ..insert(1, "|---|");
+                                    tableString = tableStringList.join("\n");
                                     return TexMarkdown(tableString);
                                   }
                                   var controller = ScrollController();
