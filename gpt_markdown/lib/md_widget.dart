@@ -58,6 +58,8 @@ class MdWidget extends StatelessWidget {
                     .asMap(),
               )
               .toList();
+          bool heading =
+              RegExp(r"^\|.*?\|\n\|-[-\\ |]*?-\|\n").hasMatch(eachLn.trim());
           int maxCol = 0;
           for (final each in value) {
             if (maxCol < each.keys.length) {
@@ -80,11 +82,23 @@ class MdWidget extends StatelessWidget {
                     color: Theme.of(context).colorScheme.onSurface,
                   ),
                   children: value
+                      .asMap()
+                      .entries
                       .map<TableRow>(
-                        (e) => TableRow(
+                        (entry) => TableRow(
+                          decoration: (heading)
+                              ? BoxDecoration(
+                                  color: (entry.key == 0)
+                                      ? Theme.of(context)
+                                          .colorScheme
+                                          .surfaceVariant
+                                      : null,
+                                )
+                              : null,
                           children: List.generate(
                             maxCol,
                             (index) {
+                              var e = entry.value;
                               String data = e[index] ?? "";
                               if (RegExp(r"^---+$").hasMatch(data.trim())) {
                                 return const SizedBox();
