@@ -1,3 +1,7 @@
+## 0.0.5
+
+* Latex table workarround added.
+
 ## 0.0.4
 
 * Customizable latex and workarround added.
