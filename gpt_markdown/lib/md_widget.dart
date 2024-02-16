@@ -58,8 +58,10 @@ class MdWidget extends StatelessWidget {
                     .asMap(),
               )
               .toList();
-          bool heading =
-              RegExp(r"^\|.*?\|\n\|-[-\\ |]*?-\|\n").hasMatch(eachLn.trim());
+          bool heading = RegExp(
+            r"^\|.*?\|\n\|-[-\\ |]*?-\|$",
+            multiLine: true,
+          ).hasMatch(eachLn.trim());
           int maxCol = 0;
           for (final each in value) {
             if (maxCol < each.keys.length) {
@@ -100,7 +102,7 @@ class MdWidget extends StatelessWidget {
                             (index) {
                               var e = entry.value;
                               String data = e[index] ?? "";
-                              if (RegExp(r"^---+$").hasMatch(data.trim())) {
+                              if (RegExp(r"^--+$").hasMatch(data.trim())) {
                                 return const SizedBox();
                               }
                               return Center(
