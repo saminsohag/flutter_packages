@@ -1,3 +1,7 @@
+## 0.0.10
+
+* $$_$$ syntex fixes.
+
 ## 0.0.9
 
 * $_$ syntex added for latex with a gard condition for \(_\).

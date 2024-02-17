@@ -36,6 +36,7 @@ class TexMarkdown extends StatelessWidget {
           .replaceAllMapped(
               RegExp(
                 r"(?<!\\)\$\$(.*?)(?<!\\)\$\$",
+                dotAll: true,
               ),
               (match) => "\\[${match[1] ?? ""}\\]")
           .replaceAllMapped(

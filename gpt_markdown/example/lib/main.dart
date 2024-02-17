@@ -1,8 +1,8 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:flutter_math_fork/flutter_math.dart';
 import 'package:gpt_markdown/gpt_markdown.dart';
+import 'package:flutter_math_fork/flutter_math.dart';
 
+//
 void main() {
   runApp(const MyApp());
 }
@@ -46,6 +46,7 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
+//
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title, required this.onPressed});
   final VoidCallback? onPressed;
@@ -136,29 +137,27 @@ Markdown and LaTeX can be powerful tools for formatting text and mathematical ex
                           ),
                           child: LayoutBuilder(builder: (context, constraints) {
                             return Theme(
-                              data: Theme.of(context).copyWith(
-                                textTheme: const TextTheme(
-                                  // For H1.
-                                  headlineLarge: TextStyle(fontSize: 55),
-                                  // For H2.
-                                  headlineMedium: TextStyle(fontSize: 45),
-                                  // For H3.
-                                  headlineSmall: TextStyle(fontSize: 35),
-                                  // For H4.
-                                  titleLarge: TextStyle(fontSize: 25),
-                                  // For H5.
-                                  titleMedium: TextStyle(fontSize: 15),
-                                  // For H6.
-                                  titleSmall: TextStyle(fontSize: 10),
-                                ),
-                              ),
+                              data: Theme.of(context),
+                              // .copyWith(
+                              //   textTheme: const TextTheme(
+                              //     // For H1.
+                              //     headlineLarge: TextStyle(fontSize: 55),
+                              //     // For H2.
+                              //     headlineMedium: TextStyle(fontSize: 45),
+                              //     // For H3.
+                              //     headlineSmall: TextStyle(fontSize: 35),
+                              //     // For H4.
+                              //     titleLarge: TextStyle(fontSize: 25),
+                              //     // For H5.
+                              //     titleMedium: TextStyle(fontSize: 15),
+                              //     // For H6.
+                              //     titleSmall: TextStyle(fontSize: 10),
+                              //   ),
+                              // ),
                               child: TexMarkdown(
                                 _controller.text,
                                 textDirection: _direction,
-                                onLinkTab: (url, title) {
-                                  log(title, name: "title");
-                                  log(url, name: "url");
-                                },
+                                onLinkTab: (url, title) {},
                                 textAlign: TextAlign.justify,
                                 // textScaler: const TextScaler.linear(1.3),
                                 textScaleFactor: 1,
