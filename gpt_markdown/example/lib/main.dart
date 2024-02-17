@@ -161,7 +161,7 @@ Markdown and LaTeX can be powerful tools for formatting text and mathematical ex
                                 },
                                 textAlign: TextAlign.justify,
                                 // textScaler: const TextScaler.linear(1.3),
-                                textScaler: MediaQuery.textScalerOf(context),
+                                textScaleFactor: 1.7,
                                 style: const TextStyle(
                                   // Regular text font size here.
                                   fontSize: 15,

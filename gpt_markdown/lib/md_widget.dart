@@ -11,7 +11,7 @@ class MdWidget extends StatelessWidget {
       this.textDirection = TextDirection.ltr,
       this.onLinkTab,
       this.textAlign,
-      this.textScaler,
+      this.textScaleFactor,
       this.latexWorkaround,
       this.latexBuilder,
       this.followLinkColor = false});
@@ -19,7 +19,7 @@ class MdWidget extends StatelessWidget {
   final TextDirection textDirection;
   final TextStyle? style;
   final TextAlign? textAlign;
-  final TextScaler? textScaler;
+  final double? textScaleFactor;
   final void Function(String url, String title)? onLinkTab;
   final String Function(String tex)? latexWorkaround;
   final Widget Function(BuildContext context, String tex)? latexBuilder;
@@ -166,7 +166,7 @@ class MdWidget extends StatelessWidget {
         style: style?.copyWith(),
       ),
       textDirection: textDirection,
-      textScaler: textScaler,
+      textScaleFactor: textScaleFactor,
       textAlign: textAlign,
     );
   }

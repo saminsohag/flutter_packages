@@ -1,3 +1,7 @@
+## 0.0.6
+
+* Fixed textScaler problem by removeing that and added textScaleFector.
+
 ## 0.0.5
 
 * Latex table workarround added.

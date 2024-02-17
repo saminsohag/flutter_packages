@@ -14,7 +14,7 @@ class TexMarkdown extends StatelessWidget {
     this.textDirection = TextDirection.ltr,
     this.latexWorkaround,
     this.textAlign,
-    this.textScaler,
+    this.textScaleFactor,
     this.onLinkTab,
     this.latexBuilder,
   });
@@ -22,7 +22,7 @@ class TexMarkdown extends StatelessWidget {
   final String data;
   final TextStyle? style;
   final TextAlign? textAlign;
-  final TextScaler? textScaler;
+  final double? textScaleFactor;
   final void Function(String url, String title)? onLinkTab;
   final String Function(String tex)? latexWorkaround;
   final Widget Function(BuildContext context, String tex)? latexBuilder;
@@ -37,7 +37,7 @@ class TexMarkdown extends StatelessWidget {
       style: style,
       onLinkTab: onLinkTab,
       textAlign: textAlign,
-      textScaler: textScaler,
+      textScaleFactor: textScaleFactor,
       followLinkColor: followLinkColor,
       latexWorkaround: latexWorkaround,
       latexBuilder: latexBuilder,
