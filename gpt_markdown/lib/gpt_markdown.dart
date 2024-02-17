@@ -30,9 +30,29 @@ class TexMarkdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String tex = data.trim();
+    if (!tex.contains(r"\(")) {
+      tex = tex
+          .replaceAllMapped(
+              RegExp(
+                r"(?<!\\)\$\$(.*?)(?<!\\)\$\$",
+              ),
+              (match) => "\\[${match[1] ?? ""}\\]")
+          .replaceAllMapped(
+              RegExp(
+                r"(?<!\\)\$(.*?)(?<!\\)\$",
+              ),
+              (match) => "\\(${match[1] ?? ""}\\)");
+      tex = tex.splitMapJoin(
+        RegExp(r"\[.*?\]|\(.*?\)"),
+        onNonMatch: (p0) {
+          return p0.replaceAll("\\\$", "\$");
+        },
+      );
+    }
     return ClipRRect(
         child: MdWidget(
-      data.trim(),
+      tex,
       textDirection: textDirection,
       style: style,
       onLinkTab: onLinkTab,
