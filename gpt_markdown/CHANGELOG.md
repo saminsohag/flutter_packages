@@ -1,3 +1,11 @@
+## 0.0.9
+
+* $_$ syntex added for latex with a gard condition for \(_\).
+
+## 0.0.8
+
+* $_$ syntex added for latex with a gard condition for \(_\).
+
 ## 0.0.6
 
 * Fixed textScaler problem by removeing that and added textScaleFector.

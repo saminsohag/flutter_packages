@@ -1,6 +1,6 @@
 name: gpt_markdown
 description: "The purpose of this package is to render the response of ChatGPT into a Flutter app."
-version: 0.0.6
+version: 0.0.9
 homepage: https://github.com/saminsohag/flutter_packages/tree/main/gpt_markdown
 
 environment:
