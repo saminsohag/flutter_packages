@@ -186,22 +186,29 @@ Markdown and LaTeX can be powerful tools for formatting text and mathematical ex
                                     return TexMarkdown(tableString);
                                   }
                                   var controller = ScrollController();
-                                  return Column(
-                                    children: [
-                                      Scrollbar(
-                                        controller: controller,
-                                        child: SingleChildScrollView(
+                                  return Padding(
+                                    padding: const EdgeInsets.all(0.0),
+                                    child: Material(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onInverseSurface,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Scrollbar(
                                           controller: controller,
-                                          scrollDirection: Axis.horizontal,
-                                          child: Math.tex(
-                                            tex,
-                                            textStyle: const TextStyle(
-                                              fontSize: 17,
+                                          child: SingleChildScrollView(
+                                            controller: controller,
+                                            scrollDirection: Axis.horizontal,
+                                            child: Math.tex(
+                                              tex,
+                                              textStyle: const TextStyle(
+                                                fontSize: 17,
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
-                                    ],
+                                    ),
                                   );
                                 },
                               ),
