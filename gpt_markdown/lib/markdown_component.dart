@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
 import 'package:gpt_markdown/custom_widgets/custom_divider.dart';
 import 'package:gpt_markdown/custom_widgets/custom_error_image.dart';
@@ -9,6 +10,9 @@ import 'md_widget.dart';
 /// Markdown components
 abstract class MarkdownComponent {
   static List<MarkdownComponent> get components => [
+        CodeBlockMd(),
+        NewLines(),
+        TableMd(),
         HTag(),
         IndentMd(),
         UnOrderedList(),
@@ -247,6 +251,29 @@ class HTag extends BlockMd {
         ],
       ),
       textDirection: textDirection,
+    );
+  }
+}
+
+class NewLines extends InlineMd {
+  @override
+  RegExp get exp => RegExp(r"\n\n+");
+  @override
+  InlineSpan span(
+    BuildContext context,
+    String text,
+    TextStyle? style,
+    TextDirection textDirection,
+    final void Function(String url, String title)? onLinkTab,
+    final String Function(String tex)? latexWorkaround,
+    final Widget Function(BuildContext context, String tex)? latexBuilder,
+  ) {
+    return TextSpan(
+      text: "\n\n\n\n",
+      style: TextStyle(
+        fontSize: 6,
+        color: style?.color,
+      ),
     );
   }
 }
@@ -760,6 +787,10 @@ class TableMd extends BlockMd {
               .asMap(),
         )
         .toList();
+    bool heading = RegExp(
+      r"^\|.*?\|\n\|-[-\\ |]*?-\|$",
+      multiLine: true,
+    ).hasMatch(text.trim());
     int maxCol = 0;
     for (final each in value) {
       if (maxCol < each.keys.length) {
@@ -770,26 +801,50 @@ class TableMd extends BlockMd {
       return Text("", style: style);
     }
     return Table(
-      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
       textDirection: textDirection,
+      defaultColumnWidth: CustomTableColumnWidth(),
+      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
       border: TableBorder.all(
         width: 1,
         color: Theme.of(context).colorScheme.onSurface,
       ),
       children: value
+          .asMap()
+          .entries
           .map<TableRow>(
-            (e) => TableRow(
+            (entry) => TableRow(
+              decoration: (heading)
+                  ? BoxDecoration(
+                      color: (entry.key == 0)
+                          ? Theme.of(context).colorScheme.surfaceVariant
+                          : null,
+                    )
+                  : null,
               children: List.generate(
                 maxCol,
-                (index) => Center(
-                  child: MdWidget(
-                    (e[index] ?? "").trim(),
-                    textDirection: textDirection,
-                    onLinkTab: onLinkTab,
-                    style: style,
-                    latexWorkaround: latexWorkaround,
-                  ),
-                ),
+                (index) {
+                  var e = entry.value;
+                  String data = e[index] ?? "";
+                  if (RegExp(r"^--+$").hasMatch(data.trim()) ||
+                      data.trim().isEmpty) {
+                    return const SizedBox();
+                  }
+
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
+                      child: MdWidget(
+                        (e[index] ?? "").trim(),
+                        textDirection: textDirection,
+                        onLinkTab: onLinkTab,
+                        style: style,
+                        latexWorkaround: latexWorkaround,
+                        latexBuilder: latexBuilder,
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           )
@@ -799,6 +854,105 @@ class TableMd extends BlockMd {
 
   @override
   RegExp get exp => RegExp(
-        r"(((\|[^\n\|]+\|)((([^\n\|]+\|)+)?))(\n(((\|[^\n\|]+\|)(([^\n\|]+\|)+)?)))+)?",
+        r"^(((\|[^\n\|]+\|)((([^\n\|]+\|)+)?))(\n(((\|[^\n\|]+\|)(([^\n\|]+\|)+)?)))+)$",
       );
+}
+
+class CodeBlockMd extends BlockMd {
+  @override
+  RegExp get exp => RegExp(
+        r"\s*?```(.*?)\n((.*?)(:?\n\s*?```)|(.*)(:?\n```)?)$",
+        multiLine: true,
+        dotAll: true,
+      );
+  @override
+  Widget build(
+    BuildContext context,
+    String text,
+    TextStyle? style,
+    TextDirection textDirection,
+    final void Function(String url, String title)? onLinkTab,
+    final String Function(String tex)? latexWorkaround,
+    final Widget Function(BuildContext context, String tex)? latexBuilder,
+  ) {
+    String codes = exp.firstMatch(text)?[2] ?? "";
+    String name = exp.firstMatch(text)?[1] ?? "";
+    codes = codes.replaceAll(r"```", "").trim();
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: CodeField(name: name, codes: codes),
+    );
+  }
+}
+
+class CodeField extends StatefulWidget {
+  const CodeField({super.key, required this.name, required this.codes});
+  final String name;
+  final String codes;
+
+  @override
+  State<CodeField> createState() => _CodeFieldState();
+}
+
+class _CodeFieldState extends State<CodeField> {
+  bool _copied = false;
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Theme.of(context).colorScheme.onInverseSurface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+                child: Text(widget.name),
+              ),
+              const Spacer(),
+              TextButton.icon(
+                style: TextButton.styleFrom(
+                  foregroundColor: Theme.of(context).colorScheme.onSurface,
+                  textStyle: const TextStyle(
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
+                onPressed: () async {
+                  await Clipboard.setData(ClipboardData(text: widget.codes))
+                      .then((value) {
+                    setState(() {
+                      _copied = true;
+                    });
+                  });
+                  await Future.delayed(const Duration(seconds: 2));
+                  setState(() {
+                    _copied = false;
+                  });
+                },
+                icon: Icon(
+                  (_copied) ? Icons.done : Icons.content_paste,
+                  size: 15,
+                ),
+                label: Text((_copied) ? "Copied!" : "Copy code"),
+              ),
+            ],
+          ),
+          const Divider(
+            height: 1,
+          ),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              widget.codes,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
