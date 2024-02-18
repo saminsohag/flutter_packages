@@ -1,3 +1,7 @@
+## 0.0.11
+
+* New syntex added for codes and highlight.
+
 ## 0.0.10
 
 * $$_$$ syntex fixes.
