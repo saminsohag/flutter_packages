@@ -22,6 +22,7 @@ abstract class MarkdownComponent {
         HrLine(),
         ImageMd(),
         BoldMd(),
+        HighlightedText(),
         LatexMathMultyLine(),
         LatexMath(),
         ItalicMd(),
@@ -464,6 +465,40 @@ class OrderedList extends BlockMd {
         latexWorkaround: latexWorkaround,
         latexBuilder: latexBuilder,
       ),
+    );
+  }
+}
+
+class HighlightedText extends InlineMd {
+  @override
+  RegExp get exp => RegExp(r"`.*?`");
+
+  @override
+  InlineSpan span(
+    BuildContext context,
+    String text,
+    TextStyle? style,
+    TextDirection textDirection,
+    final void Function(String url, String title)? onLinkTab,
+    final String Function(String tex)? latexWorkaround,
+    final Widget Function(BuildContext context, String tex)? latexBuilder,
+  ) {
+    return TextSpan(
+      text: text,
+      style: style?.copyWith(
+            fontWeight: FontWeight.bold,
+            background: Paint()
+              ..color = Theme.of(context).colorScheme.surfaceVariant
+              ..strokeCap = StrokeCap.round
+              ..strokeJoin = StrokeJoin.round,
+          ) ??
+          TextStyle(
+            fontWeight: FontWeight.bold,
+            background: Paint()
+              ..color = Theme.of(context).colorScheme.surfaceVariant
+              ..strokeCap = StrokeCap.round
+              ..strokeJoin = StrokeJoin.round,
+          ),
     );
   }
 }
