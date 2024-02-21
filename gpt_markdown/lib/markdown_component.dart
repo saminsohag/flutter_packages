@@ -38,10 +38,10 @@ abstract class MarkdownComponent {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex)? codeBuilder,
   ) {
     List<InlineSpan> spans = [];
-    List<String> regexes =
-        components.map<String>((e) => e.exp.pattern).toList();
+    List<String> regexes = components.map<String>((e) => e.exp.pattern).toList();
     final combinedRegex = RegExp(
       regexes.join("|"),
       multiLine: true,
@@ -64,6 +64,7 @@ abstract class MarkdownComponent {
                 onLinkTab,
                 latexWorkaround,
                 latexBuilder,
+                codeBuilder,
               ));
             } else {
               if (each is BlockMd) {
@@ -84,6 +85,7 @@ abstract class MarkdownComponent {
                     onLinkTab,
                     latexWorkaround,
                     latexBuilder,
+                    codeBuilder,
                   ),
                   TextSpan(
                     text: "\n ",
@@ -123,6 +125,7 @@ abstract class MarkdownComponent {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex)? codeBuilder,
   );
 
   RegExp get exp;
@@ -143,6 +146,7 @@ abstract class InlineMd extends MarkdownComponent {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex)? codeBuilder,
   );
 }
 
@@ -159,6 +163,7 @@ abstract class BlockMd extends MarkdownComponent {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex)? codeBuilder,
   ) {
     return WidgetSpan(
       child: build(
@@ -169,6 +174,7 @@ abstract class BlockMd extends MarkdownComponent {
         onLinkTab,
         latexWorkaround,
         latexBuilder,
+        codeBuilder,
       ),
       alignment: PlaceholderAlignment.middle,
     );
@@ -182,6 +188,7 @@ abstract class BlockMd extends MarkdownComponent {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex)? codeBuilder,
   );
 }
 
@@ -198,6 +205,7 @@ class HTag extends BlockMd {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex)? codeBuilder,
   ) {
     var match = exp.firstMatch(text.trim());
     return Text.rich(
@@ -207,35 +215,18 @@ class HTag extends BlockMd {
             context,
             "${match?[2]}",
             [
-              Theme.of(context)
-                  .textTheme
-                  .headlineLarge
-                  ?.copyWith(color: style?.color),
-              Theme.of(context)
-                  .textTheme
-                  .headlineMedium
-                  ?.copyWith(color: style?.color),
-              Theme.of(context)
-                  .textTheme
-                  .headlineSmall
-                  ?.copyWith(color: style?.color),
-              Theme.of(context)
-                  .textTheme
-                  .titleLarge
-                  ?.copyWith(color: style?.color),
-              Theme.of(context)
-                  .textTheme
-                  .titleMedium
-                  ?.copyWith(color: style?.color),
-              Theme.of(context)
-                  .textTheme
-                  .titleSmall
-                  ?.copyWith(color: style?.color),
+              Theme.of(context).textTheme.headlineLarge?.copyWith(color: style?.color),
+              Theme.of(context).textTheme.headlineMedium?.copyWith(color: style?.color),
+              Theme.of(context).textTheme.headlineSmall?.copyWith(color: style?.color),
+              Theme.of(context).textTheme.titleLarge?.copyWith(color: style?.color),
+              Theme.of(context).textTheme.titleMedium?.copyWith(color: style?.color),
+              Theme.of(context).textTheme.titleSmall?.copyWith(color: style?.color),
             ][match![1]!.length - 1],
             textDirection,
             (url, title) {},
             latexWorkaround,
             latexBuilder,
+            codeBuilder,
           )),
           if (match[1]!.length == 1) ...[
             const TextSpan(
@@ -268,6 +259,7 @@ class NewLines extends InlineMd {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex)? codeBuilder,
   ) {
     return TextSpan(
       text: "\n\n\n\n",
@@ -292,6 +284,7 @@ class HrLine extends BlockMd {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex)? codeBuilder,
   ) {
     return CustomDivider(
       height: 2,
@@ -315,6 +308,7 @@ class CheckBoxMd extends BlockMd {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex)? codeBuilder,
   ) {
     var match = exp.firstMatch(text.trim());
     return CustomCb(
@@ -347,6 +341,7 @@ class RadioButtonMd extends BlockMd {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex)? codeBuilder,
   ) {
     var match = exp.firstMatch(text.trim());
     return CustomRb(
@@ -379,6 +374,7 @@ class IndentMd extends BlockMd {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex)? codeBuilder,
   ) {
     [
       r"\\\[(.*?)\\\]",
@@ -394,8 +390,7 @@ class IndentMd extends BlockMd {
       textDirection: textDirection,
       child: RichText(
           text: TextSpan(
-        children: MarkdownComponent.generate(context, "${match?[2]}", style,
-            textDirection, onLinkTab, latexWorkaround, latexBuilder),
+        children: MarkdownComponent.generate(context, "${match?[2]}", style, textDirection, onLinkTab, latexWorkaround, latexBuilder, codeBuilder),
       )),
     );
   }
@@ -416,6 +411,7 @@ class UnOrderedList extends BlockMd {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex)? codeBuilder,
   ) {
     var match = exp.firstMatch(text);
     return UnorderedListView(
@@ -451,6 +447,7 @@ class OrderedList extends BlockMd {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex)? codeBuilder,
   ) {
     var match = exp.firstMatch(text.trim());
     return OrderedListView(
@@ -482,6 +479,7 @@ class HighlightedText extends InlineMd {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex)? codeBuilder,
   ) {
     return TextSpan(
       text: text,
@@ -517,21 +515,21 @@ class BoldMd extends InlineMd {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex)? codeBuilder,
   ) {
     var match = exp.firstMatch(text.trim());
     return TextSpan(
       children: MarkdownComponent.generate(
         context,
         "${match?[1]}",
-        style?.copyWith(fontWeight: FontWeight.bold) ??
-            const TextStyle(fontWeight: FontWeight.w900),
+        style?.copyWith(fontWeight: FontWeight.bold) ?? const TextStyle(fontWeight: FontWeight.w900),
         textDirection,
         onLinkTab,
         latexWorkaround,
         latexBuilder,
+        codeBuilder,
       ),
-      style: style?.copyWith(fontWeight: FontWeight.bold) ??
-          const TextStyle(fontWeight: FontWeight.bold),
+      style: style?.copyWith(fontWeight: FontWeight.bold) ?? const TextStyle(fontWeight: FontWeight.bold),
     );
   }
 }
@@ -552,6 +550,7 @@ class LatexMathMultyLine extends BlockMd {
     void Function(String url, String title)? onLinkTab,
     String Function(String tex)? latexWorkaround,
     Widget Function(BuildContext context, String tex)? latexBuilder,
+    Widget Function(BuildContext context, String tex)? codeBuilder,
   ) {
     var p0 = exp.firstMatch(text.trim());
     p0?.group(0);
@@ -572,8 +571,7 @@ class LatexMathMultyLine extends BlockMd {
               options: MathOptions(
                 sizeUnderTextStyle: MathSize.large,
                 color: style?.color ?? Theme.of(context).colorScheme.onSurface,
-                fontSize: style?.fontSize ??
-                    Theme.of(context).textTheme.bodyMedium?.fontSize,
+                fontSize: style?.fontSize ?? Theme.of(context).textTheme.bodyMedium?.fontSize,
                 mathFontOptions: FontOptions(
                   fontFamily: "Main",
                   fontWeight: style?.fontWeight ?? FontWeight.normal,
@@ -590,9 +588,7 @@ class LatexMathMultyLine extends BlockMd {
                 return Text(
                   workaround(mathText),
                   textDirection: textDirection,
-                  style: style?.copyWith(
-                          color: Theme.of(context).colorScheme.error) ??
-                      TextStyle(color: Theme.of(context).colorScheme.error),
+                  style: style?.copyWith(color: Theme.of(context).colorScheme.error) ?? TextStyle(color: Theme.of(context).colorScheme.error),
                 );
               },
             );
@@ -620,6 +616,7 @@ class LatexMath extends InlineMd {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex)? codeBuilder,
   ) {
     var p0 = exp.firstMatch(text.trim());
     p0?.group(0);
@@ -641,8 +638,7 @@ class LatexMath extends InlineMd {
         options: MathOptions(
           sizeUnderTextStyle: MathSize.large,
           color: style?.color ?? Theme.of(context).colorScheme.onSurface,
-          fontSize: style?.fontSize ??
-              Theme.of(context).textTheme.bodyMedium?.fontSize,
+          fontSize: style?.fontSize ?? Theme.of(context).textTheme.bodyMedium?.fontSize,
           mathFontOptions: FontOptions(
             fontFamily: "Main",
             fontWeight: style?.fontWeight ?? FontWeight.normal,
@@ -659,9 +655,7 @@ class LatexMath extends InlineMd {
           return Text(
             workaround(mathText),
             textDirection: textDirection,
-            style:
-                style?.copyWith(color: Theme.of(context).colorScheme.error) ??
-                    TextStyle(color: Theme.of(context).colorScheme.error),
+            style: style?.copyWith(color: Theme.of(context).colorScheme.error) ?? TextStyle(color: Theme.of(context).colorScheme.error),
           );
         },
       ),
@@ -683,6 +677,7 @@ class ItalicMd extends InlineMd {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex)? codeBuilder,
   ) {
     var match = exp.firstMatch(text.trim());
     return TextSpan(
@@ -694,6 +689,7 @@ class ItalicMd extends InlineMd {
         onLinkTab,
         latexWorkaround,
         latexBuilder,
+        codeBuilder,
       ),
       style: (style ?? const TextStyle()).copyWith(fontStyle: FontStyle.italic),
     );
@@ -714,6 +710,7 @@ class ATagMd extends InlineMd {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex)? codeBuilder,
   ) {
     var match = exp.firstMatch(text.trim());
     if (match?[1] == null && match?[2] == null) {
@@ -759,13 +756,13 @@ class ImageMd extends InlineMd {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex)? codeBuilder,
   ) {
     var match = exp.firstMatch(text.trim());
     double? height;
     double? width;
     if (match?[1] != null) {
-      var size = RegExp(r"^([0-9]+)?x?([0-9]+)?")
-          .firstMatch(match![1].toString().trim());
+      var size = RegExp(r"^([0-9]+)?x?([0-9]+)?").firstMatch(match![1].toString().trim());
       width = double.tryParse(size?[1]?.toString().trim() ?? 'a');
       height = double.tryParse(size?[2]?.toString().trim() ?? 'a');
     }
@@ -778,16 +775,12 @@ class ImageMd extends InlineMd {
           image: NetworkImage(
             "${match?[2]}",
           ),
-          loadingBuilder: (BuildContext context, Widget child,
-              ImageChunkEvent? loadingProgress) {
+          loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
             if (loadingProgress == null) {
               return child;
             }
             return CustomImageLoading(
-              progress: loadingProgress.expectedTotalBytes != null
-                  ? loadingProgress.cumulativeBytesLoaded /
-                      loadingProgress.expectedTotalBytes!
-                  : 1,
+              progress: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : 1,
             );
           },
           fit: BoxFit.fill,
@@ -811,15 +804,12 @@ class TableMd extends BlockMd {
     void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex)? codeBuilder,
   ) {
     final List<Map<int, String>> value = text
         .split('\n')
         .map<Map<int, String>>(
-          (e) => e
-              .split('|')
-              .where((element) => element.isNotEmpty)
-              .toList()
-              .asMap(),
+          (e) => e.split('|').where((element) => element.isNotEmpty).toList().asMap(),
         )
         .toList();
     bool heading = RegExp(
@@ -850,9 +840,7 @@ class TableMd extends BlockMd {
             (entry) => TableRow(
               decoration: (heading)
                   ? BoxDecoration(
-                      color: (entry.key == 0)
-                          ? Theme.of(context).colorScheme.surfaceVariant
-                          : null,
+                      color: (entry.key == 0) ? Theme.of(context).colorScheme.surfaceVariant : null,
                     )
                   : null,
               children: List.generate(
@@ -860,15 +848,13 @@ class TableMd extends BlockMd {
                 (index) {
                   var e = entry.value;
                   String data = e[index] ?? "";
-                  if (RegExp(r"^--+$").hasMatch(data.trim()) ||
-                      data.trim().isEmpty) {
+                  if (RegExp(r"^--+$").hasMatch(data.trim()) || data.trim().isEmpty) {
                     return const SizedBox();
                   }
 
                   return Center(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       child: MdWidget(
                         (e[index] ?? "").trim(),
                         textDirection: textDirection,
@@ -909,13 +895,14 @@ class CodeBlockMd extends BlockMd {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex)? codeBuilder,
   ) {
     String codes = exp.firstMatch(text)?[2] ?? "";
     String name = exp.firstMatch(text)?[1] ?? "";
     codes = codes.replaceAll(r"```", "").trim();
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: CodeField(name: name, codes: codes),
+      child: codeBuilder != null ? codeBuilder(context, codes) : CodeField(name: name, codes: codes),
     );
   }
 }
@@ -944,8 +931,7 @@ class _CodeFieldState extends State<CodeField> {
           Row(
             children: [
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
                 child: Text(widget.name),
               ),
               const Spacer(),
@@ -957,8 +943,7 @@ class _CodeFieldState extends State<CodeField> {
                   ),
                 ),
                 onPressed: () async {
-                  await Clipboard.setData(ClipboardData(text: widget.codes))
-                      .then((value) {
+                  await Clipboard.setData(ClipboardData(text: widget.codes)).then((value) {
                     setState(() {
                       _copied = true;
                     });
