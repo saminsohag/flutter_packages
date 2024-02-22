@@ -49,7 +49,7 @@ At this moment this package supports:
         ##### Heading 5
         ###### Heading 6
 
-- Latex formula \(\frac a b\) or \[\frac ab\]
+- Latex formula `\(\frac a b\)` or `\[\frac ab\]`
 
         \(\frac a b\)
 
@@ -86,7 +86,7 @@ return TexMarkdown(
 
 ```
 
-## Here I am providing some sample response of ChatGPT and it's Response:
+## Here I am providing some sample response of ChatGPT and it's result:
 
 
 ```markdown

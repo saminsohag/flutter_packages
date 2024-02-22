@@ -1,18 +1,22 @@
+## 0.0.12
+
+* codeBuilder method added [[#6](https://github.com/saminsohag/flutter_packages/issues/6)], and maked the table scrollable.
+
 ## 0.0.11
 
 * New syntex added for codes and highlight.
 
 ## 0.0.10
 
-* $$_$$ syntex fixes.
+* `$$_$$` syntex fixes.
 
 ## 0.0.9
 
-* $_$ syntex added for latex with a gard condition for \(_\).
+* `$_$` syntex added for latex with a gard condition for `\(_\)`.
 
 ## 0.0.8
 
-* $_$ syntex added for latex with a gard condition for \(_\).
+* `$_$` syntex added for latex with a gard condition for `\(_\)`.
 
 ## 0.0.6
 
