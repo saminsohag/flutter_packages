@@ -67,6 +67,21 @@ Welcome to ChatGPT! Below is an example of a response with Markdown and LaTeX co
 
 ### Markdown Example
 
+
+```
+class MarkdownHelper {
+
+
+  Map<String, Widget> getTitleWidget(m.Node node) => title.getTitleWidget(node);
+
+  Widget getPWidget(m.Element node) => p.getPWidget(node);
+
+  Widget getPreWidget(m.Node node) => pre.getPreWidget(node);
+
+}
+```
+
+
 You can use Markdown to format text easily. Here are some examples:
 
 - **Bold Text**: **This text is bold**

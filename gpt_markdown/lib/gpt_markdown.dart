@@ -17,6 +17,7 @@ class TexMarkdown extends StatelessWidget {
     this.textScaleFactor,
     this.onLinkTab,
     this.latexBuilder,
+    this.codeBuilder,
   });
   final TextDirection textDirection;
   final String data;
@@ -27,6 +28,7 @@ class TexMarkdown extends StatelessWidget {
   final String Function(String tex)? latexWorkaround;
   final Widget Function(BuildContext context, String tex)? latexBuilder;
   final bool followLinkColor;
+  final Widget Function(BuildContext context, String tex)? codeBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +64,7 @@ class TexMarkdown extends StatelessWidget {
       followLinkColor: followLinkColor,
       latexWorkaround: latexWorkaround,
       latexBuilder: latexBuilder,
+      codeBuilder: codeBuilder,
     ));
   }
 }

@@ -5,16 +5,19 @@ import 'package:gpt_markdown/markdown_component.dart';
 
 /// It creates a markdown widget closed to each other.
 class MdWidget extends StatelessWidget {
-  const MdWidget(this.exp,
-      {super.key,
-      this.style,
-      this.textDirection = TextDirection.ltr,
-      this.onLinkTab,
-      this.textAlign,
-      this.textScaleFactor,
-      this.latexWorkaround,
-      this.latexBuilder,
-      this.followLinkColor = false});
+  const MdWidget(
+    this.exp, {
+    super.key,
+    this.style,
+    this.textDirection = TextDirection.ltr,
+    this.onLinkTab,
+    this.textAlign,
+    this.textScaleFactor,
+    this.latexWorkaround,
+    this.latexBuilder,
+    this.followLinkColor = false,
+    this.codeBuilder,
+  });
   final String exp;
   final TextDirection textDirection;
   final TextStyle? style;
@@ -24,6 +27,7 @@ class MdWidget extends StatelessWidget {
   final String Function(String tex)? latexWorkaround;
   final Widget Function(BuildContext context, String tex)? latexBuilder;
   final bool followLinkColor;
+  final Widget Function(BuildContext context, String tex)? codeBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +50,7 @@ class MdWidget extends StatelessWidget {
         onLinkTab,
         latexWorkaround,
         latexBuilder,
+        codeBuilder,
       ),
     );
     return Text.rich(
