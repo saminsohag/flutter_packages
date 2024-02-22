@@ -38,7 +38,7 @@ abstract class MarkdownComponent {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
-    final Widget Function(BuildContext context, String tex)? codeBuilder,
+    final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     List<InlineSpan> spans = [];
     List<String> regexes =
@@ -126,7 +126,7 @@ abstract class MarkdownComponent {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
-    final Widget Function(BuildContext context, String tex)? codeBuilder,
+    final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   );
 
   RegExp get exp;
@@ -147,7 +147,7 @@ abstract class InlineMd extends MarkdownComponent {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
-    final Widget Function(BuildContext context, String tex)? codeBuilder,
+    final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   );
 }
 
@@ -164,7 +164,7 @@ abstract class BlockMd extends MarkdownComponent {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
-    final Widget Function(BuildContext context, String tex)? codeBuilder,
+    final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     return WidgetSpan(
       child: build(
@@ -189,7 +189,7 @@ abstract class BlockMd extends MarkdownComponent {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
-    final Widget Function(BuildContext context, String tex)? codeBuilder,
+    final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   );
 }
 
@@ -206,7 +206,7 @@ class HTag extends BlockMd {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
-    final Widget Function(BuildContext context, String tex)? codeBuilder,
+    final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     var match = exp.firstMatch(text.trim());
     return Text.rich(
@@ -278,7 +278,7 @@ class NewLines extends InlineMd {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
-    final Widget Function(BuildContext context, String tex)? codeBuilder,
+    final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     return TextSpan(
       text: "\n\n\n\n",
@@ -303,7 +303,7 @@ class HrLine extends BlockMd {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
-    final Widget Function(BuildContext context, String tex)? codeBuilder,
+    final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     return CustomDivider(
       height: 2,
@@ -327,7 +327,7 @@ class CheckBoxMd extends BlockMd {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
-    final Widget Function(BuildContext context, String tex)? codeBuilder,
+    final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     var match = exp.firstMatch(text.trim());
     return CustomCb(
@@ -361,7 +361,7 @@ class RadioButtonMd extends BlockMd {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
-    final Widget Function(BuildContext context, String tex)? codeBuilder,
+    final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     var match = exp.firstMatch(text.trim());
     return CustomRb(
@@ -395,7 +395,7 @@ class IndentMd extends BlockMd {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
-    final Widget Function(BuildContext context, String tex)? codeBuilder,
+    final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     [
       r"\\\[(.*?)\\\]",
@@ -440,7 +440,7 @@ class UnOrderedList extends BlockMd {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
-    final Widget Function(BuildContext context, String tex)? codeBuilder,
+    final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     var match = exp.firstMatch(text);
     return UnorderedListView(
@@ -477,7 +477,7 @@ class OrderedList extends BlockMd {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
-    final Widget Function(BuildContext context, String tex)? codeBuilder,
+    final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     var match = exp.firstMatch(text.trim());
     return OrderedListView(
@@ -510,7 +510,7 @@ class HighlightedText extends InlineMd {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
-    final Widget Function(BuildContext context, String tex)? codeBuilder,
+    final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     return TextSpan(
       text: text,
@@ -546,7 +546,7 @@ class BoldMd extends InlineMd {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
-    final Widget Function(BuildContext context, String tex)? codeBuilder,
+    final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     var match = exp.firstMatch(text.trim());
     return TextSpan(
@@ -583,7 +583,7 @@ class LatexMathMultyLine extends BlockMd {
     void Function(String url, String title)? onLinkTab,
     String Function(String tex)? latexWorkaround,
     Widget Function(BuildContext context, String tex)? latexBuilder,
-    Widget Function(BuildContext context, String tex)? codeBuilder,
+    Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     var p0 = exp.firstMatch(text.trim());
     p0?.group(0);
@@ -652,7 +652,7 @@ class LatexMath extends InlineMd {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
-    final Widget Function(BuildContext context, String tex)? codeBuilder,
+    final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     var p0 = exp.firstMatch(text.trim());
     p0?.group(0);
@@ -716,7 +716,7 @@ class ItalicMd extends InlineMd {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
-    final Widget Function(BuildContext context, String tex)? codeBuilder,
+    final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     var match = exp.firstMatch(text.trim());
     return TextSpan(
@@ -749,7 +749,7 @@ class ATagMd extends InlineMd {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
-    final Widget Function(BuildContext context, String tex)? codeBuilder,
+    final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     var match = exp.firstMatch(text.trim());
     if (match?[1] == null && match?[2] == null) {
@@ -795,7 +795,7 @@ class ImageMd extends InlineMd {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
-    final Widget Function(BuildContext context, String tex)? codeBuilder,
+    final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     var match = exp.firstMatch(text.trim());
     double? height;
@@ -848,7 +848,7 @@ class TableMd extends BlockMd {
     void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
-    final Widget Function(BuildContext context, String tex)? codeBuilder,
+    final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     final List<Map<int, String>> value = text
         .split('\n')
@@ -873,56 +873,64 @@ class TableMd extends BlockMd {
     if (maxCol == 0) {
       return Text("", style: style);
     }
-    return Table(
-      textDirection: textDirection,
-      defaultColumnWidth: CustomTableColumnWidth(),
-      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-      border: TableBorder.all(
-        width: 1,
-        color: Theme.of(context).colorScheme.onSurface,
+    final controller = ScrollController();
+    return Scrollbar(
+    controller: controller,
+      child: SingleChildScrollView(
+      controller: controller,
+      scrollDirection: Axis.horizontal,
+        child: Table(
+          textDirection: textDirection,
+          defaultColumnWidth: CustomTableColumnWidth(),
+          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+          border: TableBorder.all(
+            width: 1,
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
+          children: value
+              .asMap()
+              .entries
+              .map<TableRow>(
+                (entry) => TableRow(
+                  decoration: (heading)
+                      ? BoxDecoration(
+                          color: (entry.key == 0)
+                              ? Theme.of(context).colorScheme.surfaceVariant
+                              : null,
+                        )
+                      : null,
+                  children: List.generate(
+                    maxCol,
+                    (index) {
+                      var e = entry.value;
+                      String data = e[index] ?? "";
+                      if (RegExp(r"^--+$").hasMatch(data.trim()) ||
+                          data.trim().isEmpty) {
+                        return const SizedBox();
+                      }
+        
+                      return Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
+                          child: MdWidget(
+                            (e[index] ?? "").trim(),
+                            textDirection: textDirection,
+                            onLinkTab: onLinkTab,
+                            style: style,
+                            latexWorkaround: latexWorkaround,
+                            latexBuilder: latexBuilder,
+                            codeBuilder: codeBuilder,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              )
+              .toList(),
+        ),
       ),
-      children: value
-          .asMap()
-          .entries
-          .map<TableRow>(
-            (entry) => TableRow(
-              decoration: (heading)
-                  ? BoxDecoration(
-                      color: (entry.key == 0)
-                          ? Theme.of(context).colorScheme.surfaceVariant
-                          : null,
-                    )
-                  : null,
-              children: List.generate(
-                maxCol,
-                (index) {
-                  var e = entry.value;
-                  String data = e[index] ?? "";
-                  if (RegExp(r"^--+$").hasMatch(data.trim()) ||
-                      data.trim().isEmpty) {
-                    return const SizedBox();
-                  }
-
-                  return Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
-                      child: MdWidget(
-                        (e[index] ?? "").trim(),
-                        textDirection: textDirection,
-                        onLinkTab: onLinkTab,
-                        style: style,
-                        latexWorkaround: latexWorkaround,
-                        latexBuilder: latexBuilder,
-                        codeBuilder: codeBuilder,
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          )
-          .toList(),
     );
   }
 
@@ -948,7 +956,7 @@ class CodeBlockMd extends BlockMd {
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
     final Widget Function(BuildContext context, String tex)? latexBuilder,
-    final Widget Function(BuildContext context, String tex)? codeBuilder,
+    final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     String codes = exp.firstMatch(text)?[2] ?? "";
     String name = exp.firstMatch(text)?[1] ?? "";
@@ -956,7 +964,7 @@ class CodeBlockMd extends BlockMd {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: codeBuilder != null
-          ? codeBuilder(context, codes)
+          ? codeBuilder(context,name, codes)
           : CodeField(name: name, codes: codes),
     );
   }

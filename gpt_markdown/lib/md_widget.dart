@@ -27,7 +27,8 @@ class MdWidget extends StatelessWidget {
   final String Function(String tex)? latexWorkaround;
   final Widget Function(BuildContext context, String tex)? latexBuilder;
   final bool followLinkColor;
-  final Widget Function(BuildContext context, String tex)? codeBuilder;
+  final Widget Function(BuildContext context, String name, String code)?
+      codeBuilder;
 
   @override
   Widget build(BuildContext context) {
