@@ -236,7 +236,7 @@ Markdown and LaTeX can be powerful tools for formatting text and mathematical ex
                                       ),
                                     );
                                   }
-                                  child = GestureDetector(
+                                  child = InkWell(
                                     onTap: () {
                                       debugPrint("Hello world");
                                     },
