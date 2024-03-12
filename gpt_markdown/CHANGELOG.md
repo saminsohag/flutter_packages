@@ -1,3 +1,7 @@
+## 0.1.1
+
+* Fixed hitTest essue.
+
 ## 0.1.0
 
 * Inline Latex Builder added and Link are now Clickable and Latex Error Color changed to null for debug mode.

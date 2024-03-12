@@ -26,7 +26,8 @@ class TexMarkdown extends StatelessWidget {
   final TextScaler? textScaler;
   final void Function(String url, String title)? onLinkTab;
   final String Function(String tex)? latexWorkaround;
-  final Widget Function(BuildContext context, String tex, bool inline)?
+  final Widget Function(
+          BuildContext context, String tex, TextStyle style, bool inline)?
       latexBuilder;
   final bool followLinkColor;
   final Widget Function(BuildContext context, String name, String code)?
