@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
@@ -37,7 +38,7 @@ abstract class MarkdownComponent {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex,bool inline)? latexBuilder,
     final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     List<InlineSpan> spans = [];
@@ -125,7 +126,7 @@ abstract class MarkdownComponent {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex, bool inline)? latexBuilder,
     final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   );
 
@@ -146,7 +147,7 @@ abstract class InlineMd extends MarkdownComponent {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex,bool inline)? latexBuilder,
     final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   );
 }
@@ -163,7 +164,7 @@ abstract class BlockMd extends MarkdownComponent {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex,bool inline)? latexBuilder,
     final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     return WidgetSpan(
@@ -188,7 +189,7 @@ abstract class BlockMd extends MarkdownComponent {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex,bool inline)? latexBuilder,
     final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   );
 }
@@ -205,7 +206,7 @@ class HTag extends BlockMd {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex,bool inline)? latexBuilder,
     final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     var match = exp.firstMatch(text.trim());
@@ -277,7 +278,7 @@ class NewLines extends InlineMd {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex,bool inline)? latexBuilder,
     final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     return TextSpan(
@@ -302,7 +303,7 @@ class HrLine extends BlockMd {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex,bool inline)? latexBuilder,
     final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     return CustomDivider(
@@ -326,7 +327,7 @@ class CheckBoxMd extends BlockMd {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex,bool inline)? latexBuilder,
     final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     var match = exp.firstMatch(text.trim());
@@ -360,7 +361,7 @@ class RadioButtonMd extends BlockMd {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex,bool inline)? latexBuilder,
     final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     var match = exp.firstMatch(text.trim());
@@ -394,7 +395,7 @@ class IndentMd extends BlockMd {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex,bool inline)? latexBuilder,
     final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     [
@@ -439,7 +440,7 @@ class UnOrderedList extends BlockMd {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex,bool inline)? latexBuilder,
     final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     var match = exp.firstMatch(text);
@@ -476,7 +477,7 @@ class OrderedList extends BlockMd {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex,bool inline)? latexBuilder,
     final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     var match = exp.firstMatch(text.trim());
@@ -509,7 +510,7 @@ class HighlightedText extends InlineMd {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex,bool inline)? latexBuilder,
     final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     return TextSpan(
@@ -545,7 +546,7 @@ class BoldMd extends InlineMd {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex,bool inline)? latexBuilder,
     final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     var match = exp.firstMatch(text.trim());
@@ -582,7 +583,7 @@ class LatexMathMultyLine extends BlockMd {
     TextDirection textDirection,
     void Function(String url, String title)? onLinkTab,
     String Function(String tex)? latexWorkaround,
-    Widget Function(BuildContext context, String tex)? latexBuilder,
+    Widget Function(BuildContext context, String tex,bool inline)? latexBuilder,
     Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     var p0 = exp.firstMatch(text.trim());
@@ -591,7 +592,7 @@ class LatexMathMultyLine extends BlockMd {
     var workaround = latexWorkaround ?? (String tex) => tex;
 
     var builder = latexBuilder ??
-        (BuildContext context, String tex) => Math.tex(
+        (BuildContext context, String tex,bool inline) => Math.tex(
               tex,
               textStyle: style?.copyWith(
                 fontFamily: "SansSerif",
@@ -623,12 +624,12 @@ class LatexMathMultyLine extends BlockMd {
                   workaround(mathText),
                   textDirection: textDirection,
                   style: style?.copyWith(
-                          color: Theme.of(context).colorScheme.error) ??
-                      TextStyle(color: Theme.of(context).colorScheme.error),
+                          color:(!kDebugMode)?null: Theme.of(context).colorScheme.error) ??
+                      TextStyle(color:(!kDebugMode)?null: Theme.of(context).colorScheme.error),
                 );
               },
             );
-    return builder(context, workaround(mathText));
+    return builder(context, workaround(mathText),false);
   }
 }
 
@@ -651,53 +652,55 @@ class LatexMath extends InlineMd {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex,bool inline)? latexBuilder,
     final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     var p0 = exp.firstMatch(text.trim());
     p0?.group(0);
     String mathText = p0?[1]?.toString() ?? "";
     var workaround = latexWorkaround ?? (String tex) => tex;
+    var builder = latexBuilder ??
+        (BuildContext context, String tex,bool inline) => Math.tex(
+              tex,
+              textStyle: style?.copyWith(
+                fontFamily: "SansSerif",
+              ),
+              mathStyle: MathStyle.display,
+              textScaleFactor: 1,
+              settings: const TexParserSettings(
+                strict: Strict.ignore,
+              ),
+              options: MathOptions(
+                sizeUnderTextStyle: MathSize.large,
+                color: style?.color ?? Theme.of(context).colorScheme.onSurface,
+                fontSize: style?.fontSize ??
+                    Theme.of(context).textTheme.bodyMedium?.fontSize,
+                mathFontOptions: FontOptions(
+                  fontFamily: "Main",
+                  fontWeight: style?.fontWeight ?? FontWeight.normal,
+                  fontShape: FontStyle.normal,
+                ),
+                textFontOptions: FontOptions(
+                  fontFamily: "Main",
+                  fontWeight: style?.fontWeight ?? FontWeight.normal,
+                  fontShape: FontStyle.normal,
+                ),
+                style: MathStyle.display,
+              ),
+              onErrorFallback: (err) {
+                return Text(
+                  workaround(mathText),
+                  textDirection: textDirection,
+                  style: style?.copyWith(
+                          color:(!kDebugMode)?null: Theme.of(context).colorScheme.error) ??
+                      TextStyle(color:(!kDebugMode)?null: Theme.of(context).colorScheme.error),
+                );
+              },
+            );
     return WidgetSpan(
       alignment: PlaceholderAlignment.baseline,
       baseline: TextBaseline.alphabetic,
-      child: Math.tex(
-        workaround(mathText),
-        textStyle: style?.copyWith(
-          fontFamily: "SansSerif",
-        ),
-        mathStyle: MathStyle.display,
-        textScaleFactor: 1,
-        settings: const TexParserSettings(
-          strict: Strict.ignore,
-        ),
-        options: MathOptions(
-          sizeUnderTextStyle: MathSize.large,
-          color: style?.color ?? Theme.of(context).colorScheme.onSurface,
-          fontSize: style?.fontSize ??
-              Theme.of(context).textTheme.bodyMedium?.fontSize,
-          mathFontOptions: FontOptions(
-            fontFamily: "Main",
-            fontWeight: style?.fontWeight ?? FontWeight.normal,
-            fontShape: FontStyle.normal,
-          ),
-          textFontOptions: FontOptions(
-            fontFamily: "Main",
-            fontWeight: style?.fontWeight ?? FontWeight.normal,
-            fontShape: FontStyle.normal,
-          ),
-          style: MathStyle.display,
-        ),
-        onErrorFallback: (err) {
-          return Text(
-            workaround(mathText),
-            textDirection: textDirection,
-            style:
-                style?.copyWith(color: Theme.of(context).colorScheme.error) ??
-                    TextStyle(color: Theme.of(context).colorScheme.error),
-          );
-        },
-      ),
+      child:builder(context, workaround(mathText),true),
     );
   }
 }
@@ -715,7 +718,7 @@ class ItalicMd extends InlineMd {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex,bool inline)? latexBuilder,
     final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     var match = exp.firstMatch(text.trim());
@@ -748,7 +751,7 @@ class ATagMd extends InlineMd {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex,bool inline)? latexBuilder,
     final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     var match = exp.firstMatch(text.trim());
@@ -794,7 +797,7 @@ class ImageMd extends InlineMd {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex,bool inline)? latexBuilder,
     final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     var match = exp.firstMatch(text.trim());
@@ -847,7 +850,7 @@ class TableMd extends BlockMd {
     TextDirection textDirection,
     void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex,bool inline)? latexBuilder,
     final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     final List<Map<int, String>> value = text
@@ -955,7 +958,7 @@ class CodeBlockMd extends BlockMd {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex)? latexBuilder,
+    final Widget Function(BuildContext context, String tex,bool inline)? latexBuilder,
     final Widget Function(BuildContext context,String name,String code)? codeBuilder,
   ) {
     String codes = exp.firstMatch(text)?[2] ?? "";

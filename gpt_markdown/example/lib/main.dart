@@ -172,17 +172,20 @@ Markdown and LaTeX can be powerful tools for formatting text and mathematical ex
                               child: TexMarkdown(
                                 _controller.text,
                                 textDirection: _direction,
-                                onLinkTab: (url, title) {},
+                                onLinkTab: (url, title) {
+                                  debugPrint(url);
+                                  debugPrint(title);
+                                },
                                 textAlign: TextAlign.justify,
                                 // textScaler: const TextScaler.linear(1.3),
-                                textScaleFactor: 1,
+                                textScaler: const TextScaler.linear(1),
                                 style: const TextStyle(
                                   // Regular text font size here.
                                   fontSize: 15,
                                 ),
                                 latexWorkaround: (tex) => tex.replaceAllMapped(
                                     RegExp(r"align\*"), (match) => "aligned"),
-                                latexBuilder: (contex, tex) {
+                                latexBuilder: (contex, tex, inline) {
                                   if (tex.contains(r"\begin{tabular}")) {
                                     // return table.
                                     String tableString = "|${(RegExp(
@@ -201,30 +204,45 @@ Markdown and LaTeX can be powerful tools for formatting text and mathematical ex
                                     return TexMarkdown(tableString);
                                   }
                                   var controller = ScrollController();
-                                  return Padding(
-                                    padding: const EdgeInsets.all(0.0),
-                                    child: Material(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onInverseSurface,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Scrollbar(
-                                          controller: controller,
-                                          child: SingleChildScrollView(
+                                  Widget child = Math.tex(
+                                    tex,
+                                    textStyle: const TextStyle(
+                                      fontSize: 17,
+                                    ),
+                                  );
+                                  if (!inline) {
+                                    child = Padding(
+                                      padding: const EdgeInsets.all(0.0),
+                                      child: Material(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onInverseSurface,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Scrollbar(
                                             controller: controller,
-                                            scrollDirection: Axis.horizontal,
-                                            child: Math.tex(
-                                              tex,
-                                              textStyle: const TextStyle(
-                                                fontSize: 17,
+                                            child: SingleChildScrollView(
+                                              controller: controller,
+                                              scrollDirection: Axis.horizontal,
+                                              child: Math.tex(
+                                                tex,
+                                                textStyle: const TextStyle(
+                                                  fontSize: 17,
+                                                ),
                                               ),
                                             ),
                                           ),
                                         ),
                                       ),
-                                    ),
+                                    );
+                                  }
+                                  child = GestureDetector(
+                                    onTap: () {
+                                      debugPrint("Hello world");
+                                    },
+                                    child: child,
                                   );
+                                  return child;
                                 },
                               ),
                               // child: const Text("Hello"),
