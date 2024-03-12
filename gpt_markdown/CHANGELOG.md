@@ -1,3 +1,9 @@
+## 0.1.0
+
+* Inline Latex Builder added and Link are now Clickable and Latex Error Color changed to null for debug mode.
+
+* `textScaleFector` is removed and `textScaler` added
+
 ## 0.0.12
 
 * codeBuilder method added [[#6](https://github.com/saminsohag/flutter_packages/issues/6)], and maked the table scrollable.
