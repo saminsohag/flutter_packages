@@ -38,7 +38,8 @@ abstract class MarkdownComponent {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex, TextStyle textStyle, bool inline)?
+    final Widget Function(
+            BuildContext context, String tex, TextStyle textStyle, bool inline)?
         latexBuilder,
     final Widget Function(BuildContext context, String name, String code)?
         codeBuilder,
@@ -128,7 +129,8 @@ abstract class MarkdownComponent {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex,TextStyle textStyle, bool inline)?
+    final Widget Function(
+            BuildContext context, String tex, TextStyle textStyle, bool inline)?
         latexBuilder,
     final Widget Function(BuildContext context, String name, String code)?
         codeBuilder,
@@ -151,7 +153,8 @@ abstract class InlineMd extends MarkdownComponent {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex,TextStyle textStyle, bool inline)?
+    final Widget Function(
+            BuildContext context, String tex, TextStyle textStyle, bool inline)?
         latexBuilder,
     final Widget Function(BuildContext context, String name, String code)?
         codeBuilder,
@@ -170,7 +173,8 @@ abstract class BlockMd extends MarkdownComponent {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex,TextStyle textStyle, bool inline)?
+    final Widget Function(
+            BuildContext context, String tex, TextStyle textStyle, bool inline)?
         latexBuilder,
     final Widget Function(BuildContext context, String name, String code)?
         codeBuilder,
@@ -197,7 +201,8 @@ abstract class BlockMd extends MarkdownComponent {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex,TextStyle textStyle, bool inline)?
+    final Widget Function(
+            BuildContext context, String tex, TextStyle textStyle, bool inline)?
         latexBuilder,
     final Widget Function(BuildContext context, String name, String code)?
         codeBuilder,
@@ -216,7 +221,8 @@ class HTag extends BlockMd {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex,TextStyle textStyle, bool inline)?
+    final Widget Function(
+            BuildContext context, String tex, TextStyle textStyle, bool inline)?
         latexBuilder,
     final Widget Function(BuildContext context, String name, String code)?
         codeBuilder,
@@ -290,7 +296,8 @@ class NewLines extends InlineMd {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex,TextStyle textStyle, bool inline)?
+    final Widget Function(
+            BuildContext context, String tex, TextStyle textStyle, bool inline)?
         latexBuilder,
     final Widget Function(BuildContext context, String name, String code)?
         codeBuilder,
@@ -317,7 +324,8 @@ class HrLine extends BlockMd {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex,TextStyle textStyle, bool inline)?
+    final Widget Function(
+            BuildContext context, String tex, TextStyle textStyle, bool inline)?
         latexBuilder,
     final Widget Function(BuildContext context, String name, String code)?
         codeBuilder,
@@ -343,7 +351,8 @@ class CheckBoxMd extends BlockMd {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex,TextStyle textStyle, bool inline)?
+    final Widget Function(
+            BuildContext context, String tex, TextStyle textStyle, bool inline)?
         latexBuilder,
     final Widget Function(BuildContext context, String name, String code)?
         codeBuilder,
@@ -379,7 +388,8 @@ class RadioButtonMd extends BlockMd {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex,TextStyle textStyle, bool inline)?
+    final Widget Function(
+            BuildContext context, String tex, TextStyle textStyle, bool inline)?
         latexBuilder,
     final Widget Function(BuildContext context, String name, String code)?
         codeBuilder,
@@ -415,7 +425,8 @@ class IndentMd extends BlockMd {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex,TextStyle textStyle, bool inline)?
+    final Widget Function(
+            BuildContext context, String tex, TextStyle textStyle, bool inline)?
         latexBuilder,
     final Widget Function(BuildContext context, String name, String code)?
         codeBuilder,
@@ -462,7 +473,8 @@ class UnOrderedList extends BlockMd {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex,TextStyle textStyle, bool inline)?
+    final Widget Function(
+            BuildContext context, String tex, TextStyle textStyle, bool inline)?
         latexBuilder,
     final Widget Function(BuildContext context, String name, String code)?
         codeBuilder,
@@ -501,7 +513,8 @@ class OrderedList extends BlockMd {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex,TextStyle textStyle, bool inline)?
+    final Widget Function(
+            BuildContext context, String tex, TextStyle textStyle, bool inline)?
         latexBuilder,
     final Widget Function(BuildContext context, String name, String code)?
         codeBuilder,
@@ -536,7 +549,8 @@ class HighlightedText extends InlineMd {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex,TextStyle textStyle, bool inline)?
+    final Widget Function(
+            BuildContext context, String tex, TextStyle textStyle, bool inline)?
         latexBuilder,
     final Widget Function(BuildContext context, String name, String code)?
         codeBuilder,
@@ -574,7 +588,8 @@ class BoldMd extends InlineMd {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex,TextStyle textStyle, bool inline)?
+    final Widget Function(
+            BuildContext context, String tex, TextStyle textStyle, bool inline)?
         latexBuilder,
     final Widget Function(BuildContext context, String name, String code)?
         codeBuilder,
@@ -613,7 +628,8 @@ class LatexMathMultyLine extends BlockMd {
     TextDirection textDirection,
     void Function(String url, String title)? onLinkTab,
     String Function(String tex)? latexWorkaround,
-    Widget Function(BuildContext context, String tex,TextStyle textStyle, bool inline)?
+    Widget Function(
+            BuildContext context, String tex, TextStyle textStyle, bool inline)?
         latexBuilder,
     Widget Function(BuildContext context, String name, String code)?
         codeBuilder,
@@ -624,7 +640,8 @@ class LatexMathMultyLine extends BlockMd {
     var workaround = latexWorkaround ?? (String tex) => tex;
 
     var builder = latexBuilder ??
-        (BuildContext context, String tex,TextStyle textStyle, bool inline) => Math.tex(
+        (BuildContext context, String tex, TextStyle textStyle, bool inline) =>
+            Math.tex(
               tex,
               textStyle: textStyle,
               mathStyle: MathStyle.display,
@@ -654,13 +671,14 @@ class LatexMathMultyLine extends BlockMd {
                   workaround(mathText),
                   textDirection: textDirection,
                   style: textStyle.copyWith(
-                          color: (!kDebugMode)
-                              ? null
-                              : Theme.of(context).colorScheme.error),
+                      color: (!kDebugMode)
+                          ? null
+                          : Theme.of(context).colorScheme.error),
                 );
               },
             );
-    return builder(context, workaround(mathText),style??const TextStyle(), false);
+    return builder(
+        context, workaround(mathText), style ?? const TextStyle(), false);
   }
 }
 
@@ -683,7 +701,8 @@ class LatexMath extends InlineMd {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex,TextStyle textStyle, bool inline)?
+    final Widget Function(
+            BuildContext context, String tex, TextStyle textStyle, bool inline)?
         latexBuilder,
     final Widget Function(BuildContext context, String name, String code)?
         codeBuilder,
@@ -693,7 +712,8 @@ class LatexMath extends InlineMd {
     String mathText = p0?[1]?.toString() ?? "";
     var workaround = latexWorkaround ?? (String tex) => tex;
     var builder = latexBuilder ??
-        (BuildContext context, String tex,TextStyle textStyle, bool inline) => Math.tex(
+        (BuildContext context, String tex, TextStyle textStyle, bool inline) =>
+            Math.tex(
               tex,
               textStyle: textStyle,
               mathStyle: MathStyle.display,
@@ -723,16 +743,17 @@ class LatexMath extends InlineMd {
                   workaround(mathText),
                   textDirection: textDirection,
                   style: textStyle.copyWith(
-                          color: (!kDebugMode)
-                              ? null
-                              : Theme.of(context).colorScheme.error),
+                      color: (!kDebugMode)
+                          ? null
+                          : Theme.of(context).colorScheme.error),
                 );
               },
             );
     return WidgetSpan(
       alignment: PlaceholderAlignment.baseline,
       baseline: TextBaseline.alphabetic,
-      child: builder(context, workaround(mathText),style ??const TextStyle(), true),
+      child: builder(
+          context, workaround(mathText), style ?? const TextStyle(), true),
     );
   }
 }
@@ -750,7 +771,8 @@ class ItalicMd extends InlineMd {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex,TextStyle textStyle, bool inline)?
+    final Widget Function(
+            BuildContext context, String tex, TextStyle textStyle, bool inline)?
         latexBuilder,
     final Widget Function(BuildContext context, String name, String code)?
         codeBuilder,
@@ -785,7 +807,8 @@ class ATagMd extends InlineMd {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex,TextStyle textStyle, bool inline)?
+    final Widget Function(
+            BuildContext context, String tex, TextStyle textStyle, bool inline)?
         latexBuilder,
     final Widget Function(BuildContext context, String name, String code)?
         codeBuilder,
@@ -833,7 +856,8 @@ class ImageMd extends InlineMd {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex,TextStyle textStyle, bool inline)?
+    final Widget Function(
+            BuildContext context, String tex, TextStyle textStyle, bool inline)?
         latexBuilder,
     final Widget Function(BuildContext context, String name, String code)?
         codeBuilder,
@@ -888,7 +912,8 @@ class TableMd extends BlockMd {
     TextDirection textDirection,
     void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex,TextStyle textStyle, bool inline)?
+    final Widget Function(
+            BuildContext context, String tex, TextStyle textStyle, bool inline)?
         latexBuilder,
     final Widget Function(BuildContext context, String name, String code)?
         codeBuilder,
@@ -998,7 +1023,8 @@ class CodeBlockMd extends BlockMd {
     TextDirection textDirection,
     final void Function(String url, String title)? onLinkTab,
     final String Function(String tex)? latexWorkaround,
-    final Widget Function(BuildContext context, String tex,TextStyle textStyle, bool inline)?
+    final Widget Function(
+            BuildContext context, String tex, TextStyle textStyle, bool inline)?
         latexBuilder,
     final Widget Function(BuildContext context, String name, String code)?
         codeBuilder,

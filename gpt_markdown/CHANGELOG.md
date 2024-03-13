@@ -1,3 +1,7 @@
+## 0.1.2
+
+* `textStyle` Parameter added to the latexBuilder function.
+
 ## 0.1.1
 
 * Fixed hitTest essue.
