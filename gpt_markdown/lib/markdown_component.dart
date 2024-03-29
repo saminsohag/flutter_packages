@@ -10,7 +10,7 @@ import 'md_widget.dart';
 
 /// Markdown components
 abstract class MarkdownComponent {
-  static List<MarkdownComponent> get components => [
+  static final List<MarkdownComponent>  components = [
         CodeBlockMd(),
         NewLines(),
         TableMd(),

@@ -17,6 +17,7 @@ class MdWidget extends StatelessWidget {
     this.latexBuilder,
     this.followLinkColor = false,
     this.codeBuilder,
+    this.maxLines,
   });
   final String exp;
   final TextDirection textDirection;
@@ -31,6 +32,7 @@ class MdWidget extends StatelessWidget {
   final bool followLinkColor;
   final Widget Function(BuildContext context, String name, String code)?
       codeBuilder;
+  final int? maxLines;
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +66,7 @@ class MdWidget extends StatelessWidget {
       textDirection: textDirection,
       textScaler: textScaler,
       textAlign: textAlign,
+      maxLines: maxLines,
     );
   }
 }

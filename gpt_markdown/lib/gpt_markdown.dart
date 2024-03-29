@@ -18,6 +18,7 @@ class TexMarkdown extends StatelessWidget {
     this.onLinkTab,
     this.latexBuilder,
     this.codeBuilder,
+    this.maxLines,
   });
   final TextDirection textDirection;
   final String data;
@@ -26,6 +27,7 @@ class TexMarkdown extends StatelessWidget {
   final TextScaler? textScaler;
   final void Function(String url, String title)? onLinkTab;
   final String Function(String tex)? latexWorkaround;
+  final int? maxLines;
   final Widget Function(
           BuildContext context, String tex, TextStyle style, bool inline)?
       latexBuilder;
@@ -68,6 +70,7 @@ class TexMarkdown extends StatelessWidget {
       latexWorkaround: latexWorkaround,
       latexBuilder: latexBuilder,
       codeBuilder: codeBuilder,
+      maxLines: maxLines,
     ));
   }
 }
