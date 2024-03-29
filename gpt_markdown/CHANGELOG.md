@@ -1,3 +1,7 @@
+## 0.1.3
+
+* `maxLines` Parameter added.
+
 ## 0.1.2
 
 * `textStyle` Parameter added to the latexBuilder function.
