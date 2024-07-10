@@ -10,25 +10,26 @@ import 'md_widget.dart';
 
 /// Markdown components
 abstract class MarkdownComponent {
-  static final List<MarkdownComponent>  components = [
-        CodeBlockMd(),
-        NewLines(),
-        TableMd(),
-        HTag(),
-        IndentMd(),
-        UnOrderedList(),
-        OrderedList(),
-        RadioButtonMd(),
-        CheckBoxMd(),
-        HrLine(),
-        ImageMd(),
-        HighlightedText(),
-        BoldMd(),
-        LatexMathMultyLine(),
-        LatexMath(),
-        ItalicMd(),
-        ATagMd(),
-      ];
+  static final List<MarkdownComponent> components = [
+    CodeBlockMd(),
+    NewLines(),
+    TableMd(),
+    HTag(),
+    IndentMd(),
+    UnOrderedList(),
+    OrderedList(),
+    RadioButtonMd(),
+    CheckBoxMd(),
+    HrLine(),
+    ImageMd(),
+    HighlightedText(),
+    BoldMd(),
+    LatexMathMultyLine(),
+    LatexMath(),
+    ItalicMd(),
+    ATagMd(),
+    SourceTag(),
+  ];
 
   /// Generate widget for markdown widget
   static List<InlineSpan> generate(
@@ -560,14 +561,14 @@ class HighlightedText extends InlineMd {
       style: style?.copyWith(
             fontWeight: FontWeight.bold,
             background: Paint()
-              ..color = Theme.of(context).colorScheme.surfaceVariant
+              ..color = Theme.of(context).colorScheme.surfaceContainerHighest
               ..strokeCap = StrokeCap.round
               ..strokeJoin = StrokeJoin.round,
           ) ??
           TextStyle(
             fontWeight: FontWeight.bold,
             background: Paint()
-              ..color = Theme.of(context).colorScheme.surfaceVariant
+              ..color = Theme.of(context).colorScheme.surfaceContainerHighest
               ..strokeCap = StrokeCap.round
               ..strokeJoin = StrokeJoin.round,
           ),
@@ -794,6 +795,57 @@ class ItalicMd extends InlineMd {
   }
 }
 
+/// source text component
+class SourceTag extends InlineMd {
+  @override
+  RegExp get exp => RegExp(r"\[(\d+?)\]");
+
+  @override
+  InlineSpan span(
+    BuildContext context,
+    String text,
+    TextStyle? style,
+    TextDirection textDirection,
+    final void Function(String url, String title)? onLinkTab,
+    final String Function(String tex)? latexWorkaround,
+    final Widget Function(
+            BuildContext context, String tex, TextStyle textStyle, bool inline)?
+        latexBuilder,
+    final Widget Function(BuildContext context, String name, String code)?
+        codeBuilder,
+  ) {
+    var match = exp.firstMatch(text.trim());
+    if (match?[1] == null) {
+      return const TextSpan();
+    }
+    return WidgetSpan(
+      alignment: PlaceholderAlignment.middle,
+      // baseline: TextBaseline.alphabetic,
+      child: Padding(
+        padding: const EdgeInsets.all(2),
+        child: Container(
+          width: 20,
+          height: 20,
+          decoration: ShapeDecoration(
+            shape: const OvalBorder(),
+            // color: Theme.of(context).colorScheme.onSurface,
+            color: Theme.of(context).colorScheme.surfaceContainerHighest,
+            // borderRadius: BorderRadius.circular(100),
+          ),
+          child: FittedBox(
+            fit: BoxFit.contain,
+            child: Text(
+              "${match?[1]}",
+              // style: (style ?? const TextStyle()).copyWith(),
+              textDirection: textDirection,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 /// Link text component
 class ATagMd extends InlineMd {
   @override
@@ -963,7 +1015,9 @@ class TableMd extends BlockMd {
                   decoration: (heading)
                       ? BoxDecoration(
                           color: (entry.key == 0)
-                              ? Theme.of(context).colorScheme.surfaceVariant
+                              ? Theme.of(context)
+                                  .colorScheme
+                                  .surfaceContainerHighest
                               : null,
                         )
                       : null,

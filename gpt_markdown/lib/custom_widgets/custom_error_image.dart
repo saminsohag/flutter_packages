@@ -18,7 +18,7 @@ class CustomImageError extends LeafRenderObjectWidget {
   RenderObject createRenderObject(BuildContext context) {
     return RenderCustomImageError(
       iconColor ?? Theme.of(context).colorScheme.onSurfaceVariant,
-      backgroundColor ?? Theme.of(context).colorScheme.surfaceVariant,
+      backgroundColor ?? Theme.of(context).colorScheme.surfaceContainerHighest,
       outlineColor ?? Theme.of(context).colorScheme.outline,
     );
   }
@@ -26,8 +26,8 @@ class CustomImageError extends LeafRenderObjectWidget {
   @override
   void updateRenderObject(
       BuildContext context, covariant RenderCustomImageError renderObject) {
-    renderObject._backgroundColor =
-        backgroundColor ?? Theme.of(context).colorScheme.surfaceVariant;
+    renderObject._backgroundColor = backgroundColor ??
+        Theme.of(context).colorScheme.surfaceContainerHighest;
     renderObject._iconColor =
         iconColor ?? Theme.of(context).colorScheme.onSurfaceVariant;
     renderObject._outlineColor =
@@ -133,7 +133,7 @@ class CustomImageLoading extends LeafRenderObjectWidget {
   RenderObject createRenderObject(BuildContext context) {
     return RenderCustomImageLoading(
       iconColor ?? Theme.of(context).colorScheme.onSurfaceVariant,
-      backgroundColor ?? Theme.of(context).colorScheme.surfaceVariant,
+      backgroundColor ?? Theme.of(context).colorScheme.surfaceContainerHighest,
       outlineColor ?? Theme.of(context).colorScheme.outline,
       progress,
     );
@@ -142,8 +142,8 @@ class CustomImageLoading extends LeafRenderObjectWidget {
   @override
   void updateRenderObject(
       BuildContext context, covariant RenderCustomImageLoading renderObject) {
-    renderObject._backgroundColor =
-        backgroundColor ?? Theme.of(context).colorScheme.surfaceVariant;
+    renderObject._backgroundColor = backgroundColor ??
+        Theme.of(context).colorScheme.surfaceContainerHighest;
     renderObject._iconColor =
         iconColor ?? Theme.of(context).colorScheme.onSurfaceVariant;
     renderObject._outlineColor =
