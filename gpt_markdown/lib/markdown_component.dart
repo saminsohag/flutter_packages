@@ -540,7 +540,7 @@ class OrderedList extends BlockMd {
 
 class HighlightedText extends InlineMd {
   @override
-  RegExp get exp => RegExp(r"`.*?`");
+  RegExp get exp => RegExp(r"`(.+?)`");
 
   @override
   InlineSpan span(
@@ -556,12 +556,13 @@ class HighlightedText extends InlineMd {
     final Widget Function(BuildContext context, String name, String code)?
         codeBuilder,
   ) {
+    var match = exp.firstMatch(text.trim());
     return TextSpan(
-      text: text,
+      text: match?[1],
       style: style?.copyWith(
             fontWeight: FontWeight.bold,
             background: Paint()
-              ..color = Theme.of(context).colorScheme.surfaceContainerHighest
+              ..color = Theme.of(context).colorScheme.onInverseSurface
               ..strokeCap = StrokeCap.round
               ..strokeJoin = StrokeJoin.round,
           ) ??
@@ -823,21 +824,19 @@ class SourceTag extends InlineMd {
       // baseline: TextBaseline.alphabetic,
       child: Padding(
         padding: const EdgeInsets.all(2),
-        child: Container(
+        child: SizedBox(
           width: 20,
           height: 20,
-          decoration: ShapeDecoration(
+          child: Material(
+            color: Theme.of(context).colorScheme.onInverseSurface,
             shape: const OvalBorder(),
-            // color: Theme.of(context).colorScheme.onSurface,
-            color: Theme.of(context).colorScheme.surfaceContainerHighest,
-            // borderRadius: BorderRadius.circular(100),
-          ),
-          child: FittedBox(
-            fit: BoxFit.contain,
-            child: Text(
-              "${match?[1]}",
-              // style: (style ?? const TextStyle()).copyWith(),
-              textDirection: textDirection,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                "${match?[1]}",
+                // style: (style ?? const TextStyle()).copyWith(),
+                textDirection: textDirection,
+              ),
             ),
           ),
         ),
