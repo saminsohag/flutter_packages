@@ -1,3 +1,7 @@
+## 0.1.5
+
+* Some color changes and highlighted text style changed.
+
 ## 0.1.4
 
 * `[source]` format added.
