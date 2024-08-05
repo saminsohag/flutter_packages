@@ -381,16 +381,14 @@ class OrderedList extends BlockMd {
     final GptMarkdownConfig config,
   ) {
     var match = exp.firstMatch(text.trim());
-    var conf = config.copyWith(
-        style: (config.style ?? const TextStyle())
-            .copyWith(fontWeight: FontWeight.w100));
     return OrderedListView(
       no: "${match?[1]}",
       textDirection: config.textDirection,
-      style: conf.style,
+      style: (config.style ?? const TextStyle())
+          .copyWith(fontWeight: FontWeight.w100),
       child: MdWidget(
         "${match?[2]}",
-        config: conf,
+        config: config,
       ),
     );
   }

@@ -178,8 +178,8 @@ Markdown and LaTeX can be powerful tools for formatting text and mathematical ex
                                     debugPrint(url);
                                     debugPrint(title);
                                   },
-                                  maxLines: 7,
-                                  overflow: TextOverflow.ellipsis,
+                                  // maxLines: 7,
+                                  // overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.justify,
                                   // textScaler: const TextScaler.linear(1.3),
                                   textScaler: const TextScaler.linear(1),

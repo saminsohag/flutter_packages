@@ -1,3 +1,7 @@
+## 0.1.7
+
+* ordered list color fixed.
+
 ## 0.1.6
 
 * `overflow` perameter added.
