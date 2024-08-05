@@ -33,16 +33,11 @@ class MdWidget extends StatelessWidget {
         config,
       ),
     );
-    return Text.rich(
+    return config.getRich(
       TextSpan(
         children: list,
         style: config.style?.copyWith(),
       ),
-      textDirection: config.textDirection,
-      textScaler: config.textScaler,
-      textAlign: config.textAlign,
-      maxLines: config.maxLines,
-      overflow: config.overflow,
     );
   }
 }

@@ -58,4 +58,15 @@ class GptMarkdownConfig {
       overflow: overflow ?? this.overflow,
     );
   }
+
+  getRich(InlineSpan span) {
+    return Text.rich(
+      span,
+      textDirection: textDirection,
+      textScaler: textScaler,
+      textAlign: textAlign,
+      maxLines: maxLines,
+      overflow: overflow,
+    );
+  }
 }

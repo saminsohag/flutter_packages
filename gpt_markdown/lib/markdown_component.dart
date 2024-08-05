@@ -194,7 +194,7 @@ class HTag extends BlockMd {
           .titleSmall
           ?.copyWith(color: config.style?.color),
     ][match![1]!.length - 1]);
-    return Text.rich(
+    return config.getRich(
       TextSpan(
         children: [
           ...(MarkdownComponent.generate(
@@ -217,9 +217,6 @@ class HTag extends BlockMd {
           ],
         ],
       ),
-      textDirection: config.textDirection,
-      overflow: config.overflow,
-      maxLines: config.maxLines,
     );
   }
 }
@@ -679,7 +676,7 @@ class ATagMd extends InlineMd {
         onTap: () {
           config.onLinkTab?.call("${match?[2]}", "${match?[1]}");
         },
-        child: Text.rich(
+        child: config.getRich(
           TextSpan(
             text: "${match?[1]}",
             style: (config.style ?? const TextStyle()).copyWith(
@@ -688,7 +685,6 @@ class ATagMd extends InlineMd {
               decoration: TextDecoration.underline,
             ),
           ),
-          textDirection: config.textDirection,
         ),
       ),
     );
