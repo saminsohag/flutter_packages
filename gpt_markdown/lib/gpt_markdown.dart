@@ -1,6 +1,7 @@
 library tex_markdown;
 
 import 'package:flutter/material.dart';
+import 'package:gpt_markdown/custom_widgets/markdow_config.dart';
 
 import 'md_widget.dart';
 
@@ -19,6 +20,7 @@ class TexMarkdown extends StatelessWidget {
     this.latexBuilder,
     this.codeBuilder,
     this.maxLines,
+    this.overflow,
   });
   final TextDirection textDirection;
   final String data;
@@ -28,6 +30,7 @@ class TexMarkdown extends StatelessWidget {
   final void Function(String url, String title)? onLinkTab;
   final String Function(String tex)? latexWorkaround;
   final int? maxLines;
+  final TextOverflow? overflow;
   final Widget Function(
           BuildContext context, String tex, TextStyle style, bool inline)?
       latexBuilder;
@@ -61,16 +64,19 @@ class TexMarkdown extends StatelessWidget {
     return ClipRRect(
         child: MdWidget(
       tex,
-      textDirection: textDirection,
-      style: style,
-      onLinkTab: onLinkTab,
-      textAlign: textAlign,
-      textScaler: textScaler,
-      followLinkColor: followLinkColor,
-      latexWorkaround: latexWorkaround,
-      latexBuilder: latexBuilder,
-      codeBuilder: codeBuilder,
-      maxLines: maxLines,
+      config: GptMarkdownConfig(
+        textDirection: textDirection,
+        style: style,
+        onLinkTab: onLinkTab,
+        textAlign: textAlign,
+        textScaler: textScaler,
+        followLinkColor: followLinkColor,
+        latexWorkaround: latexWorkaround,
+        latexBuilder: latexBuilder,
+        codeBuilder: codeBuilder,
+        maxLines: maxLines,
+        overflow: overflow,
+      ),
     ));
   }
 }

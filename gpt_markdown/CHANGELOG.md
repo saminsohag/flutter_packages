@@ -1,3 +1,7 @@
+## 0.1.6
+
+* `overflow` perameter added.
+
 ## 0.1.5
 
 * Some color changes and highlighted text style changed.

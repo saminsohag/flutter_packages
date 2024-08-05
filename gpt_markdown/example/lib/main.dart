@@ -178,7 +178,8 @@ Markdown and LaTeX can be powerful tools for formatting text and mathematical ex
                                     debugPrint(url);
                                     debugPrint(title);
                                   },
-                                  maxLines: null,
+                                  // maxLines: 3,
+                                  // overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.justify,
                                   // textScaler: const TextScaler.linear(1.3),
                                   textScaler: const TextScaler.linear(1),
@@ -186,9 +187,33 @@ Markdown and LaTeX can be powerful tools for formatting text and mathematical ex
                                     // Regular text font size here.
                                     fontSize: 15,
                                   ),
-                                  latexWorkaround: (tex) =>
-                                      tex.replaceAllMapped(RegExp(r"align\*"),
-                                          (match) => "aligned"),
+                                  latexWorkaround: (tex) {
+                                    List<String> stack = [];
+                                    tex = tex.splitMapJoin(
+                                      RegExp(r"\\text\{|\{|\}|\_"),
+                                      onMatch: (p) {
+                                        String input = p[0] ?? "";
+                                        if (input == r"\text{") {
+                                          stack.add(input);
+                                        }
+                                        if (stack.isNotEmpty) {
+                                          if (input == r"{") {
+                                            stack.add(input);
+                                          }
+                                          if (input == r"}") {
+                                            stack.removeLast();
+                                          }
+                                          if (input == r"_") {
+                                            return r"\_";
+                                          }
+                                        }
+                                        return input;
+                                      },
+                                    );
+                                    return tex.replaceAllMapped(
+                                        RegExp(r"align\*"),
+                                        (match) => "aligned");
+                                  },
                                   latexBuilder:
                                       (contex, tex, textStyle, inline) {
                                     if (tex.contains(r"\begin{tabular}")) {
