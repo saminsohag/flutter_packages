@@ -236,6 +236,7 @@ Markdown and LaTeX can be powerful tools for formatting text and mathematical ex
                                     textScaler: const TextScaler.linear(1),
                                     style: const TextStyle(
                                       // Regular text font size here.
+                                      color: Colors.red,
                                       fontSize: 15,
                                     ),
                                     latexWorkaround: (tex) {

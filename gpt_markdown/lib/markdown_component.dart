@@ -355,9 +355,13 @@ class UnOrderedList extends BlockMd {
   ) {
     var match = exp.firstMatch(text);
     return UnorderedListView(
-      bulletColor: config.style?.color,
+      bulletColor:
+          config.style?.color ?? DefaultTextStyle.of(context).style.color,
       padding: 10.0,
-      bulletSize: 3,
+      bulletSize: 0.2 *
+          (config.style?.fontSize ??
+              DefaultTextStyle.of(context).style.fontSize ??
+              kDefaultFontSize),
       textDirection: config.textDirection,
       child: MdWidget(
         "${match?[1]}",

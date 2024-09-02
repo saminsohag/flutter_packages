@@ -1,3 +1,7 @@
+## 0.1.8
+
+* unordered list bullet color fixed.
+
 ## 0.1.7
 
 * ordered list color fixed.
