@@ -1,3 +1,7 @@
+## 0.1.9
+
+* source config added.
+
 ## 0.1.8
 
 * unordered list bullet color fixed.

@@ -19,6 +19,7 @@ class TexMarkdown extends StatelessWidget {
     this.onLinkTab,
     this.latexBuilder,
     this.codeBuilder,
+    this.sourceTagBuilder,
     this.maxLines,
     this.overflow,
   });
@@ -37,6 +38,7 @@ class TexMarkdown extends StatelessWidget {
   final bool followLinkColor;
   final Widget Function(BuildContext context, String name, String code)?
       codeBuilder;
+  final Widget Function(BuildContext, String, TextStyle)? sourceTagBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -76,6 +78,7 @@ class TexMarkdown extends StatelessWidget {
         codeBuilder: codeBuilder,
         maxLines: maxLines,
         overflow: overflow,
+        sourceTagBuilder: sourceTagBuilder,
       ),
     ));
   }

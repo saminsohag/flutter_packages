@@ -326,6 +326,24 @@ Markdown and LaTeX can be powerful tools for formatting text and mathematical ex
                                       );
                                       return child;
                                     },
+                                    sourceTagBuilder:
+                                        (buildContext, string, textStyle) {
+                                      var value = int.tryParse(string);
+                                      value ??= -1;
+                                      value += 1;
+                                      return SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.red,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Center(child: Text("$value")),
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ),
                                 // child: const Text("Hello"),

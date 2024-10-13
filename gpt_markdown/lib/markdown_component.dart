@@ -618,7 +618,7 @@ class ItalicMd extends InlineMd {
 /// source text component
 class SourceTag extends InlineMd {
   @override
-  RegExp get exp => RegExp(r"\[(\d+?)\]");
+  RegExp get exp => RegExp(r"(?:【.*?)?\[(\d+?)\]");
 
   @override
   InlineSpan span(
@@ -627,7 +627,8 @@ class SourceTag extends InlineMd {
     final GptMarkdownConfig config,
   ) {
     var match = exp.firstMatch(text.trim());
-    if (match?[1] == null) {
+    var content = match?[1];
+    if (content == null) {
       return const TextSpan();
     }
     return WidgetSpan(
@@ -635,22 +636,24 @@ class SourceTag extends InlineMd {
       // baseline: TextBaseline.alphabetic,
       child: Padding(
         padding: const EdgeInsets.all(2),
-        child: SizedBox(
-          width: 20,
-          height: 20,
-          child: Material(
-            color: Theme.of(context).colorScheme.onInverseSurface,
-            shape: const OvalBorder(),
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                "${match?[1]}",
-                // style: (style ?? const TextStyle()).copyWith(),
-                textDirection: config.textDirection,
+        child: config.sourceTagBuilder
+                ?.call(context, content, const TextStyle()) ??
+            SizedBox(
+              width: 20,
+              height: 20,
+              child: Material(
+                color: Theme.of(context).colorScheme.onInverseSurface,
+                shape: const OvalBorder(),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    content,
+                    // style: (style ?? const TextStyle()).copyWith(),
+                    textDirection: config.textDirection,
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
       ),
     );
   }
