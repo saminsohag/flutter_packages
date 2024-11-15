@@ -11,7 +11,7 @@ import 'md_widget.dart';
 
 /// Markdown components
 abstract class MarkdownComponent {
-  static final List<MarkdownComponent> components = [
+  static List<MarkdownComponent> get components => [
     CodeBlockMd(),
     NewLines(),
     TableMd(),
@@ -25,9 +25,9 @@ abstract class MarkdownComponent {
     ImageMd(),
     HighlightedText(),
     BoldMd(),
+    ItalicMd(),
     LatexMathMultyLine(),
     LatexMath(),
-    ItalicMd(),
     ATagMd(),
     SourceTag(),
   ];
@@ -435,7 +435,7 @@ class HighlightedText extends InlineMd {
 /// Bold text component
 class BoldMd extends InlineMd {
   @override
-  RegExp get exp => RegExp(r"\*\*(([\S^\*].*?)?[\S^\*?])\*\*");
+  RegExp get exp => RegExp(r"(?<!\*)\*\*(?<!\s)(.+?)(?<!\s)\*\*(?!\*)");
 
   @override
   InlineSpan span(
@@ -447,6 +447,32 @@ class BoldMd extends InlineMd {
     var conf = config.copyWith(
         style: config.style?.copyWith(fontWeight: FontWeight.bold) ??
             const TextStyle(fontWeight: FontWeight.bold));
+    return TextSpan(
+      children: MarkdownComponent.generate(
+        context,
+        "${match?[1]}",
+        conf,
+      ),
+      style: conf.style,
+    );
+  }
+}
+
+/// Italic text component
+class ItalicMd extends InlineMd {
+  @override
+  RegExp get exp => RegExp(r"(?<!\*)\*(?<!\s)(.+?)(?<!\s)\*(?!\*)", dotAll: true);
+
+  @override
+  InlineSpan span(
+    BuildContext context,
+    String text,
+    final GptMarkdownConfig config,
+  ) {
+    var match = exp.firstMatch(text.trim());
+    var conf = config.copyWith(
+        style: (config.style ?? const TextStyle())
+            .copyWith(fontStyle: FontStyle.italic));
     return TextSpan(
       children: MarkdownComponent.generate(
         context,
@@ -585,32 +611,6 @@ class LatexMath extends InlineMd {
       baseline: TextBaseline.alphabetic,
       child: builder(context, workaround(mathText),
           config.style ?? const TextStyle(), true),
-    );
-  }
-}
-
-/// Italic text component
-class ItalicMd extends InlineMd {
-  @override
-  RegExp get exp => RegExp(r"\*(\S(.*?\S)?)\*", dotAll: true);
-
-  @override
-  InlineSpan span(
-    BuildContext context,
-    String text,
-    final GptMarkdownConfig config,
-  ) {
-    var match = exp.firstMatch(text.trim());
-    var conf = config.copyWith(
-        style: (config.style ?? const TextStyle())
-            .copyWith(fontStyle: FontStyle.italic));
-    return TextSpan(
-      children: MarkdownComponent.generate(
-        context,
-        "${match?[1]}",
-        conf,
-      ),
-      style: conf.style,
     );
   }
 }
