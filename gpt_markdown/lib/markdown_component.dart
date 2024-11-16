@@ -12,25 +12,26 @@ import 'md_widget.dart';
 /// Markdown components
 abstract class MarkdownComponent {
   static List<MarkdownComponent> get components => [
-    CodeBlockMd(),
-    NewLines(),
-    TableMd(),
-    HTag(),
-    IndentMd(),
-    UnOrderedList(),
-    OrderedList(),
-    RadioButtonMd(),
-    CheckBoxMd(),
-    HrLine(),
-    ImageMd(),
-    HighlightedText(),
-    BoldMd(),
-    ItalicMd(),
-    LatexMathMultyLine(),
-    LatexMath(),
-    ATagMd(),
-    SourceTag(),
-  ];
+        CodeBlockMd(),
+        NewLines(),
+        TableMd(),
+        HTag(),
+        IndentMd(),
+        UnOrderedList(),
+        OrderedList(),
+        RadioButtonMd(),
+        CheckBoxMd(),
+        HrLine(),
+        ImageMd(),
+        HighlightedText(),
+        StrikeMd(),
+        BoldMd(),
+        ItalicMd(),
+        LatexMathMultyLine(),
+        LatexMath(),
+        ATagMd(),
+        SourceTag(),
+      ];
 
   /// Generate widget for markdown widget
   static List<InlineSpan> generate(
@@ -329,8 +330,8 @@ class IndentMd extends BlockMd {
       padding: spaces * 5,
       bulletSize: 0,
       textDirection: config.textDirection,
-      child: RichText(
-          text: TextSpan(
+      child: Text.rich(
+           TextSpan(
         children: MarkdownComponent.generate(
           context,
           "${match?[2]}",
@@ -358,7 +359,7 @@ class UnOrderedList extends BlockMd {
       bulletColor:
           config.style?.color ?? DefaultTextStyle.of(context).style.color,
       padding: 10.0,
-      bulletSize: 0.2 *
+      bulletSize: 0.4 *
           (config.style?.fontSize ??
               DefaultTextStyle.of(context).style.fontSize ??
               kDefaultFontSize),
@@ -457,11 +458,40 @@ class BoldMd extends InlineMd {
     );
   }
 }
+class StrikeMd extends InlineMd {
+  @override
+  RegExp get exp => RegExp(r"(?<!\*)\~\~(?<!\s)(.+?)(?<!\s)\~\~(?!\*)");
+
+  @override
+  InlineSpan span(
+    BuildContext context,
+    String text,
+    final GptMarkdownConfig config,
+  ) {
+    var match = exp.firstMatch(text.trim());
+    var conf = config.copyWith(
+        style: config.style?.copyWith(
+        decoration: TextDecoration.lineThrough,
+        decorationColor: config.style?.color,
+      ) ??
+            const TextStyle(decoration: TextDecoration.lineThrough,
+      ));
+    return TextSpan(
+      children: MarkdownComponent.generate(
+        context,
+        "${match?[1]}",
+        conf,
+      ),
+      style: conf.style,
+    );
+  }
+}
 
 /// Italic text component
 class ItalicMd extends InlineMd {
   @override
-  RegExp get exp => RegExp(r"(?<!\*)\*(?<!\s)(.+?)(?<!\s)\*(?!\*)", dotAll: true);
+  RegExp get exp =>
+      RegExp(r"(?<!\*)\*(?<!\s)(.+?)(?<!\s)\*(?!\*)", dotAll: true);
 
   @override
   InlineSpan span(
