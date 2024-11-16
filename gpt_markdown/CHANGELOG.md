@@ -1,3 +1,7 @@
+## 0.1.10
+
+* components are now selectable.
+
 ## 0.1.9
 
 * source config added.

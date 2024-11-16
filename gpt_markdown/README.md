@@ -2,7 +2,7 @@ This package can render ChatGPT response into Flutter app. This package suppport
 
 ## Features
 
-You can create simple markdown view by this package.
+You can create simple markdown view by this package. Use can make the contents selectable using `SelectiionArea` widget.
 
 At this moment this package supports:
 - List 
@@ -24,13 +24,18 @@ At this moment this package supports:
 - Table
 
     ```
-    | Name | Roll |
-    | sohag | 1   |
+    | Name      | Roll |
+    |-------------|-------------|
+    | sohag      | 1       |
 
     ```
     | Name      | Roll |
     |-------------|-------------|
     | sohag      | 1       |
+
+- Striked text
+
+        ~~Bolt text~~
 
 - Bolt text
 
