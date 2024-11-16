@@ -330,8 +330,7 @@ class IndentMd extends BlockMd {
       padding: spaces * 5,
       bulletSize: 0,
       textDirection: config.textDirection,
-      child: Text.rich(
-           TextSpan(
+      child: Text.rich(TextSpan(
         children: MarkdownComponent.generate(
           context,
           "${match?[2]}",
@@ -458,6 +457,7 @@ class BoldMd extends InlineMd {
     );
   }
 }
+
 class StrikeMd extends InlineMd {
   @override
   RegExp get exp => RegExp(r"(?<!\*)\~\~(?<!\s)(.+?)(?<!\s)\~\~(?!\*)");
@@ -471,11 +471,12 @@ class StrikeMd extends InlineMd {
     var match = exp.firstMatch(text.trim());
     var conf = config.copyWith(
         style: config.style?.copyWith(
-        decoration: TextDecoration.lineThrough,
-        decorationColor: config.style?.color,
-      ) ??
-            const TextStyle(decoration: TextDecoration.lineThrough,
-      ));
+              decoration: TextDecoration.lineThrough,
+              decorationColor: config.style?.color,
+            ) ??
+            const TextStyle(
+              decoration: TextDecoration.lineThrough,
+            ));
     return TextSpan(
       children: MarkdownComponent.generate(
         context,
