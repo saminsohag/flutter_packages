@@ -13,13 +13,6 @@ dependencies:
   cupertino_icons: ^1.0.2
   gpt_markdown:
     path: ../../gpt_markdown
-  printing: ^5.10.3
-  pdf: ^3.10.1
-  flutter_html_to_pdf: ^0.7.0
-  url_launcher: ^6.1.10
-  path_provider: ^2.0.14
-  permission_handler: ^11.3.1
-  file_picker: ^8.0.6
   flutter_math_fork: ^0.7.2
   watcher: ^1.1.0
   desktop_drop: ^0.4.4
