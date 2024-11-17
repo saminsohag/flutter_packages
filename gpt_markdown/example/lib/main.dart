@@ -6,7 +6,6 @@ import 'package:gpt_markdown/gpt_markdown.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
 import 'package:watcher/watcher.dart';
 
-//
 void main() {
   runApp(const MyApp());
 }
@@ -37,7 +36,7 @@ class _MyAppState extends State<MyApp> {
         colorSchemeSeed: Colors.blue,
       ),
       home: MyHomePage(
-        title: 'Flutter Demo Home Page',
+        title: 'GptMarkdown',
         onPressed: () {
           setState(() {
             _themeMode = (_themeMode == ThemeMode.dark)
@@ -50,7 +49,6 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-//
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title, required this.onPressed});
   final VoidCallback? onPressed;
@@ -145,6 +143,7 @@ Markdown and LaTeX can be powerful tools for formatting text and mathematical ex
   }
 
   bool writingMod = true;
+  bool selectable = false;
 
   @override
   Widget build(BuildContext context) {
@@ -152,6 +151,19 @@ Markdown and LaTeX can be powerful tools for formatting text and mathematical ex
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
+          IconButton(
+            onPressed: () {
+              setState(() {
+                selectable = !selectable;
+              });
+            },
+            icon: Icon(
+              Icons.select_all_outlined,
+              color: selectable
+                  ? Theme.of(context).colorScheme.onSurfaceVariant
+                  : Theme.of(context).colorScheme.onSurface.withOpacity(0.38),
+            ),
+          ),
           IconButton(
             onPressed: () {
               setState(() {
@@ -168,7 +180,8 @@ Markdown and LaTeX can be powerful tools for formatting text and mathematical ex
             onPressed: () => setState(() {
               writingMod = !writingMod;
             }),
-            icon: const Icon(Icons.arrow_drop_down),
+            icon:
+                Icon(writingMod ? Icons.arrow_drop_down : Icons.arrow_drop_up),
           ),
         ],
       ),
@@ -193,50 +206,43 @@ Markdown and LaTeX can be powerful tools for formatting text and mathematical ex
                       AnimatedBuilder(
                         animation: _controller,
                         builder: (context, _) {
-                          return Material(
-                            // color: Theme.of(context).colorScheme.surfaceVariant,
-                            shape: RoundedRectangleBorder(
-                              side: BorderSide(
+                          return Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              border: Border.all(
                                   width: 1,
                                   color: Theme.of(context).colorScheme.outline),
                             ),
-                            child:
-                                LayoutBuilder(builder: (context, constraints) {
-                              return Theme(
-                                data: Theme.of(context),
-                                // .copyWith(
-                                //   textTheme: const TextTheme(
-                                //     // For H1.
-                                //     headlineLarge: TextStyle(fontSize: 55),
-                                //     // For H2.
-                                //     headlineMedium: TextStyle(fontSize: 45),
-                                //     // For H3.
-                                //     headlineSmall: TextStyle(fontSize: 35),
-                                //     // For H4.
-                                //     titleLarge: TextStyle(fontSize: 25),
-                                //     // For H5.
-                                //     titleMedium: TextStyle(fontSize: 15),
-                                //     // For H6.
-                                //     titleSmall: TextStyle(fontSize: 10),
-                                //   ),
-                                // ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: TexMarkdown(
+                            child: Theme(
+                              data: Theme.of(context),
+                              // .copyWith(
+                              //   textTheme: const TextTheme(
+                              //     // For H1.
+                              //     headlineLarge: TextStyle(fontSize: 55),
+                              //     // For H2.
+                              //     headlineMedium: TextStyle(fontSize: 45),
+                              //     // For H3.
+                              //     headlineSmall: TextStyle(fontSize: 35),
+                              //     // For H4.
+                              //     titleLarge: TextStyle(fontSize: 25),
+                              //     // For H5.
+                              //     titleMedium: TextStyle(fontSize: 15),
+                              //     // For H6.
+                              //     titleSmall: TextStyle(fontSize: 10),
+                              //   ),
+                              // ),
+                              child: Builder(
+                                builder: (context) {
+                                  Widget child = TexMarkdown(
                                     _controller.text,
                                     textDirection: _direction,
                                     onLinkTab: (url, title) {
                                       debugPrint(url);
                                       debugPrint(title);
                                     },
-                                    // maxLines: 7,
-                                    // overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.justify,
-                                    // textScaler: const TextScaler.linear(1.3),
                                     textScaler: const TextScaler.linear(1),
                                     style: const TextStyle(
-                                      // Regular text font size here.
-                                      color: Colors.red,
                                       fontSize: 15,
                                     ),
                                     latexWorkaround: (tex) {
@@ -344,11 +350,15 @@ Markdown and LaTeX can be powerful tools for formatting text and mathematical ex
                                         ),
                                       );
                                     },
-                                  ),
-                                ),
-                                // child: const Text("Hello"),
-                              );
-                            }),
+                                  );
+                                  if (selectable) {
+                                    child = SelectionArea(child: child);
+                                  }
+                                  return child;
+                                },
+                              ),
+                              // child: const Text("Hello"),
+                            ),
                           );
                         },
                       ),
