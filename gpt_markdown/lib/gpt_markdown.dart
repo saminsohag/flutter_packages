@@ -2,8 +2,11 @@ library tex_markdown;
 
 import 'package:flutter/material.dart';
 import 'package:gpt_markdown/custom_widgets/markdow_config.dart';
+import 'package:gpt_markdown/markdown_component.dart';
 
 import 'md_widget.dart';
+
+export 'package:gpt_markdown/markdown_component.dart';
 
 /// This widget create a full markdown widget as a column view.
 class TexMarkdown extends StatelessWidget {
@@ -22,6 +25,7 @@ class TexMarkdown extends StatelessWidget {
     this.sourceTagBuilder,
     this.maxLines,
     this.overflow,
+    this.customComponents = const [],
   });
   final TextDirection textDirection;
   final String data;
@@ -39,6 +43,7 @@ class TexMarkdown extends StatelessWidget {
   final Widget Function(BuildContext context, String name, String code)?
       codeBuilder;
   final Widget Function(BuildContext, String, TextStyle)? sourceTagBuilder;
+  final List<MarkdownComponent> customComponents;
 
   @override
   Widget build(BuildContext context) {
@@ -79,6 +84,7 @@ class TexMarkdown extends StatelessWidget {
         maxLines: maxLines,
         overflow: overflow,
         sourceTagBuilder: sourceTagBuilder,
+        customComponents: customComponents,
       ),
     ));
   }
