@@ -4,7 +4,9 @@ import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
 import 'package:gpt_markdown/gpt_markdown.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
+import 'package:gpt_markdown/theme.dart';
 import 'package:watcher/watcher.dart';
+import 'selectable_adapter.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,10 +33,14 @@ class _MyAppState extends State<MyApp> {
         colorSchemeSeed: Colors.blue,
       ),
       darkTheme: ThemeData(
-        useMaterial3: true,
-        brightness: Brightness.dark,
-        colorSchemeSeed: Colors.blue,
-      ),
+          useMaterial3: true,
+          brightness: Brightness.dark,
+          colorSchemeSeed: Colors.blue,
+          extensions: [
+            GptMarkdownThemeData(
+              highlightColor: Colors.red,
+            ),
+          ]),
       home: MyHomePage(
         title: 'GptMarkdown',
         onPressed: () {
@@ -147,241 +153,254 @@ Markdown and LaTeX can be powerful tools for formatting text and mathematical ex
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        actions: [
-          IconButton(
-            onPressed: () {
-              setState(() {
-                selectable = !selectable;
-              });
-            },
-            icon: Icon(
-              Icons.select_all_outlined,
-              color: selectable
-                  ? Theme.of(context).colorScheme.onSurfaceVariant
-                  : Theme.of(context).colorScheme.onSurface.withOpacity(0.38),
-            ),
-          ),
-          IconButton(
-            onPressed: () {
-              setState(() {
-                _direction = TextDirection.values[(_direction.index + 1) % 2];
-              });
-            },
-            icon: const [Text("LTR"), Text("RTL")][_direction.index],
-          ),
-          IconButton(
-            onPressed: widget.onPressed,
-            icon: const Icon(Icons.sunny),
-          ),
-          IconButton(
-            onPressed: () => setState(() {
-              writingMod = !writingMod;
-            }),
-            icon:
-                Icon(writingMod ? Icons.arrow_drop_down : Icons.arrow_drop_up),
-          ),
-        ],
+    return GptMarkdownTheme(
+      gptThemeData: GptMarkdownTheme.of(context).copyWith(
+        highlightColor: Colors.purple,
       ),
-      body: DropTarget(
-        onDragDone: (details) {
-          var files = details.files;
-          if (files.length != 1) {
-            return;
-          }
-          var file = files[0];
-          String path = file.path;
-          this.file = File(path);
-          load();
-        },
-        child: Stack(
-          children: [
-            Column(
-              children: [
-                Expanded(
-                  child: ListView(
-                    children: [
-                      AnimatedBuilder(
-                        animation: _controller,
-                        builder: (context, _) {
-                          return Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  width: 1,
-                                  color: Theme.of(context).colorScheme.outline),
-                            ),
-                            child: Theme(
-                              data: Theme.of(context),
-                              // .copyWith(
-                              //   textTheme: const TextTheme(
-                              //     // For H1.
-                              //     headlineLarge: TextStyle(fontSize: 55),
-                              //     // For H2.
-                              //     headlineMedium: TextStyle(fontSize: 45),
-                              //     // For H3.
-                              //     headlineSmall: TextStyle(fontSize: 35),
-                              //     // For H4.
-                              //     titleLarge: TextStyle(fontSize: 25),
-                              //     // For H5.
-                              //     titleMedium: TextStyle(fontSize: 15),
-                              //     // For H6.
-                              //     titleSmall: TextStyle(fontSize: 10),
-                              //   ),
-                              // ),
-                              child: Builder(
-                                builder: (context) {
-                                  Widget child = TexMarkdown(
-                                    _controller.text,
-                                    textDirection: _direction,
-                                    onLinkTab: (url, title) {
-                                      debugPrint(url);
-                                      debugPrint(title);
-                                    },
-                                    textAlign: TextAlign.justify,
-                                    textScaler: const TextScaler.linear(1),
-                                    style: const TextStyle(
-                                      fontSize: 15,
-                                    ),
-                                    latexWorkaround: (tex) {
-                                      List<String> stack = [];
-                                      tex = tex.splitMapJoin(
-                                        RegExp(r"\\text\{|\{|\}|\_"),
-                                        onMatch: (p) {
-                                          String input = p[0] ?? "";
-                                          if (input == r"\text{") {
-                                            stack.add(input);
-                                          }
-                                          if (stack.isNotEmpty) {
-                                            if (input == r"{") {
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+          actions: [
+            IconButton(
+              onPressed: () {
+                setState(() {
+                  selectable = !selectable;
+                });
+              },
+              icon: Icon(
+                Icons.select_all_outlined,
+                color: selectable
+                    ? Theme.of(context).colorScheme.onSurfaceVariant
+                    : Theme.of(context).colorScheme.onSurface.withOpacity(0.38),
+              ),
+            ),
+            IconButton(
+              onPressed: () {
+                setState(() {
+                  _direction = TextDirection.values[(_direction.index + 1) % 2];
+                });
+              },
+              icon: const [Text("LTR"), Text("RTL")][_direction.index],
+            ),
+            IconButton(
+              onPressed: widget.onPressed,
+              icon: const Icon(Icons.sunny),
+            ),
+            IconButton(
+              onPressed: () => setState(() {
+                writingMod = !writingMod;
+              }),
+              icon: Icon(
+                  writingMod ? Icons.arrow_drop_down : Icons.arrow_drop_up),
+            ),
+          ],
+        ),
+        body: DropTarget(
+          onDragDone: (details) {
+            var files = details.files;
+            if (files.length != 1) {
+              return;
+            }
+            var file = files[0];
+            String path = file.path;
+            this.file = File(path);
+            load();
+          },
+          child: Stack(
+            children: [
+              Column(
+                children: [
+                  Expanded(
+                    child: ListView(
+                      children: [
+                        AnimatedBuilder(
+                          animation: _controller,
+                          builder: (context, _) {
+                            return Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    width: 1,
+                                    color:
+                                        Theme.of(context).colorScheme.outline),
+                              ),
+                              child: Theme(
+                                data: Theme.of(context),
+                                // .copyWith(
+                                //   textTheme: const TextTheme(
+                                //     // For H1.
+                                //     headlineLarge: TextStyle(fontSize: 55),
+                                //     // For H2.
+                                //     headlineMedium: TextStyle(fontSize: 45),
+                                //     // For H3.
+                                //     headlineSmall: TextStyle(fontSize: 35),
+                                //     // For H4.
+                                //     titleLarge: TextStyle(fontSize: 25),
+                                //     // For H5.
+                                //     titleMedium: TextStyle(fontSize: 15),
+                                //     // For H6.
+                                //     titleSmall: TextStyle(fontSize: 10),
+                                //   ),
+                                // ),
+                                child: Builder(
+                                  builder: (context) {
+                                    Widget child = TexMarkdown(
+                                      _controller.text,
+                                      textDirection: _direction,
+                                      onLinkTab: (url, title) {
+                                        debugPrint(url);
+                                        debugPrint(title);
+                                      },
+                                      textAlign: TextAlign.justify,
+                                      textScaler: const TextScaler.linear(1),
+                                      style: const TextStyle(
+                                        fontSize: 15,
+                                      ),
+                                      latexWorkaround: (tex) {
+                                        List<String> stack = [];
+                                        tex = tex.splitMapJoin(
+                                          RegExp(r"\\text\{|\{|\}|\_"),
+                                          onMatch: (p) {
+                                            String input = p[0] ?? "";
+                                            if (input == r"\text{") {
                                               stack.add(input);
                                             }
-                                            if (input == r"}") {
-                                              stack.removeLast();
+                                            if (stack.isNotEmpty) {
+                                              if (input == r"{") {
+                                                stack.add(input);
+                                              }
+                                              if (input == r"}") {
+                                                stack.removeLast();
+                                              }
+                                              if (input == r"_") {
+                                                return r"\_";
+                                              }
                                             }
-                                            if (input == r"_") {
-                                              return r"\_";
-                                            }
-                                          }
-                                          return input;
-                                        },
-                                      );
-                                      return tex.replaceAllMapped(
-                                          RegExp(r"align\*"),
-                                          (match) => "aligned");
-                                    },
-                                    latexBuilder:
-                                        (contex, tex, textStyle, inline) {
-                                      if (tex.contains(r"\begin{tabular}")) {
-                                        // return table.
-                                        String tableString = "|${(RegExp(
-                                              r"^\\begin\{tabular\}\{.*?\}(.*?)\\end\{tabular\}$",
-                                              multiLine: true,
-                                              dotAll: true,
-                                            ).firstMatch(tex)?[1] ?? "").trim()}|";
-                                        tableString = tableString
-                                            .replaceAll(r"\\", "|\n|")
-                                            .replaceAll(r"\hline", "")
-                                            .replaceAll(
-                                                RegExp(r"(?<!\\)&"), "|");
-                                        var tableStringList = tableString
-                                            .split("\n")
-                                          ..insert(1, "|---|");
-                                        tableString =
-                                            tableStringList.join("\n");
-                                        return TexMarkdown(tableString);
-                                      }
-                                      var controller = ScrollController();
-                                      Widget child = Math.tex(
-                                        tex,
-                                        textStyle: textStyle,
-                                      );
-                                      if (!inline) {
-                                        child = Padding(
-                                          padding: const EdgeInsets.all(0.0),
-                                          child: Material(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onInverseSurface,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Scrollbar(
-                                                controller: controller,
-                                                child: SingleChildScrollView(
+                                            return input;
+                                          },
+                                        );
+                                        return tex.replaceAllMapped(
+                                            RegExp(r"align\*"),
+                                            (match) => "aligned");
+                                      },
+                                      latexBuilder:
+                                          (contex, tex, textStyle, inline) {
+                                        if (tex.contains(r"\begin{tabular}")) {
+                                          // return table.
+                                          String tableString = "|${(RegExp(
+                                                r"^\\begin\{tabular\}\{.*?\}(.*?)\\end\{tabular\}$",
+                                                multiLine: true,
+                                                dotAll: true,
+                                              ).firstMatch(tex)?[1] ?? "").trim()}|";
+                                          tableString = tableString
+                                              .replaceAll(r"\\", "|\n|")
+                                              .replaceAll(r"\hline", "")
+                                              .replaceAll(
+                                                  RegExp(r"(?<!\\)&"), "|");
+                                          var tableStringList = tableString
+                                              .split("\n")
+                                            ..insert(1, "|---|");
+                                          tableString =
+                                              tableStringList.join("\n");
+                                          return TexMarkdown(tableString);
+                                        }
+                                        var controller = ScrollController();
+                                        Widget child = Math.tex(
+                                          tex,
+                                          textStyle: textStyle,
+                                        );
+                                        if (!inline) {
+                                          child = Padding(
+                                            padding: const EdgeInsets.all(0.0),
+                                            child: Material(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onInverseSurface,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Scrollbar(
                                                   controller: controller,
-                                                  scrollDirection:
-                                                      Axis.horizontal,
-                                                  child: Math.tex(
-                                                    tex,
-                                                    textStyle: textStyle,
+                                                  child: SingleChildScrollView(
+                                                    controller: controller,
+                                                    scrollDirection:
+                                                        Axis.horizontal,
+                                                    child: Math.tex(
+                                                      tex,
+                                                      textStyle: textStyle,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
                                             ),
+                                          );
+                                        }
+                                        child = SelectableAdapter(
+                                          selectedText: tex,
+                                          child: Math.tex(tex),
+                                        );
+                                        child = InkWell(
+                                          onTap: () {
+                                            debugPrint("Hello world");
+                                          },
+                                          child: child,
+                                        );
+                                        return child;
+                                      },
+                                      sourceTagBuilder:
+                                          (buildContext, string, textStyle) {
+                                        var value = int.tryParse(string);
+                                        value ??= -1;
+                                        value += 1;
+                                        return SizedBox(
+                                          height: 20,
+                                          width: 20,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.red,
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            child:
+                                                Center(child: Text("$value")),
                                           ),
                                         );
-                                      }
-                                      child = InkWell(
-                                        onTap: () {
-                                          debugPrint("Hello world");
-                                        },
+                                      },
+                                    );
+                                    if (selectable) {
+                                      child = SelectionArea(
                                         child: child,
                                       );
-                                      return child;
-                                    },
-                                    sourceTagBuilder:
-                                        (buildContext, string, textStyle) {
-                                      var value = int.tryParse(string);
-                                      value ??= -1;
-                                      value += 1;
-                                      return SizedBox(
-                                        height: 20,
-                                        width: 20,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: Colors.red,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          child: Center(child: Text("$value")),
-                                        ),
-                                      );
-                                    },
-                                  );
-                                  if (selectable) {
-                                    child = SelectionArea(child: child);
-                                  }
-                                  return child;
-                                },
+                                    }
+                                    return child;
+                                  },
+                                ),
+                                // child: const Text("Hello"),
                               ),
-                              // child: const Text("Hello"),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                if (writingMod)
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(maxHeight: 200),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextField(
-                        decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            label: Text("Type here:")),
-                        maxLines: null,
-                        controller: _controller,
-                      ),
+                            );
+                          },
+                        ),
+                      ],
                     ),
                   ),
-              ],
-            ),
-          ],
+                  if (writingMod)
+                    ConstrainedBox(
+                      constraints: const BoxConstraints(maxHeight: 200),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextField(
+                          decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              label: Text("Type here:")),
+                          maxLines: null,
+                          controller: _controller,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -7,6 +7,7 @@ import 'package:gpt_markdown/custom_widgets/custom_error_image.dart';
 import 'package:gpt_markdown/custom_widgets/custom_rb_cb.dart';
 import 'package:gpt_markdown/custom_widgets/markdow_config.dart';
 import 'package:gpt_markdown/custom_widgets/unordered_ordered_list.dart';
+import 'package:gpt_markdown/theme.dart';
 import 'md_widget.dart';
 
 /// Markdown components
@@ -413,14 +414,14 @@ class HighlightedText extends InlineMd {
       style: config.style?.copyWith(
             fontWeight: FontWeight.bold,
             background: Paint()
-              ..color = Theme.of(context).colorScheme.onInverseSurface
+              ..color = GptMarkdownTheme.of(context).highlightColor
               ..strokeCap = StrokeCap.round
               ..strokeJoin = StrokeJoin.round,
           ) ??
           TextStyle(
             fontWeight: FontWeight.bold,
             background: Paint()
-              ..color = Theme.of(context).colorScheme.surfaceContainerHighest
+              ..color = GptMarkdownTheme.of(context).highlightColor
               ..strokeCap = StrokeCap.round
               ..strokeJoin = StrokeJoin.round,
           ),

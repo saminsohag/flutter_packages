@@ -1,3 +1,7 @@
+## 0.1.11
+
+* `GptMarkdownTheme` and `GptMarkdownThemeData` classes added.
+
 ## 0.1.10
 
 * components are now selectable.
