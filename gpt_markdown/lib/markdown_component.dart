@@ -12,7 +12,7 @@ import 'md_widget.dart';
 
 /// Markdown components
 abstract class MarkdownComponent {
-  static List<MarkdownComponent> get components => [
+  static List<MarkdownComponent> components = [
         CodeBlockMd(),
         NewLines(),
         TableMd(),
@@ -310,7 +310,7 @@ class RadioButtonMd extends BlockMd {
 /// Indent
 class IndentMd extends BlockMd {
   @override
-  RegExp get exp => RegExp(r"^(\ +)([^\n]+)$");
+  RegExp get exp => RegExp(r"^(\ \ \ \ +)([^\n]+)$");
   get onLinkTab => null;
 
   @override

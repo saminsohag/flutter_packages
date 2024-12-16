@@ -1,3 +1,7 @@
+## 0.1.12
+
+* Fixed the indentation syntex of regex.
+
 ## 0.1.11
 
 * `GptMarkdownTheme` and `GptMarkdownThemeData` classes added.
