@@ -41,8 +41,14 @@ abstract class MarkdownComponent {
     final GptMarkdownConfig config,
   ) {
     List<InlineSpan> spans = [];
+
+    List<MarkdownComponent> combinedComponenets = [
+      ...components,
+      ...config.customComponents
+    ];
+
     List<String> regexes =
-        components.map<String>((e) => e.exp.pattern).toList();
+        combinedComponenets.map<String>((e) => e.exp.pattern).toList();
     final combinedRegex = RegExp(
       regexes.join("|"),
       multiLine: true,
@@ -54,7 +60,7 @@ abstract class MarkdownComponent {
       onMatch: (p0) {
         String element = p0[0] ?? "";
         elements.add(element);
-        for (var each in components) {
+        for (var each in combinedComponenets) {
           if (each.exp.hasMatch(element)) {
             if (each is InlineMd) {
               spans.add(each.span(

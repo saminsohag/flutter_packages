@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gpt_markdown/markdown_component.dart';
 
 class GptMarkdownConfig {
   const GptMarkdownConfig({
@@ -14,6 +15,7 @@ class GptMarkdownConfig {
     this.sourceTagBuilder,
     this.maxLines,
     this.overflow,
+    this.customComponents = const [],
   });
   final TextDirection textDirection;
   final TextStyle? style;
@@ -32,6 +34,7 @@ class GptMarkdownConfig {
       codeBuilder;
   final int? maxLines;
   final TextOverflow? overflow;
+  final List<MarkdownComponent> customComponents;
 
   GptMarkdownConfig copyWith({
     TextStyle? style,
