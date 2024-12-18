@@ -10,7 +10,7 @@ class GptMarkdownThemeData extends ThemeExtension<GptMarkdownThemeData> {
   factory GptMarkdownThemeData.from(BuildContext context) {
     return GptMarkdownThemeData(
       highlightColor:
-          Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.2),
+          Theme.of(context).colorScheme.onSurfaceVariant.withAlpha(50),
     );
   }
 

@@ -1,3 +1,7 @@
+## 0.1.14
+
+* Cnaged `withOpacity` to `withAlpha` in `theme.dart` for highlightColor.
+
 ## 0.1.13
 
 * `GptMarkdownTheme` and `GptMarkdownThemeData` class moved to `gpt_markdown.dart` library.
